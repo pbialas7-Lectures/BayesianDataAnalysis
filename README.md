@@ -18,7 +18,7 @@ conda activate bda
 Now you can install required packages (if you are using Anaconda some maybe already installed):
 
 ```
-mamba install  jupyterlab jupytext myst-nb
+mamba install  jupyterlab jupytext myst-nb ipywidgets
 mamba install numpy scipy  matplotlib
 ```
 If you didn't install `mamba` then you can subsitute `conda` for `mamba`. I tend to use `mamba` as it is markedly faster then `conda`.  
