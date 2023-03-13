@@ -38,7 +38,7 @@ jupytext --to notebook <md file name>
 
 When using the computers in lab, please log to your linux account and then run
 ```
-source /app/Python/3.9.7/VE/defaults/bin/activate
+source /app/Python/3.10.4/VE/defaults/bin/activate
 ```
 The you can run 
 ```
