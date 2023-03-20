@@ -1,21 +1,25 @@
 import numpy as np
-import matplotlib.pyplot as plt
-from scipy.optimize import brentq, minimize_scalar, fsolve
+from scipy.optimize import brentq, minimize_scalar
 from scipy.integrate import quad
 
 
+# Function
+
 # Mean
-def massf(f, a, b):
+def mass_f(f, a, b):
+    """Integral of f between a and b"""
     return quad(f, a, b)[0]
 
 
-def meanf(f, a, b):
+def mean_f(f, a, b):
+    """Mean of the distribution f on interval [a,b]"""
     norm = quad(f, a, b)[0]
     mean = quad(lambda x: x * f(x), a, b)[0]
     return mean / norm
 
 
-def medianf(f, a, b):
+def median_f(f, a, b):
+    """Median of distribution f on interval [a,b]"""
     norm = quad(f, a, b)[0]
 
     def cdf_med(x):
@@ -24,7 +28,8 @@ def medianf(f, a, b):
     return brentq(cdf_med, a, b)
 
 
-def var_centralf(f, c, a, b):
+def var_central_f(f, c, a, b):
+    """Variance around central point of distribution f on interval [a,b]"""
     norm = quad(f, a, b)[0]
 
     def v(x):
@@ -33,65 +38,40 @@ def var_centralf(f, c, a, b):
     return quad(v, a, b)[0]
 
 
-def confidence_interval(dist, center, alpha):
-    cdf = dist.cdf
-    f = lambda x: cdf(center) - cdf(x) - alpha / 2
-    left = fsolve(f, center)
-    f = lambda x: cdf(x) - cdf(center) - alpha / 2
-    right = fsolve(f, center)
-    return left.item(), right.item()
+# Confidence interval
+def cdi_central_f(f, center, beta, a, b):
+    """Symmetric confidence interval around central point"""
+
+    x_max = min(center - a, b - center)
+
+    def mass(w):
+        return quad(f, center - w, center + w)[0]
+
+    if mass(x_max) < beta:
+        return False, center - x_max, center + x_max
+    else:
+        width = brentq(lambda x: mass(x) - beta, 0, x_max)
+        return True, center - width, center + width
 
 
-def cdif_left(f, left, beta, *, a=0, b=1):
-    def mass(right):
-        return quad(f, left, right)[0]
+def cdi_left_f(f, left, beta, *, a=0, b=1):
+    """Confidence interval starting from left edge"""
+
+    def mass(r):
+        return quad(f, left, r)[0]
 
     if mass(b) < beta:
-        return False, a, a
+        return False, a, b
     else:
         right = brentq(lambda x: mass(x) - beta, left, b)
     return True, left, right
 
 
-def R(p, dist):
-    gt = dist > p
-    return np.where(np.logical_xor(gt[1:], gt[:-1]))[0]
-
-
-def R_mass(Rp, dist):
-    assert (Rp.size % 2) == 0
-    cdf = np.cumsum(dist)
-    mass = cdf[Rp].reshape(-1, 2)
-    return np.sum(mass[:, 1] - mass[:, 0])
-
-
-def plot_rp(xs, dist, p):
-    fig, ax = plt.subplots()
-    ax.plot(xs, dist);
-    ax.set_ylim(0, 1.25 * dist.max())
-    Rp = R(p, dist)
-    Rx = xs[Rp]
-    mass = R_mass(Rp, dist)
-    ax.axhline(p)
-    for itr in Rx.reshape(-1, 2):
-        ax.fill_between(xs, dist, 0, where=((xs > itr[0]) & (xs < itr[1])), color='lightgray');
-    ax.text(10, 0.005, f"${mass:.2f}$", fontsize=14);
-
-
-def hdr(xs, dist, beta, p_max=1, eps=1e-6):
-    p_min = 0.0
-    for i in range(24):
-        p = (p_max - p_min) / 2
-        Rp = R(p, dist)
-        mass = R_mass(Rp, dist)
-        if mass > beta:
-            p_min = p;
-        else:
-            p_max = p
-    return xs[R(p_max, dist)], R_mass(Rp, dist)
+# Highest density region
 
 
 def fzeros(f, a, b, n=100):
+    """Find all zeros of function on an interval"""
     xs = np.linspace(a, b, n)
     delta = xs[1] - xs[0]
     fxs = f(xs)
@@ -100,7 +80,8 @@ def fzeros(f, a, b, n=100):
     return [brentq(f, x, x + delta) for x in fz]
 
 
-def Rf(f, p, a, b):
+def R_f(f, p, a, b):
+    """Region R(p) for distribution f"""
     fzs = fzeros(lambda x: f(x) - p, a, b)
     if f(a) > p:
         fzs = [a] + fzs
@@ -109,7 +90,8 @@ def Rf(f, p, a, b):
     return fzs
 
 
-def PofR(f, r):
+def PofR_f(f, r):
+    """Probability of region with respect to distribution"""
     p = 0.0
     ra = np.array(r).reshape(-1, 2)
     for i in range(len(ra)):
@@ -117,22 +99,44 @@ def PofR(f, r):
     return p
 
 
-def plot_R(f, r, a, b, *, alpha=0.5, n=500, ax=None, **kwargs):
-    if ax is None:
-        ax = plt.gca()
-    xs = np.linspace(a, b, n)
-    ra = np.array(r).reshape(-1, 2)
-    for i in range(len(ra)):
-        ax.fill_between(xs, f(xs), 0, where=(xs > ra[i, 0]) & (xs < ra[i][1]), alpha=alpha, **kwargs)
-
-
-def hdrf(f, beta, *, a, b):
+def hdr_f(f, beta, *, a, b):
+    """Highest density region for distribution f on interval [a,b]"""
     max_p = -minimize_scalar(lambda x: -f(x), bounds=(a, b), method="Bounded").fun
 
     def g(p):
-        r = Rf(f, p, a, b)
-        return PofR(f, r) - beta
+        r = R_f(f, p, a, b)
+        return PofR_f(f, r) - beta
 
     p_zero = brentq(g, 0, max_p)
+    rp = R_f(f, p_zero, a, b)
+    return rp, p_zero, PofR_f(f, rp)
 
-    return p_zero, Rf(f, p_zero, a, b)
+
+# Discrete
+def R_d(dist, p):
+    gt = dist > p
+    return np.where(np.logical_xor(gt[1:], gt[:-1]))[0]
+
+
+def PofR_d(dist, r):
+    assert (r.size % 2) == 0
+    cdf = np.cumsum(dist)
+    mass = cdf[r].reshape(-1, 2)
+    return (np.sum(mass[:, 1] - mass[:, 0])) / cdf[-1]
+
+
+def hdr_d(xs, dist, beta):
+    z = np.trapz(dist, xs)
+    dist_n = dist / z
+    p_max = dist_n.max()
+    p_min = 0.0
+    for i in range(24):
+        p = (p_max + p_min) / 2
+        Rp = R_d(dist_n, p)
+        mass = PofR_d(dist_n, Rp)
+        if mass > beta:
+            p_min = p
+        else:
+            p_max = p
+    r = R_d(dist, (p_min + p_max) / 2)
+    return xs[r], p_max, PofR_d(dist, r)
