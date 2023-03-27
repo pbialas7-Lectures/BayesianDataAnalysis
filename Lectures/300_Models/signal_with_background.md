@@ -17,11 +17,8 @@ slideshow:
   slide_type: skip
 ---
 import numpy as np
-import scipy as sp
-import scipy.stats as st
-import scipy.optimize as opt
+import scipy
 import matplotlib.pyplot as plt
-import matplotlib
 plt.rcParams["figure.figsize"] = [12,8]
 ```
 
@@ -43,7 +40,35 @@ $$D_k = n_0 \left(A\, e^{\displaystyle -\frac{1}{2w^2}(x_k - x_0)^2 } +B \right)
 
 $$P(n|D) = e^{-D}\frac{D^n}{n!} $$
 
+```{code-cell} ipython3
+---
+slideshow:
+  slide_type: slide
+---
+from scipy.stats import poisson
+```
+
+```{code-cell} ipython3
+---
+slideshow:
+  slide_type: fragment
+---
+lb = 5.77
+```
+
+```{code-cell} ipython3
+---
+slideshow:
+  slide_type: slide
+---
+ks = np.arange(0,20)
+plt.stem(ks, poisson(lb).pmf(ks), basefmt='C0');
+plt.axvline(lb, color='orange')
+plt.xlabel('n');
+```
+
 +++ {"slideshow": {"slide_type": "slide"}}
+
 
 $$P(D|n)=\prod_{k=1}^M e^{-D}\frac{D^{\displaystyle n_k}}{n_k!}\propto e^{\displaystyle-M D+\log D\sum_{k=1}^M n_k}$$
 
@@ -62,9 +87,8 @@ slideshow:
   slide_type: slide
 ---
 np.random.seed(23487576)
-lb = 5.77
 M=7
-nk_pois = st.poisson(lb).rvs(size=M) 
+nk_pois = poisson(lb).rvs(size=M) 
 print(nk_pois)
 nk_sum = nk_pois.sum()
 ```
@@ -74,8 +98,16 @@ nk_sum = nk_pois.sum()
 slideshow:
   slide_type: slide
 ---
+from scipy.stats import gamma
+```
+
+```{code-cell} ipython3
+---
+slideshow:
+  slide_type: fragment
+---
 xs = np.linspace(0,20,200)
-ys = st.gamma(nk_sum,scale=1./M).pdf(xs)
+ys = gamma(nk_sum,scale=1./M).pdf(xs)
 plt.plot(xs,ys)
 plt.axvline(lb, color='red');
 ```
@@ -147,7 +179,7 @@ dk = D_rate(xk,A_true, B_true)
 slideshow:
   slide_type: fragment
 ---
-nk = st.poisson(dk).rvs(size=len(dk))
+nk = poisson(dk).rvs(size=len(dk))
 ```
 
 ```{code-cell} ipython3
@@ -231,7 +263,7 @@ ax.set_aspect(1)
 ax.contourf(xs,ys,nzs, levels=np.log(np.array([0.001,0.01,0.1, 0.3, 0.5, 0.7, 0.9,1])))
 ax.set_xlabel("A")
 ax.set_ylabel("B")
-ax.scatter([A_true],[B_true], color='red')
+ax.scatter([A_true],[B_true], color='orange')
 plt.show()
 ```
 
@@ -248,7 +280,7 @@ fig, ax = plt.subplots()
 ys = np.exp(logsumexp(nzs,axis=0))
 ax.plot(As,ys/np.trapz(ys, As))
 ax.grid()
-ax.axvline(A_true, color='red')
+ax.axvline(A_true, color='orange')
 ax.set_xlabel("A")
 ```
 
@@ -261,7 +293,7 @@ fig, ax = plt.subplots()
 ys = np.exp(logsumexp(nzs,axis=1))
 ax.plot(Bs,ys/np.trapz(ys, Bs))
 ax.grid()
-ax.axvline(B_true, color='red')
+ax.axvline(B_true, color='orange')
 ax.set_xlabel("B")
 ```
 
