@@ -40,6 +40,10 @@ $$D_k = n_0 \left(A\, e^{\displaystyle -\frac{1}{2w^2}(x_k - x_0)^2 } +B \right)
 
 $$P(n|D) = e^{-D}\frac{D^n}{n!} $$
 
++++ {"slideshow": {"slide_type": "fragment"}}
+
+$$X\sim Poisson(D)\qquad E[X]=D$$
+
 ```{code-cell} ipython3
 ---
 slideshow:
@@ -69,12 +73,11 @@ plt.xlabel('n');
 
 +++ {"slideshow": {"slide_type": "slide"}}
 
-
-$$P(D|n)=\prod_{k=1}^M e^{-D}\frac{D^{\displaystyle n_k}}{n_k!}\propto e^{\displaystyle-M D+\log D\sum_{k=1}^M n_k}$$
+$$P(D)=1$$
 
 +++ {"slideshow": {"slide_type": "fragment"}}
 
-$$P(D|n)\propto e^{\displaystyle-M D+\log D\sum_{k=1}^M n_k}=
+$$P(D|n)=\prod_{k=1}^M e^{-D}\frac{D^{\displaystyle n_k}}{n_k!}\propto
 e^{\displaystyle-M D} D^{\displaystyle \sum_k n_k}$$
 
 +++ {"slideshow": {"slide_type": "fragment"}}
@@ -160,14 +163,6 @@ def D_rate(x,A,B):
 ```{code-cell} ipython3
 ---
 slideshow:
-  slide_type: fragment
----
-D_rate(np.array([1,2,3]),np.array([1,2]),np.array([1,2]) )
-```
-
-```{code-cell} ipython3
----
-slideshow:
   slide_type: slide
 ---
 xk = np.arange(-6,7)
@@ -211,11 +206,7 @@ def log_pk(A,B):
     sh=np.ones(dim).astype('int')
     sh[0]=-1
     lk =  np.log(dk)*nk.reshape(sh) - dk
-    return lk
-
-def log_p(A,B):
-    lk = log_pk(A,B)
-    return lk.sum(axis=0)
+    return lk.sum(0)
 ```
 
 ```{code-cell} ipython3
@@ -233,7 +224,7 @@ xs, ys = np.meshgrid(As,Bs)
 slideshow:
   slide_type: fragment
 ---
-zs = log_p(xs,ys)
+zs = log_pk(xs,ys)
 nzs=zs-np.max(zs)
 ```
 
@@ -243,6 +234,7 @@ slideshow:
   slide_type: fragment
 ---
 idx = np.unravel_index(np.argmax(zs), zs.shape)
+AB_map=(xs[idx], ys[idx])
 ```
 
 ```{code-cell} ipython3
@@ -250,7 +242,8 @@ idx = np.unravel_index(np.argmax(zs), zs.shape)
 slideshow:
   slide_type: fragment
 ---
-print(xs[idx], ys[idx])
+print(A_true, B_true)
+print(AB_map)
 ```
 
 ```{code-cell} ipython3
@@ -263,25 +256,28 @@ ax.set_aspect(1)
 ax.contourf(xs,ys,nzs, levels=np.log(np.array([0.001,0.01,0.1, 0.3, 0.5, 0.7, 0.9,1])))
 ax.set_xlabel("A")
 ax.set_ylabel("B")
-ax.scatter([A_true],[B_true], color='orange')
+ax.scatter([A_true],[B_true], color='orange');ax.scatter(*AB_map, color='red')
 plt.show()
 ```
+
++++ {"slideshow": {"slide_type": "slide"}}
+
+## Marginal distributions
 
 ```{code-cell} ipython3
 from scipy.special import logsumexp
 ```
 
+### $\alpha$ distribution
+
 ```{code-cell} ipython3
----
-slideshow:
-  slide_type: slide
----
-fig, ax = plt.subplots()
 ys = np.exp(logsumexp(nzs,axis=0))
-ax.plot(As,ys/np.trapz(ys, As))
-ax.grid()
-ax.axvline(A_true, color='orange')
-ax.set_xlabel("A")
+A_map = As[ys.argmax()]
+print(A_map)
+```
+
+```{code-cell} ipython3
+AB_map
 ```
 
 ```{code-cell} ipython3
@@ -290,11 +286,34 @@ slideshow:
   slide_type: slide
 ---
 fig, ax = plt.subplots()
+ax.plot(As,ys/np.trapz(ys, As))
+ax.grid()
+ax.axvline(A_true, color='orange');ax.axvline(AB_map[0],color='red');ax.axvline(A_map,color='red')
+ax.set_xlabel("A");
+```
+
+### $\beta$ distribution
+
+```{code-cell} ipython3
+---
+slideshow:
+  slide_type: slide
+---
 ys = np.exp(logsumexp(nzs,axis=1))
+B_map = Bs[ys.argmax()]
+print(B_map)
+```
+
+```{code-cell} ipython3
+---
+slideshow:
+  slide_type: slide
+---
+fig, ax = plt.subplots()
 ax.plot(Bs,ys/np.trapz(ys, Bs))
 ax.grid()
-ax.axvline(B_true, color='orange')
-ax.set_xlabel("B")
+ax.axvline(B_true, color='orange');ax.axvline(AB_map[1],color='red');ax.axvline(B_map,color='red')
+ax.set_xlabel("B");
 ```
 
 ```{code-cell} ipython3
