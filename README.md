@@ -34,6 +34,24 @@ The notebooks in the repository are stored in [MyST (Markedly Structured Text Fo
 jupytext --to notebook <md file name>
 ```
 
+## Setting up PyMC3
+
+Unfortunatelly installing pymc3 package is not so straightforward as it conflicts with the latest `numpy` version. So before we  install it we have to donwngrade `numpy` by running the command
+```shell
+mamba install numpy=1.22
+```
+for this to work we need to use python 3.9 or  3.10. If you are using 3.11 you will have to create a new environment  using
+```shell
+conda create -n bda3.10 python=3.10
+```
+and then install all the packages as described above but specyfying `numpy=1.22`. 
+If we  have succeeded in downgrading `numpy` we can install `pymc3` by running 
+```shell
+mamba install mkl-service pymc3
+```
+Hope this works. 
+
+
 ## Using python in lab
 
 When using the computers in lab, please log to your linux account and then run
