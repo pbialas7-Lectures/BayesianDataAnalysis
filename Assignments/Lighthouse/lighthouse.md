@@ -4,7 +4,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.7
+    jupytext_version: 1.14.5
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -195,7 +195,7 @@ In the following we will drop the subscript $X$ on $P$.
 
 +++
 
-## Problem 1 
+## Problem 1
 
 +++
 
@@ -214,7 +214,7 @@ $$\sum_i P(xs_i)=1$$
 
 +++
 
-Find the MAP estimate for $x_{lh}$. 
+Find the MAP estimate for $x_{lh}$.
 
 +++
 
@@ -222,22 +222,28 @@ Find the MAP estimate for $x_{lh}$.
 
 +++
 
-Add the plot of the posterior after two measurments. *Hint* perform same calculations as in problem 1, but use the caclulated posterior as the new prior. Caclculate the MAP estimate. 
+Add the plot of the posterior after two measurments. *Hint* perform same calculations as in problem 1, but use the caclulated posterior as the new prior. Caclculate the MAP estimate.
 
 +++
 
 ## Problem 3
 
-```{raw-cell}
-Write an iterative procedure that calculates all the posteriors ans all MAP estimates corresponding to $1,\ldots,100$ measurments. Plot first 10 and last 10 posterior distributions. What is the final MAP? Find 95% probability interval around this value. 
-```
++++
+
+Write an iterative procedure that calculates all the posteriors and all MAP estimates corresponding to $1,\ldots,100$ measurments. Plot first ten and last ten posterior distributions. What is the final MAP? Find 95% probability interval around this value. 
+
++++
 
 ## Problem 4
 
 +++
 
-Write a procedure that takes as the input $xs$ array, the prior array,  array of measurments and returns the prior "in one go". *Hint* it is easier to work with logarithms of probabilities. For normalizing you can use `logsumexp` function from `scipy.special`. If you need to use a loop in your code, please loop over the measurments. 
+Write a procedure that takes as the input $xs$ array, the prior array,  array of measurments and returns the prior "in one go". *Hint* it is easier to work with logarithms of probabilities. For normalizing you can use `logsumexp` function from `scipy.special`. If you need to use a loop in your code, please loop over the measurments.
 
 ```{code-cell} ipython3
 from scipy.special import logsumexp
+```
+
+```{code-cell} ipython3
+
 ```

@@ -4,7 +4,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.5
+    jupytext_version: 1.16.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -13,6 +13,7 @@ kernelspec:
 
 ```{code-cell} ipython3
 ---
+editable: true
 slideshow:
   slide_type: skip
 ---
@@ -22,6 +23,7 @@ slideshow:
 
 ```{code-cell} ipython3
 ---
+editable: true
 slideshow:
   slide_type: skip
 ---
@@ -111,15 +113,18 @@ for i in range(1,101):
 
 So far we did not consider any errors on our estimators. As we have the whole posterior distribution at our disposal, there are many possible ways to define errors. One obvious way would be us use the standard deviation $\sigma$  of the posterior distribution.
 
-+++ {"slideshow": {"slide_type": "fragment"}}
++++ {"slideshow": {"slide_type": "fragment"}, "editable": true}
 
-$$\sigma^2 = \int_0^1\text{d}p (p-\mu)^2 P_{post}(p),\qquad \mu=\int_0^1\text{d}p\, p\, P_{post}(p) $$
+$$\begin{split}
+\mu &=\int_0^1\text{d}p\, p\, P_{post}(p)\\
+\sigma^2 &= \int_0^1\text{d}p (p-\mu)^2 P_{post}(p)
+\end{split}$$
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
 This of course assumes that we are using the mean $\mu$  as the estimate.
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
 For $Beta(\alpha,\beta)$ distribution the variance is
 
@@ -197,7 +202,7 @@ slideshow:
 n_l, n_r, mu, s = stats(left[:n])
 post = beta_posteriors[n-1]
 p_map = n_l/(n_l+n_r); y_map=post.pdf(p_map)
-s = np.sqrt(bst.var_centralf(post.pdf,p_map,0,1))
+s = np.sqrt(bst.var_central_f(post.pdf,p_map,0,1))
 ```
 
 ```{code-cell} ipython3
@@ -233,8 +238,8 @@ slideshow:
 ---
 n_l, n_r, mu, s = stats(left[:n])
 post = beta_posteriors[n-1]
-p_median = bst.medianf(post.pdf,0,1)
-s = np.sqrt(bst.var_centralf(post.pdf,p_median,0,1))
+p_median = bst.median_f(post.pdf,0,1)
+s = np.sqrt(bst.var_central_f(post.pdf,p_median,0,1))
 ```
 
 ```{code-cell} ipython3
@@ -268,7 +273,7 @@ fig
 slideshow:
   slide_type: skip
 ---
-from bda.stats import  cdif_left, confidence_interval
+from bda.stats import  cdi_left_f, cdi_central_f
 ```
 
 +++ {"slideshow": {"slide_type": "skip"}}
@@ -296,9 +301,9 @@ n_l = left[:n].sum(); n_r = n- n_l;
 post = beta_posteriors[n-1]
 p_map = n_l/(n_l+n_r); y_map=post.pdf(p_map)
 pax.annotate(f'MAP',(p_map, y_map),(p_map, y_map+0.5), fontsize=20, arrowprops=dict(facecolor='black', shrink=0.05), va='center');
-_,l,r=cdif_left(post.pdf, 0.0,0.75)
+_,l,r=cdi_left_f(post.pdf, 0.0,0.75)
 pax.fill_between(xs,beta_posteriors[2].pdf(xs),0, where = (xs>l) & (xs<r), alpha=0.5);
-_,l,r=cdif_left(post.pdf, 0.2,0.75)
+_,l,r=cdi_left_f(post.pdf, 0.2,0.75)
 pax.fill_between(xs,beta_posteriors[2].pdf(xs),0, where = (xs>l) & (xs<r), alpha=0.5);
 ax.set_title(f"Confidence intervals $\\beta=0.75$")
 plt.close();
@@ -329,7 +334,7 @@ n_l = left[:n].sum(); n_r = n- n_l;
 post = beta_posteriors[n-1]
 p_map = n_l/(n_l+n_r); y_map=post.pdf(p_map)
 pax.annotate(f'MAP',(p_map, y_map),(p_map, y_map+0.5), fontsize=20, arrowprops=dict(facecolor='black', shrink=0.05), va='center');
-l,r=confidence_interval(post, p_map,0.75)
+_,l,r=cdi_central_f(post.pdf, p_map,0.75,0,1)
 pax.axvline(l, color='lightblue')
 pax.axvline(r, color='lightblue')
 pax.fill_between(xs,post.pdf(xs),0, where = (xs>l) & (xs<=r),alpha=0.5, color='lightblue');
@@ -399,7 +404,7 @@ interactive_plot = interact(lambda r: plot_All(beta_posteriors[2].pdf,r),r=(0.0,
 slideshow:
   slide_type: skip
 ---
-from bda.stats import hdrf
+from bda.stats import hdr_f
 ```
 
 ```{code-cell} ipython3
@@ -417,7 +422,7 @@ n_l = left[:n].sum(); n_r = n- n_l;
 post = beta_posteriors[n-1]
 p_map = n_l/(n_l+n_r); y_map=post.pdf(p_map)
 pax.annotate(f'MAP',(p_map, y_map),(p_map, y_map+0.5), fontsize=20, arrowprops=dict(facecolor='black', shrink=0.05), va='center');
-_,lr=hdrf(post.pdf, 0.95,a=0,b=1)
+lr,_,_=hdr_f(post.pdf, 0.95,a=0,b=1)
 pax.fill_between(xs,post.pdf(xs),0, where = (xs>lr[0]) & (xs<lr[1]), alpha=0.5);
 plt.close()
 ```
@@ -449,7 +454,7 @@ n_l = left[:n].sum(); n_r = n- n_l;
 post = beta_posteriors[n-1]
 p_map = n_l/(n_l+n_r); y_map=post.pdf(p_map)
 pax.annotate(f'MAP',(p_map, y_map),(p_map, y_map+0.5), fontsize=20, arrowprops=dict(facecolor='black', shrink=0.05), va='center');
-_,lr=hdrf(post.pdf, 0.95,a=0,b=1)
+lr,_,_=hdr_f(post.pdf, 0.95,a=0,b=1)
 pax.fill_between(xs,post.pdf(xs),0, where = (xs>lr[0]) & (xs<lr[1]), alpha=0.5);
 plt.close()
 ```
@@ -521,12 +526,13 @@ slideshow:
   slide_type: skip
 ---
 fig,ax = plt.subplots()
-ps = np.linspace(0.48,0.5,1000)
+ps = np.linspace(0.48,0.51,1000)
 ax.plot(ps, f_post.pdf(ps));
 b=1-1e-10
-_,hdr=hdrf(f_post.pdf,b,a=0.4,b=0.6)
+hdr,_,_=hdr_f(f_post.pdf,.1,a=0.48,b=0.51)
 ax.fill_between(ps,f_post.pdf(ps),0,where = (ps>hdr[0]) & (ps<hdr[1]),  alpha=0.5);
 ax.text(.4930,500,f"$\\beta={b:.12g}$\n $[{hdr[0]:.4f} {hdr[1]:.4f}]$")
+ax.axvline(0.5,c='orange')
 plt.close();
 ```
 
@@ -544,5 +550,10 @@ $$ P\left(p_f>=\frac{1}{2}\right) = \frac{\int_{\frac{1}{2}}^1 p_f^{241945}(1-p_
 {\int_{0}^1  p_f^{241945}(1-p_f)^{251527}\text{d}p_f} \approx 1.15 \times 10^{-42}$$
 
 ```{code-cell} ipython3
+---
+editable: true
+slideshow:
+  slide_type: ''
+---
 
 ```

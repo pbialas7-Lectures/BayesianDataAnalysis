@@ -4,7 +4,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.5
+    jupytext_version: 1.16.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -13,6 +13,7 @@ kernelspec:
 
 ```{code-cell} ipython3
 ---
+editable: true
 slideshow:
   slide_type: skip
 ---
@@ -229,7 +230,6 @@ You can thing about it as an outcome of following experiment:
  1. You  repeat the two points above noting each time  $p$ and number of successes.
  1. From the results you select only those where number of successes was equal to `tosses[:10].sum()`
  1. The distributiion of $p$ in this selected results should match our posterior!
- 
 
 +++ {"slideshow": {"slide_type": "skip"}}
 
