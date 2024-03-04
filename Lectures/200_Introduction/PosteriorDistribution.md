@@ -56,6 +56,7 @@ np.random.seed(1149753)
 
 ```{code-cell} ipython3
 ---
+editable: true
 slideshow:
   slide_type: skip
 tags: [function]

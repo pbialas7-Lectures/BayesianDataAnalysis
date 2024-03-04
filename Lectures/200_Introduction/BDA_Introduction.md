@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.5
+    jupytext_version: 1.16.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -14,6 +14,7 @@ kernelspec:
 
 ```{code-cell} ipython3
 ---
+editable: true
 slideshow:
   slide_type: skip
 ---
@@ -54,6 +55,7 @@ dc='#1f77b4' #default color
 
 ```{code-cell} ipython3
 ---
+editable: true
 slideshow:
   slide_type: skip
 ---
@@ -90,13 +92,13 @@ We will start with the original example considered by the Reverend Thomas Bayes 
 
 +++ {"slideshow": {"slide_type": "skip"}}
 
-Imagine that somebody places a  billiard ball at random on the billiard table. The location of the ball is unknown. Then we start to throw the balls at random at the table and somebody is reporting to us if the balls have landed on the left or on the right of the first ball. The problem is really one dimensional as we are only interested in ball position along one side of the table and we can describe it by one number $p\in[0,1]$. 
+Imagine that somebody places a  billiard ball at random on the billiard table. The location of the ball is unknown. Then we start to throw the balls at random at the table and somebody is reporting to us if the balls have landed on the left or on the right of the original ball. The problem is really one dimensional as we are only interested in ball position along one side of the table and we can describe it by one number $p\in[0,1]$. 
 
 The problem considered by T. Bayes was how our belief about the ball position changes with each new ball thrown on the table.
 
 +++ {"slideshow": {"slide_type": "skip"}}
 
-So let's place our original ball on the table
+So let's place our original ball (black) on the table
 
 ```{code-cell} ipython3
 ---
@@ -138,13 +140,13 @@ $$\int_0^1\!\!\text{d}p\, P(p)=1$$
 
 +++ {"slideshow": {"slide_type": "skip"}}
 
-Given that, the probability that the ball position $p\in [a,b]$ is given by
+Given that, the probability that the ball lies in the interval $[a,b]$ is given by the integral
 
 +++ {"slideshow": {"slide_type": "fragment"}}
 
 $$P(p\in [a,b])=\int_a^b\!\!\text{d}p\, P(p)$$
 
-+++
++++ {"editable": true, "slideshow": {"slide_type": "skip"}}
 
 For each $a<=b$ this number is a _probability_ and it fulfills all the probability axioms presented in the `100_Probability/probability.md` notebook.
 
@@ -159,7 +161,7 @@ For each $a<=b$ this number is a _probability_ and it fulfills all the probabili
 
 +++ {"slideshow": {"slide_type": "skip"}}
 
-The meaning of this number (probability) is not always clear, I will stick with the Bayesian interpretation as the measure of our certainty of this event happening. In particular zero probability means that we are sure this event will not happen, and probability one means that we are certain that it will happen.
+The meaning of this number (probability) is not always clear, I will stick with the Bayesian interpretation as the measure of our certainty of that this event will happen. In particular zero probability means that we are sure this event will not happen, and probability one means that we are certain that it will happen.
 
 +++ {"slideshow": {"slide_type": "slide"}}
 
@@ -169,7 +171,7 @@ The meaning of this number (probability) is not always clear, I will stick with 
 
 We start with our belief as to the position of the ball on the table before we get any additional information. That is called a _prior_ from latin _a priori_. 
 
-We will assume that the placement was uniformly random and
+We will assume that the placement was uniformly random
 
 +++ {"slideshow": {"slide_type": "fragment"}}
 
@@ -205,7 +207,7 @@ pax.legend();
 
 +++ {"slideshow": {"slide_type": "skip"}}
 
-Now we throw another ball marked in red on the plot below. Actually I will throw 100 balls at once, but use them one by one.
+Now we throw another ball marked in red on the plot below, which lands on the right side of the original ball. Actually I will throw 100 balls at once, but use them one by one.
 
 ```{code-cell} ipython3
 ---
@@ -229,11 +231,7 @@ bl.plot_balls(ax, 1, x,left, bl.cs)
 
 +++ {"slideshow": {"slide_type": "skip"}}
 
-which lands on the right side of the original ball.
-
-+++ {"slideshow": {"slide_type": "skip"}}
-
-Intuitively it changes our belief as to where the first ball is located notably it becomes less likely that the ball is close to the left edge. Such change of probability distribution is described by the _conditional_ probability.
+Intuitively it changes our belief as to where the first ball is located notably it becomes less likely that the ball is close to the right edge. Such change of probability distribution is described by the _conditional_ probability.
 
 +++ {"slideshow": {"slide_type": "slide"}}
 
@@ -264,8 +262,9 @@ from itertools import product
 
 ```{code-cell} ipython3
 ---
+editable: true
 slideshow:
-  slide_type: fragment
+  slide_type: skip
 ---
 S = list(product(range(1,7), range(1,7)) )
 ```
@@ -326,8 +325,9 @@ rem = 1
 
 ```{code-cell} ipython3
 ---
+editable: true
 slideshow:
-  slide_type: fragment
+  slide_type: skip
 ---
 B = list(filter(lambda x: (x[0]+x[1])%2 == rem, S))
 len(B)
@@ -365,7 +365,7 @@ $$P(A\cap B)= P(A|B)P(B)$$
 
 which can be generalized to multiple sets
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
 $$B = \bigcup_{i}  B_i,\; \bigvee_{i\neq j} B_i\cap B_j=\emptyset \implies P(B)=\sum_i P(B_i)$$
 
@@ -373,43 +373,43 @@ $$B = \bigcup_{i}  B_i,\; \bigvee_{i\neq j} B_i\cap B_j=\emptyset \implies P(B)=
 
 $$P(A\cap B)= \sum_i P(A|B_i)P(B_i)$$
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
 In special case when $B=S$ this gives
 
-+++ {"slideshow": {"slide_type": "fragment"}}
++++ {"slideshow": {"slide_type": "fragment"}, "editable": true}
 
-$$P(A)= \sum_i P(A|B_i)P(B_i)$$
+$$\bigcup_i B_i = S \implies P(A)= \sum_i P(A|B_i)P(B_i)$$
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
 This is very useful for defining more complex probability distributions.
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
 ### Height distribution
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
- For example the height distribution in human population can be decomposed in this way into height distribution fro women and men, each separately being a normal distribution
+ For example the height distribution in human population can be decomposed in this way into height distribution for women and men, each separately being a normal distribution
 
-+++ {"slideshow": {"slide_type": "fragment"}}
++++ {"slideshow": {"slide_type": "fragment"}, "editable": true}
 
 $$P(h)=P(h|f)P(f)+P(h|m)P(m)$$
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
 ### Back to biliard
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
 Going back to our billiard example what we are looking for it the conditional probability of ball being at $p$ on condition that the second ball landed on the right of it
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
 $$P(p|r)$$
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
 ### Sampling distribution/ likelihood
 
@@ -417,7 +417,7 @@ $$P(p|r)$$
 
 We will start by calculating the _reverse_ conditional probability
 
-+++ {"slideshow": {"slide_type": "fragment"}}
++++ {"slideshow": {"slide_type": "fragment"}, "editable": true}
 
 $$P(r|p)$$
 
@@ -425,7 +425,18 @@ $$P(r|p)$$
 
 that the second ball lands on the right provided that first ball is at $p$. This called the _sampling distribution_ and  in this case this is the Bernoulli distribution
 
-+++ {"slideshow": {"slide_type": "fragment"}}
+```{code-cell} ipython3
+---
+editable: true
+slideshow:
+  slide_type: slide
+---
+fig,ax,pax = bl.make_pool_figure(p,ylim=(0,3))
+bl.plot_ball(ax, p, y, bc='k', lc='darkgrey', bs=200, draw_line=True)
+bl.plot_balls(ax, 1, x,left, bl.cs)
+```
+
++++ {"slideshow": {"slide_type": "fragment"}, "editable": true}
 
 $$P(r|p)=1-p\quad P(l|p)=p$$
 
@@ -433,7 +444,7 @@ $$P(r|p)=1-p\quad P(l|p)=p$$
 
 If we consider $P(r|p)$ as a function of $p$ we will call it the _likelihood_
 
-+++ {"slideshow": {"slide_type": "fragment"}}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
 $$L(p|r)\equiv P(r|p)$$
 
@@ -768,20 +779,22 @@ $$P(n_l,n_r|p) = \binom{n_l+n_r}{n_l}p^{n_l}(1-p)^{n_r}$$
 
 The normalizing factor is now more complicated but can be calculated using e.g. _Mathematica_.
 
-+++ {"slideshow": {"slide_type": "fragment"}}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
-$$\int_0^1\text{d}p' P(n_l,n_r|p')P(p') = \binom{n_l+n_r}{n_l}
-\frac{n_l!n_r!}{(n_l+n_r+1)!}=\frac{1}{n_l+n_r+1}$$
+\begin{split}
+\int_0^1\text{d}p'& P(n_l,n_r|p')P(p') \\&= \binom{n_l+n_r}{n_l}
+\frac{n_l!n_r!}{(n_l+n_r+1)!}=\frac{1}{n_l+n_r+1}
+\end{split}
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
 leading to the posterior
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
 $$P(p|n_l,n_r)=\binom{n_l+n_r}{n_l}(n_l+n_r+1)p^{n_l}(1-p)^{n_r}$$
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
 ### Beta distribution
 
@@ -789,14 +802,15 @@ $$P(p|n_l,n_r)=\binom{n_l+n_r}{n_l}(n_l+n_r+1)p^{n_l}(1-p)^{n_r}$$
 
 After some manipulations
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
-$$
-\binom{n_l+n_r}{n_l}(n_l+n_r+1)
-=\frac{(n_l+n_r)!(n_l+n_r+1)}{n_l!n_r!}
-=\frac{(n_l+n_r+1)!}{n_l!n_r!}$$
+\begin{split}
+&\binom{n_l+n_r}{n_l}(n_l+n_r+1)\\
+&\kern5mm=\frac{(n_l+n_r)!(n_l+n_r+1)}{n_l!n_r!}
+=\frac{(n_l+n_r+1)!}{n_l!n_r!}
+\end{split}
 
-+++ {"slideshow": {"slide_type": "fragment"}}
++++ {"slideshow": {"slide_type": "fragment"}, "editable": true}
 
 $$\frac{(n_l+n_r+1)!}{n_l!n_r!}=\frac{\Gamma(n_l+n_r+2)}{\Gamma(n_l+1)\Gamma(n_r+2)}$$
 
@@ -852,47 +866,49 @@ which is the usual estimate for the parameter of binomial distribution.  This is
 
 Before we proceed with the third ball we will check if we can recreate the results for the two balls. Setting $n_l=0$ and $n_r=2$ we obtain identical answer
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
-$$p(p|r,r)=PDF[Beta(1,3)]=\frac{\Gamma(4)}{\Gamma(1)\Gamma(3)}(1-p)^{2}=\frac{3!}{2!}(1-p)^{2}$$
+$$\begin{split}
+p(p|r,r)&=PDF[Beta(1,3)]\\&=\frac{\Gamma(4)}{\Gamma(1)\Gamma(3)}(1-p)^{2}=\frac{3!}{2!}(1-p)^{2}
+\end{split}
+$$
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
 It show that one can either update our knowledge incrementally or use all data at once.
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
 This is a general feature. Let's say we have collected two independent sets of data $D_1$ and $D_2$. Using all the data we obtain for the posterior
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
 $$
 \begin{split}
-P(\theta|D_2, D_2)&=\frac{P(D_2,D_1|\theta)P(\theta)}{P(D_2, D_1)}
+P(\theta|D_2, D_1)&=\frac{P(D_2,D_1|\theta)P(\theta)}{P(D_2, D_1)}
 \end{split}
 $$
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
 However using the independence of the two sets we can factorize this expression to obtain
 
-+++ {"slideshow": {"slide_type": "fragment"}}
++++ {"slideshow": {"slide_type": "fragment"}, "editable": true}
 
-$$
 \begin{split}
-\frac{P(D_2|\theta)P(D_1|\theta)P(\theta)}{P(D_2)P(D_1)}=\frac{P(D_2|\theta)}{P(D_2)}\frac{P(D_1|\theta)P(\theta)}{P(D_1)}= P(D_2|\theta)P(\theta|D_1)
+\frac{P(D_2|\theta)P(D_1|\theta)P(\theta)}{P(D_2)P(D_1)}&=\frac{P(D_2|\theta)}{P(D_2)}\frac{P(D_1|\theta)P(\theta)}{P(D_1)}\\
+&= \frac{P(D_2|\theta)}{P(D_2)}P(\theta|D_1)
 \end{split}
-$$
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
 The last expression shows that we can first calculate the posterior conditioned on set $D_1$ and use the likelihood of the set $D_2$ to get final posterior.
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
 Going back to our billiard table with our third ball on the left we obtain for posterior
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
 $$\begin{split}
 p(p|r,r,l)&=PDF[Beta(2,3)]=\frac{\Gamma(5)}{\Gamma(2)\Gamma(3)}p(1-p)^{2}\\
@@ -900,16 +916,17 @@ p(p|r,r,l)&=PDF[Beta(2,3)]=\frac{\Gamma(5)}{\Gamma(2)\Gamma(3)}p(1-p)^{2}\\
 =12 p (1-p)^2
 \end{split}$$
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
 and MAP estimate
 
-+++ {"slideshow": {"slide_type": "fragment"}}
++++ {"slideshow": {"slide_type": "fragment"}, "editable": true}
 
 $$p_{map}=\frac{1}{3}$$
 
 ```{code-cell} ipython3
 ---
+editable: true
 slideshow:
   slide_type: skip
 ---
@@ -923,6 +940,7 @@ for i in range(1,101):
 
 ```{code-cell} ipython3
 ---
+editable: true
 slideshow:
   slide_type: skip
 ---
@@ -941,50 +959,52 @@ plt.close();
 
 ```{code-cell} ipython3
 ---
+editable: true
 slideshow:
   slide_type: slide
 ---
 fig
 ```
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
 ### Posterior mean
 
-+++
++++ {"editable": true, "slideshow": {"slide_type": "skip"}}
 
 Instead of the mode we can also use the mean of the distribution as the estimator
 
-+++ {"slideshow": {"slide_type": "fragment"}}
++++ {"slideshow": {"slide_type": "fragment"}, "editable": true}
 
 $$\operatorname{Mean}[Beta(\alpha,\beta)]=\frac{\alpha}{\alpha+\beta}$$
 
-+++ {"slideshow": {"slide_type": "fragment"}}
++++ {"slideshow": {"slide_type": "fragment"}, "editable": true}
 
 $$\frac{n_l+1}{n_l+n_r+2}$$
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
 denoted below by the light blue vertical line below
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
 ### Posterior median
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
 Very often it is better to use median instead of the mean. Median has a very clear interpretation: it is a value such that probability that $p$ is less than this value is same as the probability that $p$ is greater than this value, or more exactly
 
-+++ {"slideshow": {"slide_type": "fragment"}}
++++ {"slideshow": {"slide_type": "fragment"}, "editable": true}
 
 $$P\left(p\leq p_{med}\right)\geq\frac{1}{2}\quad\text{and}\quad P\left(p\geq p_{med}\right)\geq\frac{1}{2}$$
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
 The median value is marked with a orange line on the plot below.
 
 ```{code-cell} ipython3
 ---
+editable: true
 slideshow:
   slide_type: skip
 ---
@@ -1000,7 +1020,7 @@ p_map = n_l/(n_l+n_r); y_map=beta_posteriors[n-1].pdf(p_map)
 pax.annotate(f'MAP',(p_map, y_map),(p_map, y_map+0.5), fontsize=20, arrowprops=dict(facecolor='black', shrink=0.05), va='center');
 p_mean = beta_posteriors[n-1].mean(); 
 pax.axvline(p_mean);
-p_median = bst.medianf(beta_posteriors[2].pdf,0,1)
+p_median = bst.median_f(beta_posteriors[2].pdf,0,1)
 pax.axvline(p_median, color='orange')
 plt.close();
 ```
@@ -1034,7 +1054,7 @@ p_map = n_l/(n_l+n_r); y_map=post.pdf(p_map)
 p_mean= post.mean()
 pax.annotate(f'MAP',(p_map, y_map),(p_map, y_map+0.5), fontsize=20, arrowprops=dict(facecolor='black', shrink=0.05), va='center');
 ax.axvline(p_mean)
-p_median = bst.medianf(post.pdf,0,1)
+p_median = bst.median_f(post.pdf,0,1)
 pax.axvline(p_median, color='orange')
 plt.close()
 ```
@@ -1051,11 +1071,11 @@ fig
 
 Because of relatively large number of throws there is very little difference between MAP, posterior mean and median.
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
 ## Conjugate  priors
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
 So far we have assumed that the prior is uniform over the whole interval $[0,1]$. What happens if our original ball has the tendency to land near the middle? Or near the right edge of the table? We can model that using again the Beta distribution
 
@@ -1100,11 +1120,14 @@ p^{n_l+\alpha-1}(1-p)^{n_+\beta-1}$$
 
 we see that the functional dependence of the posterior on $p$ is same as for $Beta(n_l+\alpha, n_r+\beta)$. Which means that we do not have to calculate any normalizing factors and just assume
 
-+++ {"slideshow": {"slide_type": "fragment"}}
++++ {"slideshow": {"slide_type": "fragment"}, "editable": true}
 
-$$P(p| n_r, n_l )  = \operatorname{PDF}[  Beta(n_l+\alpha, n_r+\beta),p]= = \operatorname{PDF}[  Beta(n_l+1+\alpha-1, n_r+1+\beta-1),p]$$
+$$\begin{split}
+P(p| n_r, n_l )  &= \operatorname{PDF}[  Beta(n_l+\alpha, n_r+\beta),p]
+\end{split}
+$$
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
 In this context $\alpha$ and $\beta$ are called pseudo throws, as we are effectively adding $\alpha -1$ and $\beta-1$  respectively  to the number of balls on the left and balls on the right.
 
@@ -1129,7 +1152,7 @@ and so
 $$\nu = \frac{\mu(1-\mu)}{\sigma^2}-1,\quad \alpha = \mu\nu, \quad
 \beta = (1-\mu) \nu,\quad \sigma^2<\mu(1-\mu)$$
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
 ## Categorical variables
 
@@ -1149,17 +1172,17 @@ $$P(n_1,\ldots, n_{m}|p_1,\ldots, p_{m}) = \frac{m!}{n_1!\cdots n_{m}!}p_1^{n_1}
 
 ### Example: Dice
 
-+++ {"slideshow": {"slide_type": "fragment"}}
++++ {"slideshow": {"slide_type": "fragment"}, "editable": true}
 
-$$m=6,\quad p_i=\frac{1}{6} \qquad P(n_1,\ldots, n_{6}) = \frac{N!}{n_1!\cdots n_{m}!}\frac{1}{6^m}$$
+$$m=6,\quad p_i=\frac{1}{6}$$ $$ P(n_1,\ldots, n_{6}) = \frac{N!}{n_1!\cdots n_{m}!}\frac{1}{6^m}$$
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
 #### Problem
 
-We are rolling four dices. What is the probability that we roll four ones?  What is the probebility that we roll numbers from one tow four?
+We are rolling four dices. What is the probability that we roll four ones?  What is the probability that we roll numbers from one to four?
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
 ### Dirichlet distribution
 
@@ -1172,7 +1195,7 @@ Conjugate prior  to this distribution is the Dirichlet distribution which is a g
 $$P_{Dir}(p_1,\ldots,p_{m}|\alpha_1,\ldots,\alpha_{m}) = \frac{\Gamma\left(\sum\limits_{i=1}^{m} \alpha_i\right)}{\prod\limits_{i=1}^{m}\Gamma(\alpha_i)}
 \prod\limits_{i=1}^{m}p_i^{\alpha_i-1}$$
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
 ### Posterior
 
@@ -1180,7 +1203,7 @@ $$P_{Dir}(p_1,\ldots,p_{m}|\alpha_1,\ldots,\alpha_{m}) = \frac{\Gamma\left(\sum\
 
 It is easy to check that the posterior probability density for $P(p_1,\ldots, p_{m}|n_1,\ldots, n_{m})$ with prior given by Dirichlet distribution with parameters $\alpha_k$  is again given with by the  Dirichlet distribution with parameters $\alpha_1+n_1,\ldots, \alpha_{m}+n_{m}$.
 
-+++ {"slideshow": {"slide_type": "fragment"}}
++++ {"slideshow": {"slide_type": "fragment"}, "editable": true}
 
 $$P(p_1,\ldots, p_{m}|n_1,\ldots, n_{m})=P_{Dir}(p_1,\ldots,p_{m}|\alpha_1+n_1,\ldots,\alpha_{m}+n_m)$$
 
@@ -1228,15 +1251,15 @@ Assuming uniform prior on the parameter $\lambda$
 
 $$P(\lambda)=1$$
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
 (this is an _improper_ prior, as this is not a normalizable probability distribution) we obtain for posterior after  observing a series of counts $\{k_i\}$
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
-$$P(\{k_i\}|\lambda) = \prod_{i=1}^n e^{-\lambda}\frac{\lambda^{k_i}}{k_i!}\propto \lambda^{\displaystyle n\bar{k}}e^{\displaystyle -n\lambda},\quad \bar k=\frac{1}{n}\sum_{i=1}^n k_i$$
+$$P(\{k_i\}|\lambda) = \prod_{i=1}^n e^{-\lambda}\frac{\lambda^{k_i}}{k_i!}\propto \lambda^{\displaystyle n\bar{k}}e^{\displaystyle -n\lambda}$$ $$ k=\frac{1}{n}\sum_{i=1}^n k_i$$
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
 From this formula we can infer that distribution with a pdf of the form
 
@@ -1325,5 +1348,10 @@ fig
 ```
 
 ```{code-cell} ipython3
+---
+editable: true
+slideshow:
+  slide_type: ''
+---
 
 ```

@@ -109,7 +109,7 @@ for i in range(1,101):
 
 ## Standard deviation
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
 So far we did not consider any errors on our estimators. As we have the whole posterior distribution at our disposal, there are many possible ways to define errors. One obvious way would be us use the standard deviation $\sigma$  of the posterior distribution.
 
@@ -128,12 +128,13 @@ This of course assumes that we are using the mean $\mu$  as the estimate.
 
 For $Beta(\alpha,\beta)$ distribution the variance is
 
-+++ {"slideshow": {"slide_type": "fragment"}}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
 $$\sigma^2 = \frac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}$$
 
 ```{code-cell} ipython3
 ---
+editable: true
 slideshow:
   slide_type: skip
 ---

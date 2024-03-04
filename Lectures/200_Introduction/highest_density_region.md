@@ -83,7 +83,11 @@ ax.plot(xs, dist);
 
 +++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
-$\beta$-HDR is a region where at least $\beta$ of probability is concentrated and has smallest possible volume in the sample space, hence highest density. More formal definition given below.
+$\beta$-HDR is a region where at least $\beta$ of probability is concentrated and has smallest possible volume in the sample space, hence highest density. 
+
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
+
+More formal definition given below.
 
 +++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
@@ -175,13 +179,19 @@ ax.plot(ps, beta(20,5).pdf(ps));
 ```
 
 ```{code-cell} ipython3
+---
+editable: true
+slideshow:
+  slide_type: slide
+---
 from bda.stats import hdr_f
 ```
 
 ```{code-cell} ipython3
 ---
+editable: true
 slideshow:
-  slide_type: slide
+  slide_type: ''
 ---
 hdr,_,_ = hdr_f(beta(a=20,b=5).pdf,beta=0.95,a=0,b=1)
 ps=np.linspace(0,1,1000)
