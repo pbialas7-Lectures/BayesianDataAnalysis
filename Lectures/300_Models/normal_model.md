@@ -4,7 +4,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.5
+    jupytext_version: 1.16.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -13,6 +13,7 @@ kernelspec:
 
 ```{code-cell} ipython3
 ---
+editable: true
 slideshow:
   slide_type: skip
 ---
@@ -100,7 +101,7 @@ It is reasonable to  assume same relation for the posterior
 
 $$P(\mu|\{y_k\},\sigma^2)=g(\{y_k-\mu\},\sigma^2)$$
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
 Inserting this into the formula for posterior we obtain the relation
 
@@ -116,15 +117,15 @@ that can be satisfied only when the prior does not depend on $\mu$
 
 $$P(\mu)\propto 1$$
 
-+++
++++ {"editable": true, "slideshow": {"slide_type": "slide"}}
 
 ### Improper prior
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
 Please note that this is __not__ a probability distribution as it is not normalizable. We call it an _improper_ prior. Nevertheless we can still use it  as long as posterior is a proper distribution. Because of this prior the posterior is proportional to the likelihood
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
 $$P(\mu|\b y,\sigma^2) \propto \prod_{k=1}^N \frac{1}{\sqrt{2\pi}\sigma} 
 e^{-\frac{1}{2\sigma^2}\left(y_k-\mu\right)^2}$$
@@ -233,7 +234,7 @@ $$P(\theta_1|y) = \int\text{d}\theta_2 P(\theta_1|y,\theta_2)P(\theta_2|y)$$
 
 ## Normal model with unknown variance
 
-+++
++++ {"editable": true, "slideshow": {"slide_type": "skip"}}
 
 As an example we will take the normal model with unknown mean and variance. We will treat the variance as nuisance parameter
 
@@ -241,59 +242,76 @@ As an example we will take the normal model with unknown mean and variance. We w
 
 ### Prior on scale parameter
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
 To find the prior on $\sigma$ we will  use similar reasoning as in case of $\mu$. The sampling distribution does depend on $\b y$, $\mu$ and $\sigma$ in a specific way
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
-$$P(\b y|\mu,\sigma^2)=\prod_{k=1}^NP(y_k|\mu,\sigma^2)=\frac{1}{\sigma^N}\prod_{k=1}^N f\left(\frac{y_k-\mu}{\sigma}\right)$$
+$$P(\b y|\mu,\sigma^2)=\prod_{k=1}^NP(y_k|\mu,\sigma^2)=\prod_{k=1}^N \frac{1}{\sigma} f\left(\frac{y_k-\mu}{\sigma}\right)$$
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
-We say that $\sigma$ is a _scale_ parameter as it sets the scale for $\b y$ and $\mu$. The $\sigma^{-N}$ factor assures the proper normalization: the integral over $\b y$ does not depend on $\sigma$. We will assume similar relation for posterior
+We say that $\sigma$ is a _scale_ parameter as it sets the scale for $\b y$ and $\mu$. The $\sigma^{-1}$ factor assures the proper normalization: the integral over $\b y$ does not depend on $\sigma$.
 
-+++ {"slideshow": {"slide_type": "fragment"}}
++++ {"editable": true, "slideshow": {"slide_type": ""}}
 
-$$P(\mu,\sigma^2|\b y) =\prod_{k=1}^N\frac{y_k-\mu}{(\sigma^2)^{\frac{3}{2}}} g\left(\frac{y_k-\mu}{\sigma}\right)$$
+$$
+\int_{-\infty}^\infty\text{d}y
+f\left(\frac{y-\mu}{\sigma}\right) = 
+\sigma\int_{-\infty}^\infty\text{d}z
+f\left(z\right)\qquad z= \frac{y-\mu}{\sigma}\
+$$
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"editable": true, "slideshow": {"slide_type": "skip"}}
 
-again the factor $y_k\,\sigma^{-2}$ in front stems from the normalization. It ensures that the integral over $\mu$ and $\sigma$ converges and is independent of $y$.
+If we now set define a new variable
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"editable": true, "slideshow": {"slide_type": "slide"}}
 
-This leads to the relation
+$$u_k  = \ln (y_k-\mu)$$
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++ {"editable": true, "slideshow": {"slide_type": "skip"}}
 
-$$\frac{1}{\sigma}f\left(\frac{y_k-\mu}{\sigma}\right)P(\mu,\sigma)\propto \frac{y_k-\mu}{(\sigma^2)^{\frac{3}{2}}}g\left(\frac{y_k-\mu}{\sigma}\right)$$
+ we will obtain that
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"editable": true, "slideshow": {"slide_type": "fragment"}}
 
-which is satisfied only if
+$$P_{u_k}(u_k) = e^{u_k-\log \sigma}f(e^{u_k-\log\sigma}) $$
 
-+++ {"slideshow": {"slide_type": "fragment"}}
++++ {"editable": true, "slideshow": {"slide_type": "skip"}}
 
-$$P_\sigma^2(\sigma^2)\propto \frac{1}{\sigma^2}$$
+Using same resoning as in case of $\mu$ we obtain that the prior on $\log \sigma$ is uniform 
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"editable": true, "slideshow": {"slide_type": "slide"}}
 
-If we want to use the standard deviation $\sigma$ instead of variance $\sigma^2$ the the distribution is
+$$P(\log\sigma)\propto 1 $$
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++ {"editable": true, "slideshow": {"slide_type": "skip"}}
+
+which translates into
+
++++ {"editable": true, "slideshow": {"slide_type": ""}}
 
 $$P_{\sigma}(\sigma)\propto \frac{1}{\sigma}$$
+
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
+
+If we want to use the variance $\sigma^2$ instead of standard deviation $\sigma$ the the distribution is
+
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
+
+$$P_{\sigma^2}(\sigma^2)\propto \frac{1}{\sigma^2}$$
 
 +++ {"slideshow": {"slide_type": "skip"}}
 
 This can be checked by calculating the cumulative distribution function for this distribution
 
-+++ {"slideshow": {"slide_type": "fragment"}}
++++ {"slideshow": {"slide_type": "fragment"}, "editable": true}
 
 $$CDF_{P_{\sigma^2}}(z)=P(\sigma^2<z)=P(\sigma<\sqrt{z})=CDF_{P_\sigma}(\sqrt{z})$$
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
 and differentiating it with respect to $z$.
 
@@ -317,7 +335,7 @@ Differentiating with respect to $z$ we obtain
 
 $$P_{\log\sigma}(\log \sigma)=e^z \text{CDF}^\prime_{P_\sigma}(e^z)\propto e^z \frac{1}{e^z} = 1$$
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
 ### Normal model --  posterior for variance $\sigma^2$
 
@@ -375,7 +393,7 @@ e^{\displaystyle -\frac{n-1}{2\sigma^2}s^2}\sqrt{2\pi\frac{\sigma^2}{n}}
 \end{split}
 $$
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
 leading to
 
@@ -392,11 +410,11 @@ This is a [_inverse Gamma_ distribution](https://en.wikipedia.org/wiki/Inverse-g
 
 $$f(x;\alpha,\beta)=\frac{\beta^\alpha}{\Gamma(\alpha)}x^{-(\alpha+1)}e^{-\frac{\beta}{x}}$$
 
-+++
++++ {"editable": true, "slideshow": {"slide_type": "skip"}}
 
 This leads finally to
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
 $$\sigma^2|y \sim \operatorname{Inv-}\Gamma\left(\alpha=\frac{n-1}{2},\beta=\frac{1}{2}(n-1)s^2\right)$$
 
@@ -446,6 +464,8 @@ y_bar = y.mean()
 s2 = y.var(ddof=1)
 ```
 
++++ {"editable": true, "slideshow": {"slide_type": "skip"}}
+
 Parameter `ddof` (delta degrees of freedom) determines what divisor is to be used when calculating variance. In this case value one means that we divide by $n-1$ thus obtaining the unbiased estimate (see [documentation](https://numpy.org/doc/stable/reference/generated/numpy.var.html#numpy.var)).
 
 ```{code-cell} ipython3
@@ -471,32 +491,42 @@ plt.axvline(var, color='orange',label='true value');
 plt.legend();
 ```
 
++++ {"editable": true, "slideshow": {"slide_type": "skip"}}
+
 We can find the MAP estimate of $\sigma^2$
 
 ```{code-cell} ipython3
 ---
+editable: true
 slideshow:
   slide_type: skip
 ---
 vars[np.argmax(post_var.pdf(vars))]
 ```
 
++++ {"editable": true, "slideshow": {"slide_type": "skip"}}
+
 and check if it agrees with the formula we have derived
 
 ```{code-cell} ipython3
+---
+editable: true
+slideshow:
+  slide_type: ''
+---
 var_map = s2*(n-1)/(n+1)
 var_map
 ```
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
 The join posterior can be rewritten as
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
 $$P(\mu,\sigma^2|y) = P(\mu|\sigma^2,y)P(\sigma^2|y)$$
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
 with
 
@@ -565,11 +595,11 @@ The integral over $z$ does not depend on $\mu$ so
 
 $$P(\mu, y)\propto A^{-\frac{n}{2}}=\left(n(\bar y-\mu)^2+(n-1)s^2\right)^{-\frac{n}{2}}$$
 
-+++
++++ {"editable": true, "slideshow": {"slide_type": "skip"}}
 
 Pulling out the $\left((n-1)s^2\right)^{-\frac{n}{2}}$ term we obtain
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
 $$\left((n-1)s^2\right)^{-\frac{n}{2}}\left(\frac{n}{n-1}\frac{(\bar y-\mu)^2}{s^2}+1\right)^{-\frac{n}{2}}$$
 
@@ -615,15 +645,20 @@ slideshow:
 mu_map= y.mean()
 ```
 
++++ {"editable": true, "slideshow": {"slide_type": "skip"}}
+
 Again we will use the `scipy.stats` module
 
 ```{code-cell} ipython3
 ---
+editable: true
 slideshow:
   slide_type: skip
 ---
 from scipy.stats import t
 ```
+
++++ {"editable": true, "slideshow": {"slide_type": "skip"}}
 
 The student's $t$ distribution depends only on the number of degrees of freedom $\nu$ but `scipy.stats` permits us to provide `location` and `scale` parameter that allow us to obtain the distribution directly for $\mu$ instead of $x$
 
@@ -842,7 +877,7 @@ $$
 P(\mu,\sigma^2|y) \propto  (\sigma^2)^{-\frac{n}{2}} 
 e^{\displaystyle -\frac{n}{2\sigma^2}\left(\bar y -\mu\right)^2 -\frac{n-1}{2\sigma^2}s^2}$$
 
-+++
++++ {"editable": true, "slideshow": {"slide_type": "skip"}}
 
 the only difference being the missing factor $\sigma^{-2}$.
 
@@ -863,7 +898,7 @@ This agian is a [_inverse Gamma_ distribution](https://en.wikipedia.org/wiki/Inv
 
 $$f(x;\alpha,\beta)=\frac{\beta^\alpha}{\Gamma(\alpha)}x^{-(\alpha+1)}e^{-\frac{\beta}{x}}$$
 
-+++
++++ {"editable": true, "slideshow": {"slide_type": "skip"}}
 
 but now we obtain slightly different values for parameters $\alpha$ and $\beta$
 
@@ -918,6 +953,8 @@ slideshow:
 vars[np.argmax(post_var.pdf(vars))]
 ```
 
++++ {"editable": true, "slideshow": {"slide_type": "skip"}}
+
 and check if it agrees with the formula we have derived
 
 ```{code-cell} ipython3
@@ -933,7 +970,7 @@ The join posterior can be rewritten as
 
 $$P(\mu,\sigma^2|y) = P(\mu|\sigma^2,y)P(\sigma^2|y)$$
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
 with
 
@@ -1074,6 +1111,7 @@ post_mu = t(df=n-1, loc=y.mean(), scale=np.sqrt(s2/n))
 
 ```{code-cell} ipython3
 ---
+editable: true
 slideshow:
   slide_type: slide
 ---
