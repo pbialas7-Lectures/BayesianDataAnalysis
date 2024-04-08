@@ -4,7 +4,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.5
+    jupytext_version: 1.16.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -31,7 +31,9 @@ Give the posterior distribution for $(\mu, \sigma^2)$ obtained by pretending tha
 
 $$\mu\propto 1\qquad \sigma^2\propto \frac{1}{\sigma^2}$$
 
-+++
+```{code-cell}
+import numpy as np
+```
 
 ## Problem 2
 
@@ -57,16 +59,12 @@ How do the incorrect and correct posterior distributions differ? Compare means, 
 
 +++ {"tags": ["EN"]}
 
-To calculate mean and variance of $\mu$ and $\sigma^2$ we need marginal distributions. We can approximate them  numerically by symming over one axis of the grid.
+To calculate mean and variance of $\mu$ and $\sigma^2$ we need marginal distributions. We can approximate them  numerically by summing over one axis of the grid.
 Do not forget to exponentiate the log of probability before summing!
 
 +++
 
-Do obliczenia średniej i wariancji
-
-+++ {"tags": ["EN"]}
-
-### Contour plots
+Do obliczenia średniej i wariancji dla $\mu$ i $\sigma$ będziemy potrzebowali rozkładów brzegowych. Możemy przybliżyć je analitycznie sumując po jednej osi rozkładu dwuwymiarowego.
 
 +++ {"tags": ["EN"]}
 
@@ -123,57 +121,6 @@ plt.show()
 +++ {"tags": ["EN"]}
 
 When solving the problem is better to calculate not the posterior probability but the log of posterior probability.
-
-```{code-cell}
-isig, imu = np.unravel_index(ps.argmax(), ps.shape)
-print(mus[imu], sigmas[isig])
-```
-
-```{code-cell}
-isig, imu = np.unravel_index(ps_correct.argmax(), ps_correct.shape)
-print(mus[imu], sigmas[isig])
-```
-
-```{code-cell}
-(ps - ps_correct).max()
-```
-
-```{code-cell}
-np.unravel_index(ps.argmax(),ps.shape)
-```
-
-```{code-cell}
-sigmas[62]
-```
-
-```{code-cell}
-mus[259]
-```
-
-```{code-cell}
-np.unravel_index(ps_correct.argmax(),ps.shape)
-```
-
-```{code-cell}
-sigmas[56]
-```
-
-```{code-cell}
-mus[260]
-```
-
-```{code-cell}
-plt.contourf(mus,sigmas,np.exp(ps)-np.exp(ps_correct));
-plt.colorbar();
-```
-
-```{code-cell}
-%time st.norm(0,1).cdf(0.0)
-```
-
-```{code-cell}
-%time erf(0)
-```
 
 ```{code-cell}
 
