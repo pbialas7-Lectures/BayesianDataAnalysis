@@ -4,14 +4,14 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.7
+    jupytext_version: 1.16.2
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
 
-```{code-cell} ipython3
+```{code-cell}
 import numpy as np
 ```
 
@@ -21,18 +21,18 @@ import numpy as np
 
 Elmentwise operation on arrays require the tensors to be of the same shape:
 
-```{code-cell} ipython3
+```{code-cell}
 mat1 = np.ones((3,4))
 mat2 = 2*np.ones_like(mat1)
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 mat1+mat2
 ```
 
 However creating a whole array when we just want to add same  number to all elemnts like above would be tedious. That's why `numpy` provides a much more convenient way:
 
-```{code-cell} ipython3
+```{code-cell}
 mat1 + 2
 ```
 
@@ -40,7 +40,7 @@ This is in example of *broadcasting*. Value 2 in this case is broadcast along al
 
 Let's try to add a vector. Experimenting with the size you will find out that only size (except for 1) that does not give an error is 4:
 
-```{code-cell} ipython3
+```{code-cell}
 mat1 + np.arange(4)
 ```
 
@@ -74,7 +74,7 @@ We could say that the vector od size 4 was first reshaped  to size (1,4) and the
 
 +++
 
-#### Problem 
+#### Problem
 
 +++
 
@@ -84,20 +84,20 @@ How we add a vector to every column?
 
 Broadcasting can have suprising effects
 
-```{code-cell} ipython3
+```{code-cell}
 v1 = np.ones(5)
 v2 = np.arange(5)
 ```
 
 This works as expected:
 
-```{code-cell} ipython3
+```{code-cell}
 v1+v2
 ```
 
 However reshaping the first vector to column vector, will produce something more akin to tensor product.
 
-```{code-cell} ipython3
+```{code-cell}
 v1.reshape(-1,1) + v2 
 ```
 
@@ -108,13 +108,13 @@ This happens because according to bradcasting rules, the original shapes
           
 are broadcasted to 
 
-      5 x 5   
+      5 x 5
 
 +++
 
 And this can get compouned in higher dimensions.
 
-```{code-cell} ipython3
+```{code-cell}
 (mat1.reshape(1,3,1,4)+ mat1.reshape(3,1,4,1)).shape
 ```
 

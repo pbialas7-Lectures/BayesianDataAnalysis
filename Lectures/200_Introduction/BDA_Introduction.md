@@ -5,14 +5,14 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.1
+    jupytext_version: 1.16.2
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -22,7 +22,7 @@ slideshow:
 %autoreload 2
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -33,7 +33,7 @@ import matplotlib.pyplot as plt
 from scipy import stats as st
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -43,7 +43,7 @@ sys.path.append("../../src")
 import bda.stats as bst
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -53,7 +53,7 @@ plt.rcParams["figure.figsize"] = [12,8]
 dc='#1f77b4' #default color
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -100,7 +100,7 @@ The problem considered by T. Bayes was how our belief about the ball position ch
 
 So let's place our original ball (black) on the table
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -109,7 +109,7 @@ p =  np.pi/10.0
 y =  0.786
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: slide
@@ -181,7 +181,7 @@ $$P(p)=1$$
 
 which is indicated in the plot below by the blue line.
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -190,7 +190,7 @@ xs = np.linspace(0,1,1000)
 prior = np.vectorize(lambda x: 1.0)
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: slide
@@ -209,7 +209,7 @@ pax.legend();
 
 Now we throw another ball marked in red on the plot below, which lands on the right side of the original ball. Actually I will throw 100 balls at once, but use them one by one.
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -219,7 +219,7 @@ x = st.uniform(loc=0, scale=1).rvs(size=(100,2)) #location of the balls
 left=(x[:,0]<=p) + 0
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: fragment
@@ -251,7 +251,7 @@ $$P(A|B) = \frac{P(A\cap B)}{P(B)}$$
 
 We are rolling two dices, what is the probability that a three appeared in the results?
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -260,7 +260,7 @@ tags: [hide]
 from itertools import product
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -269,7 +269,7 @@ slideshow:
 S = list(product(range(1,7), range(1,7)) )
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -278,7 +278,7 @@ tags: [example, hide]
 print(S)
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -286,7 +286,7 @@ slideshow:
 A = list(filter(lambda x: x[0]==3 or x[1]==3, S))
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -294,7 +294,7 @@ slideshow:
 print(A)
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -303,7 +303,7 @@ tags: [example, hide]
 from fractions import Fraction
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -315,7 +315,7 @@ print(Fraction(len(A),len(S)) )
 
 How does that probability changes when we know that the sum of the to results is odd? What if the result is even?
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -323,7 +323,7 @@ slideshow:
 rem = 1
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -333,7 +333,7 @@ B = list(filter(lambda x: (x[0]+x[1])%2 == rem, S))
 len(B)
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -341,7 +341,7 @@ slideshow:
 AcapB = list(filter(lambda x: (x[0]+x[1])%2 == rem, A))
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -425,7 +425,7 @@ $$P(r|p)$$
 
 that the second ball lands on the right provided that first ball is at $p$. This called the _sampling distribution_ and  in this case this is the Bernoulli distribution
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -504,7 +504,7 @@ $$P(p|r)=2-2p$$
 
 denoted by the dark blue line on the plot below.
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -512,7 +512,7 @@ slideshow:
 posteriors = [lambda x: 2-2*x]
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -528,7 +528,7 @@ pax.plot(xs,prior(xs), zorder=1, c='blue', alpha=alpha);
 plt.close();
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: slide
@@ -552,7 +552,7 @@ $$p_{map}=\operatorname{argmax}_p P(p|r)$$
 
 which in this case is equal to zero.
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -565,7 +565,7 @@ def find_pmap(posterior):
     return xs[i_max], post[i_max]
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -584,7 +584,7 @@ pax.annotate(f'MAP $p={p_map:.1f}$',(p_map, y_map),(p_map+0.2, y_map),
 plt.close();
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: slide
@@ -600,7 +600,7 @@ fig
 
 We can continue by throwing another ball which again lands on the right of the original ball
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -613,7 +613,7 @@ bl.plot_balls(ax, nb, x,left, bl.cs)
 plt.close();
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: slide
@@ -649,7 +649,7 @@ $$P(p|r,r)=3(1-p)^2$$
 
 which does not change the MAP estimate which remains zero.
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -657,7 +657,7 @@ slideshow:
 posteriors.append(lambda x: 3*(1-x)**2)
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -675,7 +675,7 @@ pax.annotate(f'MAP $p={p_map:.1f}$',
 plt.close()
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: slide
@@ -689,7 +689,7 @@ fig
 
 How did the probability that $p<0.05$ changed?
 
-+++ {"slideshow": {"slide_type": "skip"}, "tags": ["answer"]}
++++ {"slideshow": {"slide_type": "skip"}, "tags": ["answer"], "jupyter": {"source_hidden": true}}
 
 This probability is given by the integral
 
@@ -709,21 +709,21 @@ $$\int_0^{0.05}\text{d}p =0.05$$
 
 For two priors we get
 
-+++ {"slideshow": {"slide_type": "skip"}, "tags": ["answer"]}
++++ {"slideshow": {"slide_type": "skip"}, "tags": ["answer"], "jupyter": {"source_hidden": true}}
 
 $$
 \int_0^{0.05}\text{d}p P(p|r) = 
 \int_0^{0.05}\text{d}p 2(1-p) = 2\cdot(0.05 -\frac{1}{2}0.05^2)=0.0975
 $$
 
-+++ {"slideshow": {"slide_type": "skip"}, "tags": ["answer"]}
++++ {"slideshow": {"slide_type": "skip"}, "tags": ["answer"], "jupyter": {"source_hidden": true}}
 
 $$
 \int_0^{0.05}\text{d}p P(p|r) = 
 \int_0^{0.05}\text{d}p 3(1-p)^2\approx 0.142
 $$
 
-+++ {"slideshow": {"slide_type": "skip"}, "tags": ["answer"]}
++++ {"slideshow": {"slide_type": "skip"}, "tags": ["answer"], "jupyter": {"source_hidden": true}}
 
 We see that this probability successively  increases.
 
@@ -735,7 +735,7 @@ We see that this probability successively  increases.
 
 Throwing a third ball we notice that it lands on the left of the original ball.
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -747,7 +747,7 @@ bl.plot_balls(ax, nb, x,left, bl.cs)
 plt.close();
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: slide
@@ -824,7 +824,7 @@ $$\alpha = n_l+1,\qquad \beta= n_r+1$$
 
 +++ {"slideshow": {"slide_type": "skip"}}
 
-we obtain that the posterior is given by the [[_Beta_ distribution](https://en.wikipedia.org/wiki/Beta_distribution)]
+we obtain that the posterior is given by the [_Beta_ distribution](https://en.wikipedia.org/wiki/Beta_distribution)
 
 +++ {"slideshow": {"slide_type": "fragment"}}
 
@@ -924,7 +924,7 @@ and MAP estimate
 
 $$p_{map}=\frac{1}{3}$$
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -938,7 +938,7 @@ for i in range(1,101):
     beta_posteriors.append(beta(n_l+1, n_r+1))
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -957,7 +957,7 @@ pax.annotate(f'MAP',(p_map, y_map),(p_map, y_map+0.5),
 plt.close();
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -1002,7 +1002,7 @@ $$P\left(p\leq p_{med}\right)\geq\frac{1}{2}\quad\text{and}\quad P\left(p\geq p_
 
 The median value is marked with a orange line on the plot below.
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -1025,7 +1025,7 @@ pax.axvline(p_median, color='orange')
 plt.close();
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: slide
@@ -1037,7 +1037,7 @@ fig
 
 And finally here is the result after 100 throws
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -1059,7 +1059,7 @@ pax.axvline(p_median, color='orange')
 plt.close()
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: slide
@@ -1083,7 +1083,7 @@ So far we have assumed that the prior is uniform over the whole interval $[0,1]$
 
 $$P(p)\sim Beta(\alpha,\beta)$$
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: slide
@@ -1095,7 +1095,7 @@ for a in [0.25,0.5,1,2,5,10]:
 plt.legend(loc=1);
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: slide
@@ -1176,7 +1176,7 @@ $$P(n_1,\ldots, n_{m}|p_1,\ldots, p_{m}) = \frac{m!}{n_1!\cdots n_{m}!}p_1^{n_1}
 
 $$m=6,\quad p_i=\frac{1}{6}$$ $$ P(n_1,\ldots, n_{6}) = \frac{N!}{n_1!\cdots n_{m}!}\frac{1}{6^m}$$
 
-+++ {"slideshow": {"slide_type": "slide"}, "editable": true}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true, "jp-MarkdownHeadingCollapsed": true}
 
 #### Problem
 
@@ -1291,7 +1291,7 @@ and  posterior distribution for Poisson distribution after observing $\{k_i\}$ c
 
 $$P(\lambda|\{k_i\}) =PDF[Gamma(\alpha+n \bar k,\beta+n)]$$
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -1299,7 +1299,7 @@ slideshow:
 from scipy.stats import gamma
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -1315,7 +1315,7 @@ ax.legend();
 plt.close();
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: slide
@@ -1323,7 +1323,7 @@ slideshow:
 fig
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -1339,7 +1339,7 @@ ax.legend();
 plt.close();
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: slide
@@ -1347,7 +1347,7 @@ slideshow:
 fig
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:

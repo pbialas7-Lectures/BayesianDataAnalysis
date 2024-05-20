@@ -4,26 +4,31 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.5
+    jupytext_version: 1.16.2
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
 
-```{code-cell} ipython3
+```{code-cell}
+---
+editable: true
+slideshow:
+  slide_type: skip
+---
 import numpy as np
 import scipy
 import matplotlib.pyplot as plt
 plt.rcParams["figure.figsize"] = [12,8]
 ```
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
 # Analysis of bioassay experiment 
 ## (from "Bayesian Data Analysis" sec. 3.7)
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: slide
@@ -33,14 +38,15 @@ n_animals = np.array([5,5,5,5])
 n_deaths = np.array([0,1,3,5])
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
   slide_type: slide
 ---
 plt.plot(dose, n_deaths/n_animals,'o')
 plt.xlabel('dose [log g/ml]', fontsize=16);
-plt.ylabel('$\\frac{\# deaths}{\# animals}$', rotation='horizontal', fontsize=16, labelpad=10);
+plt.ylabel('$\\frac{\\# deaths}{\\# animals}$', rotation='horizontal', fontsize=16, labelpad=10);
 ```
 
 +++ {"slideshow": {"slide_type": "slide"}}
@@ -100,7 +106,7 @@ $$\theta_i=s(z_i)\equiv\frac{e^z_i}{1+e^z_i}$$
 
 $z$ in this formula is often called _logit_. The sigmoid function is provided in `scipy` as `scipy.special.expit`
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: slide
@@ -108,7 +114,7 @@ slideshow:
 from scipy.special import  expit
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: fragment
@@ -162,12 +168,12 @@ $$P(\alpha,\beta)\propto 1$$
 
 so finally
 
-+++ {"slideshow": {"slide_type": "fragment"}}
++++ {"slideshow": {"slide_type": "fragment"}, "editable": true}
 
-$$\begin{multline}\log P(\alpha,\beta|y,n,x) =\\ \sum_i \left(y_i\log s(\alpha+\beta x_i)^{y_i}+(n_i-y_i)\log (1-s(\alpha+\beta x_i))\right)+ const
-\end{multline}$$
+$$\log P(\alpha,\beta|y,n,x) =\\ \sum_i \left(y_i\log s(\alpha+\beta x_i)^{y_i}+(n_i-y_i)\log (1-s(\alpha+\beta x_i))\right)+ const
+$$
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
 ### Numerical calculations
 
@@ -175,7 +181,7 @@ $$\begin{multline}\log P(\alpha,\beta|y,n,x) =\\ \sum_i \left(y_i\log s(\alpha+\
 
 We start by importing the logarithm of logistic sigmoid function from `scipy.special`
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: fragment
@@ -195,7 +201,7 @@ $$1-\theta_i=1-\frac{e^{z_i}}{1+e^{z_i}}=\frac{1}{1+e^{z_i}}=\frac{e^{-z_i}}{1+e
 
 The implementation of the  logarithm of posterior is straightforward
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: slide
@@ -211,7 +217,7 @@ def log_P_alpha_beta(a,b,x,y,n):
 
 and we can use the` scipy.otimize.mininimize` function the find the MAP estimate of $\alpha$ and $\beta$
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: slide
@@ -220,7 +226,7 @@ min_results = scipy.optimize.minimize(lambda arg: -log_P_alpha_beta(*arg,dose, n
 print(min_results)
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: fragment
@@ -233,7 +239,7 @@ print(ab_map)
 
 We can check how  those estimates compare to data
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -243,7 +249,7 @@ def lr(x,a,b):
     return expit(z)
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: slide
@@ -251,14 +257,14 @@ slideshow:
 xs = np.linspace(-1,1,500)
 plt.scatter(dose, n_deaths/n_animals)
 plt.plot(xs,lr(xs,*ab_map))
-plt.xlabel("$x\; [g/ml]$");plt.ylabel("$\\theta$",rotation='horizontal');
+plt.xlabel("$x\\; [g/ml]$");plt.ylabel("$\\theta$",rotation='horizontal');
 ```
 
 +++ {"slideshow": {"slide_type": "skip"}}
 
 It look as the choice of logistic regression as our model was justified.
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: slide
@@ -273,7 +279,7 @@ def log_P_alpha_beta_tensor(a,b,x,y,n):
                    ((log_theta_conj)*(n-y).reshape(sh)), axis=0)
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -283,7 +289,7 @@ betas  = np.linspace(-10,40,500)
 a_mesh, b_mesh = np.meshgrid(alphas, betas)
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -292,7 +298,7 @@ lr_zs = log_P_alpha_beta_tensor(a_mesh, b_mesh, dose, n_deaths, n_animals)
 lr_zs = lr_zs - lr_zs.max()
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -309,7 +315,7 @@ ax.set_xlabel("$\\alpha$",fontsize=16);ax.set_ylabel("$\\beta$",fontsize=16, rot
 plt.close()
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: slide
@@ -317,7 +323,7 @@ slideshow:
 fig
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -334,7 +340,7 @@ ax.set_xlabel("$\\alpha$",fontsize=16);ax.set_ylabel("$\\beta$",fontsize=16, rot
 plt.close()
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: slide
@@ -342,7 +348,7 @@ slideshow:
 fig
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: slide
@@ -353,7 +359,7 @@ map_alpha = alphas[log_p_alphas.argmax()]
 print(map_alpha)
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: slide
@@ -364,7 +370,7 @@ def log_trapz(log_y,x):
     return scipy.special.logsumexp(a=log_f, b= 0.5*dx)
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: fragment
@@ -372,7 +378,7 @@ slideshow:
 log_Z = log_trapz(log_p_alphas,alphas)
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: slide
@@ -394,7 +400,7 @@ plt.xlabel("$\\alpha$", fontsize=16);
 
 $$P(\alpha,\beta)=P(\beta|\alpha)P(\alpha)$$
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: slide
@@ -403,15 +409,16 @@ alphas_dist = scipy.stats.rv_discrete(0,len(log_p_alphas)-1,
                values=( range(len(log_p_alphas)), np.exp(log_p_alphas) ))
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
   slide_type: fragment
 ---
 p_alpha_beta=np.exp(lr_zs)
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: fragment
@@ -425,8 +432,9 @@ b_dist=np.asarray(
     
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
   slide_type: slide
 ---
@@ -436,7 +444,7 @@ def gen(x):
 gen = np.vectorize(gen)
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: fragment
@@ -450,7 +458,7 @@ def gen_alpha_beta(n):
     return np.stack((als,bes), axis=1)
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: slide
@@ -459,7 +467,7 @@ slideshow:
 ab = gen_alpha_beta(250000)
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: fragment
@@ -467,8 +475,9 @@ slideshow:
 ab
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
   slide_type: slide
 ---
@@ -494,21 +503,23 @@ $$s(z)=\frac{1}{2}\qquad z=0$$
 
 $$\alpha +\beta x = 0,\quad x = -\frac{\alpha}{\beta}$$
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
   slide_type: skip
 ---
 fig,ax = plt.subplots()
-ax.hist(-ab[:,0]/ab[:,1],bins=100, histtype='step', density=True, color='red')
+ax.hist(-ab[:,0]/ab[:,1],bins=500, histtype='step', density=True, color='red')
 ax.set_xlabel("LD50 [log g/ml]")
 for x in dose:
     ax.axvline(x,linewidth=0.5)
 plt.close()    
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
   slide_type: slide
 ---

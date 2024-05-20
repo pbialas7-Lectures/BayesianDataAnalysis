@@ -4,14 +4,14 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.1
+    jupytext_version: 1.16.2
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -21,7 +21,7 @@ slideshow:
 %autoreload 2
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -34,7 +34,7 @@ from scipy import stats as st
 from scipy.stats import beta
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -43,7 +43,7 @@ import sys
 sys.path.append('../../src/')
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -53,7 +53,7 @@ plt.rcParams["figure.figsize"] = [12,8]
 dc='#1f77b4' #default color
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -70,7 +70,7 @@ import bda.stats as bst
 
 This is the position of the initial ball
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -84,7 +84,7 @@ y =  0.786
 
 We throw 100 balls and check wheter they land on the left of the initial ball
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -99,7 +99,7 @@ left=(x[:,0]<=p) + 0
 
 We assume the initial uniform prior ($\alpha=\beta=1$)
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -108,7 +108,7 @@ slideshow:
 prior = np.vectorize(lambda x: 1.0)
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -131,7 +131,7 @@ So far we did not consider any errors on our estimators. As we have the whole po
 
 +++ {"slideshow": {"slide_type": "fragment"}, "editable": true}
 
-$\newcommand{\avg}[1]{\left\langle#1\right\rangle}$
+$$\newcommand{\avg}[1]{\left\langle#1\right\rangle}$$
 $$\begin{split}
 \avg{p} &=\int_0^1\text{d}p\, p\, P_{post}(p)\\
 \sigma^2 &= \int_0^1\text{d}p (p-\avg{p})^2 P_{post}(p)
@@ -192,7 +192,7 @@ $$\avg{p} = \frac{n_l+1}{n_l+n_r+2}$$
 $$\sigma^2 = \frac{
 \avg{p}(1-\avg{p})}{n_l+n_r+3}$$
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -217,7 +217,7 @@ calculates the posterior mean and variance
     return n_l, n_r, mu,s
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -233,7 +233,7 @@ for i in [1,2,3,50,100]:
 
 Below we plot the $\pm\sigma$ interval around mean
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -255,7 +255,7 @@ pax.fill_between(xs,beta_posteriors[2].pdf(xs),0, where = (xs>p_mean-s) & (xs<p_
 plt.close();
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -294,7 +294,7 @@ translating into posterior mode
 
 $$p_{MAP}=\frac{n_l}{n_l+n_r}$$
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -306,7 +306,7 @@ p_map = n_l/(n_l+n_r); y_map=post.pdf(p_map)
 s = np.sqrt(bst.var_central_f(post.pdf,p_map,0,1))
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -325,7 +325,7 @@ pax.fill_between(xs,beta_posteriors[2].pdf(xs),0, where = (xs>p_map-s) & (xs<p_m
 plt.close();
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -346,7 +346,7 @@ And finally we can use median which for Beta distribution is approximatelly
 
 $$p_{med.}\approx\frac{\alpha-\frac{1}{3}}{\alpha+\beta-\frac{2}{3}}$$
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -358,7 +358,7 @@ p_median = bst.median_f(post.pdf,0,1)
 s = np.sqrt(bst.var_central_f(post.pdf,p_median,0,1))
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -377,7 +377,7 @@ pax.fill_between(xs,beta_posteriors[2].pdf(xs),0, where = (xs>p_median-s) & (xs<
 plt.close();
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -390,7 +390,7 @@ fig
 
 ## Confidence interval
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -411,7 +411,7 @@ $$P(p\in [a,b])=\beta$$
 
 Below we construct two such possible intervals
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -437,7 +437,7 @@ ax.set_title(f"Confidence intervals $\\beta=0.75$")
 plt.close();
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -450,7 +450,7 @@ fig
 
 One way of choosing a confidence interval is to make it symmetric around $p_{MAP}$
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -484,7 +484,7 @@ ax.set_title("Confidence interval symmetric around $p_{MAP}$")
 plt.close();
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -521,7 +521,7 @@ The $\beta$ HDR is equal to $R(r_\beta)$ where $r_\beta$ is the largest constant
 
 $$P\left(x\in R(r_\beta)\right)\ge \beta$$
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -530,7 +530,7 @@ from bda.hdr_plot import plot_All
 from ipywidgets import interact
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -539,7 +539,7 @@ slideshow:
 interactive_plot = interact(lambda r: plot_All(beta_posteriors[2].pdf,r),r=(0.0,1.9,0.001))
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -548,7 +548,7 @@ slideshow:
 from bda.stats import hdr_f
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -569,7 +569,7 @@ pax.fill_between(xs,post.pdf(xs),0, where = (xs>lr[0]) & (xs<lr[1]), alpha=0.5);
 plt.close()
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -582,7 +582,7 @@ fig
 
 and here is the HDR(0.95)  after 100 balls have been thrown
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -602,7 +602,7 @@ pax.fill_between(xs,post.pdf(xs),0, where = (xs>lr[0]) & (xs<lr[1]), alpha=0.5);
 plt.close()
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: slide
@@ -622,7 +622,7 @@ Let's now take the problem considered by Laplace in 18th century. The problem wa
 
 The data he had was the following
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: fragment
@@ -635,7 +635,7 @@ m_births = 251527
 
 based on that and assuming flat prior the posterior distribution is $Beta(n_f+1,n_m+1)$
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: fragment
@@ -647,7 +647,7 @@ f_post = beta(f_births+1, m_births+1)
 
 with mode
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: slide
@@ -659,7 +659,7 @@ f_births/(f_births+m_births)
 
 and mean
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -672,7 +672,7 @@ f_post.mean()
 
 The standard deviation is
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -685,7 +685,7 @@ f_post.std()
 
 Value $\frac{1}{2}$ is well outside the errors around the mean,it is over 13 standard deviations away
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: fragment
@@ -697,7 +697,7 @@ slideshow:
 
 Next we will calculate the HDR with $\beta=1-10^{-9}$, that is an interval such that the probabilty that percentage of female births lies within this interval is  $1-10^{-9}$
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -714,7 +714,7 @@ ax.axvline(0.5,c='orange')
 plt.close();
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:

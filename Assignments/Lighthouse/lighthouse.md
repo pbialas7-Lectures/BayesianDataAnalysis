@@ -4,14 +4,14 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.5
+    jupytext_version: 1.16.2
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -21,12 +21,12 @@ slideshow:
 %autoreload 2
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 import numpy as np
 import scipy as sp
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -38,7 +38,7 @@ plt.rcParams["figure.figsize"] = [12,8]
 from matplotlib.patches import Arc, FancyArrowPatch
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -53,7 +53,7 @@ import lighthouse as lh
 
 This problem is taken from "Data Analysis, a Bayesian Tutorial" by D.S. Silva with J. Skiling. A lighthouse distance $h=1$ from the shore is rotating with constant angular frequency and emitting thin beams of light at random. The probability of emission is uniform in time. The signals are picked up on the shore by an array of detectors and their location is saved in the file `lighthouse.txt`.  The horizontal location of the lighthouse $x_{lh}$ is unknown. The task is to estimate this position.
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -62,7 +62,7 @@ slideshow:
 h=1
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -75,7 +75,7 @@ flash_x = np.loadtxt('lighthouse.txt')
 
 The figure below  presents the geometry of the problem. The orange dot indicates the lighthouse. Blue dots are the points were the flashes were recorded. The directions of the first 10 flashes are shown as lightblue lines.
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -84,7 +84,7 @@ slideshow:
 x0=10;
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
@@ -107,7 +107,7 @@ arc3=Arc((x0,h),width=0.75/aspect,height=0.75, angle=0, theta1=np.rad2deg(-np.pi
 ax.add_patch(arc3);
 ax.scatter(*lh.polar2xy((x0,h),-np.pi/2+thetas,0.75/(2*aspect), aspect=aspect));
 xy = lh.polar2xy((x0,h),-np.pi/2+np.pi/30,0.85/(2*aspect), aspect=aspect)
-ax.annotate("$\phi$",xy, fontsize=24);
+ax.annotate(r"$\phi$",xy, fontsize=24);
 ```
 
 +++ {"editable": true, "slideshow": {"slide_type": ""}}
@@ -242,13 +242,13 @@ In the following we will drop the subscript $X$ on $p$.
 
 Assuming an uniform prior on interval $[-x_{lim}, x_{lim})$ with $x_{lim}=100$ for $x_{lh}$  plot the posterior distribution after performing one measurment.  Represent posterior density function by an array $p_{post}(xs_i)$ where $xs_i$ are uniformly distributed on the interval  $[-x_{lim}, x_{lim})$:
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:
   slide_type: ''
 ---
-x_lim=100
+x_lim=100.0
 xs=np.linspace(-x_lim, x_lim,50000)
 ```
 
@@ -277,7 +277,7 @@ Add the plot of the posterior after two measurments. *Hint* perform same calcula
 ## Problem 3
 
 ```{raw-cell}
-Write an iterative procedure that calculates all the posteriors ans all MAP estimates corresponding to $1,\ldots,100$ measurments. Plot first 10 and last 10 posterior distributions. What is the final MAP? Find 95% probability interval around this value. 
+Write an iterative procedure that calculates all the posteriors ans all MAP estimates corresponding to $1,\ldots,100$ measurements. Plot first 10 and last 10 posterior distributions. What is the final MAP? Find 95% probability interval around this value. 
 ```
 
 +++ {"editable": true, "slideshow": {"slide_type": ""}}
@@ -288,7 +288,7 @@ Write an iterative procedure that calculates all the posteriors ans all MAP esti
 
 Write a procedure that takes as the input $xs$ array, the prior array,  array of measurments and returns the posterior "in one go". *Hint* it is easier to work with logarithms of probabilities. For normalizing you can use `logsumexp` function from `scipy.special`. If you need to use a loop in your code, please loop over the measurments.
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 editable: true
 slideshow:

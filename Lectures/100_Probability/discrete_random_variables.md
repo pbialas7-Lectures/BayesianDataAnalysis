@@ -4,14 +4,14 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.0
+    jupytext_version: 1.16.2
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: skip
@@ -144,15 +144,15 @@ Show that
 
 $$E_{X\times Y}[a X + b  Y]= a E_X[X] + b E_Y[Y]\quad\text{where }a,b\text{ are constants}$$
 
-+++ {"tags": ["answer"], "slideshow": {"slide_type": "skip"}}
++++ {"tags": ["answer"], "slideshow": {"slide_type": "skip"}, "jupyter": {"source_hidden": true}}
 
 $$E_{X\times Y}[a X + b  Y]=\sum_{x,y}\left(a x + b y\right) P(X=x, Y=y) = a \sum_{x,y} x  P(X=x, Y=y)+b \sum_{x,y}  y P(X=x, Y=y) $$
 
-+++ {"tags": ["answer"], "slideshow": {"slide_type": "skip"}}
++++ {"tags": ["answer"], "slideshow": {"slide_type": "skip"}, "jupyter": {"source_hidden": true}}
 
 $$a \sum_{x,y} x  P(X=x, Y=y) = a\sum_x  x \sum_y P(X=x, Y=y)= a\sum_x x P(X=x) = a E[X]$$
 
-+++ {"tags": ["answer"], "slideshow": {"slide_type": "skip"}}
++++ {"tags": ["answer"], "slideshow": {"slide_type": "skip"}, "jupyter": {"source_hidden": true}}
 
 and same for other term.
 
@@ -172,15 +172,15 @@ $$\operatorname{var}(X) = E[X^2]-E[X]^2$$
 
 __Answer__
 
-+++ {"tags": ["answer"], "slideshow": {"slide_type": "skip"}}
++++ {"tags": ["answer"], "slideshow": {"slide_type": "skip"}, "jupyter": {"source_hidden": true}}
 
 $$\operatorname{var}(X) = E[(X-E[X])^2] = E\left[X^2-2 E[X]+E[X]^2\right]$$
 
-+++ {"tags": ["answer"], "slideshow": {"slide_type": "skip"}}
++++ {"tags": ["answer"], "slideshow": {"slide_type": "skip"}, "jupyter": {"source_hidden": true}}
 
 $E[X]$ is a constant so using the linearity of expectation value we obtain
 
-+++ {"tags": ["answer"], "slideshow": {"slide_type": "skip"}}
++++ {"tags": ["answer"], "slideshow": {"slide_type": "skip"}, "jupyter": {"source_hidden": true}}
 
 $$E\left[X^2-2 E[X]+E[X]^2\right]=E[X62]+2E[X]E[X]-E[X]^2$$
 
@@ -248,7 +248,7 @@ Please check that when variables $X$ and $Y$ are linearly dependent _i.e._  $Y =
 
 Let's illustrate this with some Python code
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: slide
@@ -257,7 +257,7 @@ xs = np.random.uniform(size=10000)
 ys = np.random.uniform(size=10000)
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: fragment
@@ -270,7 +270,7 @@ np.mean( (xs-xs.mean())*(ys-ys.mean() ))
 
 We get same result using build in function
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: fragment
@@ -278,7 +278,7 @@ slideshow:
 np.cov(xs,ys)
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: fragment
@@ -287,7 +287,7 @@ slideshow:
 np.mean( (xs-xs.mean())*(ys-ys.mean() ))/np.sqrt(np.mean( (xs-xs.mean())**2)*np.mean((ys-ys.mean() )**2))
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: fragment
@@ -295,7 +295,7 @@ slideshow:
 np.corrcoef(xs,ys)
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: fragment
@@ -376,7 +376,7 @@ Take for example a coin toss with unfair coin with probability $p$ of comming up
 
 $$-p\log p - (1-p)\log(1-p)$$
 
-```{code-cell} ipython3
+```{code-cell}
 ---
 slideshow:
   slide_type: fragment

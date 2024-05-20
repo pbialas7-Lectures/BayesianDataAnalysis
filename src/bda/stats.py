@@ -1,25 +1,80 @@
+"""
+This is a collection of functions for computing statistics and confidence intervals for distributions.
+
+The functions are divided into two groups: those that work with a distribution defined by its density function
+distinguished by the suffix _f and those that work with a distribution defined by its histogram distinguished by the
+suffix _d.
+"""
+
 import numpy as np
 from scipy.optimize import brentq, minimize_scalar
 from scipy.integrate import quad
 
+arviz_importedt = False
+try:
+    import arviz as az
+    import xarray
+    arviz_imported = True
+except ImportError:
+    pass
 
-# Function
+#  Distributions defined by their density function distinguished by suffix _f
+# f is the density function of the distribution, but it does not need to be normalized.
 
-# Mean
 def mass_f(f, a, b):
-    """Integral of f between a and b"""
+    """Integral (mass) of f between a and b
+
+    Parameters
+    ----------
+    f : function
+        Density function of the distribution
+    a : float
+        Lower bound of the interval
+    b : float
+        Upper bound of the interval
+    """
     return quad(f, a, b)[0]
 
 
 def mean_f(f, a, b):
-    """Mean of the distribution f on interval [a,b]"""
-    norm = quad(f, a, b)[0]
+    """Mean of the distribution f on an interval [a,b]
+
+    Parameters
+    ----------
+    f : function
+        Density function of the distribution
+    a : float
+        Lower bound of the interval
+    b : float
+        Upper bound of the interval
+
+    Returns
+    -------
+    float
+        Mean of the distribution
+    """
+    norm = mass_f(f, a, b)
     mean = quad(lambda x: x * f(x), a, b)[0]
     return mean / norm
 
 
 def median_f(f, a, b):
-    """Median of distribution f on interval [a,b]"""
+    """Median of distribution f on an interval [a,b]
+
+    Parameters
+    ----------
+    f : function
+        Density function of the distribution
+    a : float
+        Lower bound of the interval
+    b : float
+        Upper bound of the interval
+
+    Returns
+    -------
+    float
+        Median of the distribution
+    """
     norm = quad(f, a, b)[0]
 
     def cdf_med(x):
@@ -29,7 +84,24 @@ def median_f(f, a, b):
 
 
 def var_central_f(f, c, a, b):
-    """Variance around central point of distribution f on interval [a,b]"""
+    """Variance around a central point c of distribution f on an interval [a,b]
+
+    Parameters
+    __________
+    f : function
+        Density function of the distribution
+    c : float
+        Central point
+    a : float
+        Lower bound of the interval
+    b : float
+        Upper bound of the interval
+
+    Returns
+    -------
+    float
+        Variance of the distribution
+    """
     norm = quad(f, a, b)[0]
 
     def v(x):
@@ -39,23 +111,63 @@ def var_central_f(f, c, a, b):
 
 
 # Confidence interval
-def cdi_central_f(f, center, beta, a, b):
-    """Symmetric confidence interval around central point"""
+def cdi_central_f(f, c, beta, a, b):
+    """Symmetric beta-confidence interval around central point c of distribution f on an interval [a,b]
 
-    x_max = min(center - a, b - center)
+    Parameters
+    ----------
+    f : function
+        Density function of the distribution
+    c : float
+        Central point
+    beta : float
+        Confidence level
+    a : float
+        Lower bound of the interval
+    b : float
+
+    Returns
+    -------
+    status : bool
+        True if the interval is valid, False otherwise
+    left : float
+        Left end of the interval
+    right : float
+        Right end of the interval
+    """
+
+    x_max = min(c - a, b - c)
 
     def mass(w):
-        return quad(f, center - w, center + w)[0]
+        return quad(f, c - w, c + w)[0]
 
     if mass(x_max) < beta:
-        return False, center - x_max, center + x_max
+        return False, c - x_max, c + x_max
     else:
         width = brentq(lambda x: mass(x) - beta, 0, x_max)
-        return True, center - width, center + width
+        return True, c - width, c + width
 
 
 def cdi_left_f(f, left, beta, *, a=0, b=1):
-    """Confidence interval starting from left edge"""
+    """beta-confidence interval starting from left of the distribution f on an interval [a,b]
+
+    Parameters
+    ----------
+    f : function
+        Density function of the distribution
+    left : float
+        Left end of the interval
+    beta : float
+
+    Returns
+    -------
+    status : bool
+        True if the interval is valid, False otherwise
+    left : float
+        Left end of the interval
+    right : float
+        Right end of the interval
+    """
 
     def mass(r):
         return quad(f, left, r)[0]
@@ -70,8 +182,29 @@ def cdi_left_f(f, left, beta, *, a=0, b=1):
 # Highest density region
 
 
-def fzeros(f, a, b, n=100):
-    """Find all zeros of function on an interval"""
+def zeros_f(f, a, b, n=100):
+    """Find all zeros of function f on an interval (a,b)
+
+    It divides the interval into n-1 subintervals, finds the intervals that contain zeros by checking the sign of f
+    at each end of the interval and then uses brentq to find the zero.
+
+
+    Parameters
+    ----------
+    f : function
+        Function to find zeros of
+    a : float
+        Lower bound of the interval
+    b : float
+        Upper bound of the interval
+    n : int
+        Number of subintervals  (default is 100)
+
+    Returns
+    -------
+    list
+        List of zeros of f
+    """
     xs = np.linspace(a, b, n)
     delta = xs[1] - xs[0]
     fxs = f(xs)
@@ -81,8 +214,26 @@ def fzeros(f, a, b, n=100):
 
 
 def R_f(f, p, a, b):
-    """Region R(p) for distribution f"""
-    fzs = fzeros(lambda x: f(x) - p, a, b)
+    """Region R(p) for distribution f on an interval [a,b]
+
+    Parameters
+    ----------
+    f : function
+        Density function of the distribution
+    p : float
+        Threshold
+    a : float
+        Lower bound of the interval
+    b : float
+        Upper bound of the interval
+
+    Returns
+    -------
+    list
+        List of intervals where f(x) > p.
+    """
+
+    fzs = zeros_f(lambda x: f(x) - p, a, b)
     if f(a) > p:
         fzs = [a] + fzs
     if f(b) > p:
@@ -91,7 +242,20 @@ def R_f(f, p, a, b):
 
 
 def PofR_f(f, r):
-    """Probability of region with respect to distribution"""
+    """Integral of f over the region r. The region is a list of intervals.
+
+    Parameters
+    ----------
+    f : function
+        Density function of the distribution
+    r : list
+        List of intervals
+
+    Returns
+    -------
+    float
+        Mass of the region r
+    """
     p = 0.0
     ra = np.array(r).reshape(-1, 2)
     for i in range(len(ra)):
@@ -100,7 +264,23 @@ def PofR_f(f, r):
 
 
 def hdr_f(f, beta, *, a, b):
-    """Highest density region for distribution f on interval [a,b]"""
+    """Highest density region for distribution f on an interval [a,b]
+
+    Parameters:
+    ----------
+    f : function
+        Density function of the distribution
+    beta : float
+        Confidence level
+    a : float
+        Lower bound of the interval
+    b : float
+
+    Returns:
+    --------
+    tuple
+        Tuple with the region, the threshold and the mass of the region
+    """
     max_p = -minimize_scalar(lambda x: -f(x), bounds=(a, b), method="Bounded").fun
 
     def g(p):
@@ -112,13 +292,45 @@ def hdr_f(f, beta, *, a, b):
     return rp, p_zero, PofR_f(f, rp)
 
 
-# Discrete
+# Distribution defined by its histogram distinguished by suffix _d
+# dist is the histogram of the distribution, but it does not need to be normalized.
+
 def R_d(dist, p):
+    """
+    Find the regions where dist > p
+
+    Parameters
+    ----------
+    dist: np.array
+        Histogram of the distribution
+    p: float
+        Threshold
+
+    Returns
+    -------
+    np.array
+        Array of indices where dist > p
+    """
     gt = dist > p
     return np.where(np.logical_xor(gt[1:], gt[:-1]))[0]
 
 
 def PofR_d(dist, r):
+    """
+    Compute the mass of the region r
+
+    Parameters
+    ----------
+    dist: np.array
+        Histogram of the distribution
+    r: np.array
+        Array of indices where dist > p
+
+    Returns
+    -------
+    float
+        Mass of the region r
+    """
     assert (r.size % 2) == 0
     cdf = np.cumsum(dist)
     mass = cdf[r].reshape(-1, 2)
@@ -126,6 +338,23 @@ def PofR_d(dist, r):
 
 
 def hdr_d(xs, dist, beta):
+    """
+    Compute the highest density region for a distribution defined by its histogram
+
+    Parameters
+    ----------
+    xs: np.array
+        Array of x values
+    dist: np.array
+        Histogram of the distribution
+    beta: float
+        Confidence level
+
+    Returns
+    -------
+    tuple
+        Tuple with the region, the threshold and the mass of the region
+    """
     z = np.trapz(dist, xs)
     dist_n = dist / z
     p_max = dist_n.max()
@@ -140,3 +369,28 @@ def hdr_d(xs, dist, beta):
             p_max = p
     r = R_d(dist, (p_min + p_max) / 2)
     return xs[r], p_max, PofR_d(dist, r)
+
+
+
+# Random variables
+
+if arviz_imported:
+    def mode_rvs(x, **kwargs):
+        """
+
+        Parameters
+        ----------
+        x
+        kwargs
+
+        Returns
+        -------
+
+        """
+        if isinstance(x, xarray.core.dataarray.DataArray):
+            x = x.stack(__z__=x.dims)
+            x = x.values
+        grid, pdf = az.kde(x)
+        return grid[pdf.argmax()]
+else:
+    print("Arviz not imported, mode_rvs not available")
