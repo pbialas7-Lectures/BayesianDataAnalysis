@@ -120,14 +120,6 @@ Estimate the position of the lighthouse using PyMC.
 2. Find the MAP estimate.
 3. Simulate the posterior and find the mean and 95% highest density interval. The needed flash distribution is called Cauchy. Report the mean and HDI to two decimal places.
 
-```{code-cell}
-map_x= None
-```
-
-```{code-cell}
-map_x
-```
-
 +++ {"editable": true, "slideshow": {"slide_type": ""}}
 
 ## Problem 2
