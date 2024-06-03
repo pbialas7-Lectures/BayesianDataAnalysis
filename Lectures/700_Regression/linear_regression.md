@@ -4,45 +4,55 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.5
+    jupytext_version: 1.16.2
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++ {"editable": true, "slideshow": {"slide_type": ""}}
 
 # Regression
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
   slide_type: skip
 ---
 import numpy as np
 import pymc as pm
 import arviz as az
-print(f"Running PyMC {pm.__version__} and ArviZ {az.__version__}")
 from copy import copy 
 
 import matplotlib.pyplot as plt
 from matplotlib.patches import Ellipse
-plt.rcParams['figure.figsize']=(12,8)
+plt.rcParams['figure.figsize']=(10,8)
 ```
 
-+++ {"slideshow": {"slide_type": "slide"}}
+```{code-cell}
+---
+editable: true
+slideshow:
+  slide_type: skip
+---
+degree = 180.0/np.pi
+```
+
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
 ## A Motivating Example: Linear Regression
 
-From [Getting started with PyMC3](https://docs.pymc.io/notebooks/getting_started.html)
+From [Getting started with PyMC3](https://www.pymc.io/projects/examples/en/2021.11.0/getting_started.html)
 
-+++ {"slideshow": {"slide_type": "fragment"}}
++++ {"slideshow": {"slide_type": "fragment"}, "editable": true}
 
 $$y_i \sim N(\vec{\beta} \cdot \vec{x_i}+\alpha,\sigma)$$
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
   slide_type: slide
 ---
@@ -50,12 +60,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 #plt.style.use('seaborn-darkgrid')
 
+# Initialize random number generator
 np.random.seed(123)
 
 # True parameter values
-alpha_t, sigma_t = 1, 1
+alpha_t =1
 beta_t = [1, 2.5]
+sigma_t = 1
 
+# Size of dataset
 size = 100
 
 # Predictor variable
@@ -66,8 +79,19 @@ X2 = np.random.randn(size) * 0.2
 Y = alpha_t + beta_t[0]*X1 + beta_t[1]*X2 + np.random.randn(size)*sigma_t
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
+slideshow:
+  slide_type: slide
+---
+cs=plt.scatter(X1,X2, c=Y);
+plt.colorbar(cs);
+```
+
+```{code-cell}
+---
+editable: true
 slideshow:
   slide_type: slide
 ---
@@ -75,93 +99,109 @@ basic_model = pm.Model()
 
 with basic_model:
 
-    pred1 = pm.MutableData("pred1",X1,dims="obs_id")
-    pred2 = pm.MutableData("pred2",X2,dims="obs_id")
-    
     # Priors for unknown model parameters
     alpha = pm.Normal('alpha', mu=0, sigma=10)
     beta = pm.Normal('beta', mu=0, sigma=10, shape=2)
-    sigma = pm.HalfNormal('sigma', sigma=1)
+    sigma = pm.HalfNormal('sigma', sigma=5)
 
     # Expected value of outcome
-    mu =  pm.Deterministic('mu', alpha + beta[0]*pred1 + beta[1]*pred2)
+    mu = alpha + beta[0]*X1 + beta[1]*X2
 
     # Likelihood (sampling distribution) of observations
     Y_obs = pm.Normal('Y_obs', mu=mu, sigma=sigma, observed=Y)
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
   slide_type: slide
 ---
-map_estimate = pm.find_MAP(model=basic_model, vars=[alpha, beta])
+map_estimate = pm.find_MAP(model=basic_model)
 map_estimate
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
-slideshow:
-  slide_type: slide
----
-with basic_model:
-    lr_trace = pm.sample(tune=1000, draws=20000, return_inferencedata=True)
-```
-
-```{code-cell} ipython3
----
-slideshow:
-  slide_type: slide
----
-with basic_model:
-    az.plot_trace(lr_trace, var_names=['alpha', 'beta', 'sigma']);
-```
-
-```{code-cell} ipython3
----
-slideshow:
-  slide_type: slide
----
-az.summary(lr_trace, var_names=['alpha', 'beta', 'sigma']).round(2)
-```
-
-```{code-cell} ipython3
----
-slideshow:
-  slide_type: slide
----
-betas=lr_trace.posterior['beta'].values.reshape(-1,2)
-```
-
-```{code-cell} ipython3
----
+editable: true
 slideshow:
   slide_type: ''
 ---
-alphas = lr_trace.posterior['alpha'].values.reshape(-1)
+beta_t
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
   slide_type: slide
 ---
-plt.hexbin(betas[:,0], betas[:,1]);
-plt.scatter(beta_t[:1], beta_t[1:],color='red',s=50);
+with basic_model:
+    trace = pm.sample(tune=1000, draws=8000)
+```
+
+```{code-cell}
+---
+editable: true
+slideshow:
+  slide_type: slide
+---
+with basic_model:
+    az.plot_trace(trace);
+```
+
+```{code-cell}
+---
+editable: true
+slideshow:
+  slide_type: slide
+---
+az.summary(trace).round(2)
+```
+
+```{code-cell}
+---
+editable: true
+slideshow:
+  slide_type: skip
+---
+betas=trace.posterior['beta'].values.reshape(-1,2)
+```
+
+```{code-cell}
+---
+editable: true
+slideshow:
+  slide_type: skip
+---
+alphas = trace.posterior['alpha'].values.reshape(-1)
+```
+
+```{code-cell}
+---
+editable: true
+slideshow:
+  slide_type: slide
+---
+cs = plt.hexbin(betas[:,0], betas[:,1]);
+plt.scatter(beta_t[:1], beta_t[1:],color='red',s=50, label=r"$\vec\beta_{true}$");
 plt.scatter(betas[:,0].mean(), betas[:,1].mean(),edgecolor='red',facecolor='none', s=50);
-plt.colorbar();
+plt.xlabel(r"$\beta_0$");plt.ylabel(r"$\beta_1$");
+plt.colorbar(cs);plt.legend();
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
   slide_type: slide
 ---
-np.corrcoef(betas, rowvar=False )
+np.corrcoef(betas,rowvar=False )
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
   slide_type: slide
 ---
@@ -169,8 +209,9 @@ plt.hexbin(alphas, betas[:,0]);
 plt.colorbar();
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
   slide_type: slide
 ---
@@ -178,80 +219,48 @@ plt.hexbin(alphas, betas[:,1]);
 plt.colorbar();
 ```
 
-```{code-cell} ipython3
++++ {"editable": true, "slideshow": {"slide_type": "slide"}}
+
+### Errors
+
+```{code-cell}
 ---
+editable: true
 slideshow:
-  slide_type: slide
+  slide_type: ''
 ---
-lr_trace=pm.compute_log_likelihood(lr_trace, model = basic_model, extend_inferencedata=True)
+print(az.hdi(trace.posterior['beta'],hdi_prob=.975)['beta'].values)
 ```
 
-+++ {"slideshow": {"slide_type": "slide"}}
-
-## Errors
-
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
-  slide_type: fragment
+  slide_type: ''
 ---
-# Size of dataset
-valid_size = 50
-
-# Predictor variable
-X1_valid = np.random.randn(valid_size)
-X2_valid = np.random.randn(valid_size) * 0.2
-
-# Simulate outcome variable
-Y_valid = alpha_t + beta_t[0]*X1_valid + beta_t[1]*X2_valid + np.random.randn(valid_size)*sigma_t
+print(az.hdi(trace.posterior['alpha'], hdi_prob=0.975)['alpha'].values)
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
-  slide_type: fragment
+  slide_type: ''
 ---
-with basic_model:
-    pm.set_data({"pred1": X1_valid, "pred2": X2_valid})
-    lr_trace = pm.sample_posterior_predictive(lr_trace, extend_inferencedata=True, var_names=['mu'], predictions=True)
+print(az.hdi(trace.posterior['sigma'], hdi_prob=0.975)['sigma'].values)
 ```
 
-```{code-cell} ipython3
----
-slideshow:
-  slide_type: slide
----
-lr_trace
-```
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
-```{code-cell} ipython3
+## Data analysis recipes: Fitting Model to data, David W. Hong.
+
++++ {"editable": true, "slideshow": {"slide_type": ""}}
+
+From [Data analysis recipes: Fitting Model to data, David W. Hong](https://arxiv.org/abs/1008.4686). See also [GLM: Linear regression](https://www.pymc.io/projects/docs/en/stable/learn/core_notebooks/GLM_linear.html#glm-linear)
+
+```{code-cell}
 ---
-slideshow:
-  slide_type: slide
----
-predictions = lr_trace.predictions
-```
-
-```{code-cell} ipython3
----
-slideshow:
-  slide_type: slide
----
-fig, ax = plt.subplots()
-ax.scatter(predictions['mu_dim_2'], predictions['mu'].mean(("chain","draw")) , color='orange');
-ax.vlines(predictions['mu_dim_2'], *az.hdi(predictions)['mu'].transpose("hdi", ...) , color='orange');
-```
-
-+++ {"slideshow": {"slide_type": "slide"}}
-
-# Data analysis recipes: Fitting Model to data, David W. Hong.
-
-+++ {"slideshow": {"slide_type": ""}}
-
-From [Data analysis recipes: Fitting Model to data, David W. Hong](https://arxiv.org/abs/1008.4686)
-
-```{code-cell} ipython3
----
+editable: true
 slideshow:
   slide_type: slide
 ---
@@ -259,40 +268,43 @@ data = np.loadtxt("linear_regression.txt")
 clean_data = data[5:]
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
-  slide_type: slide
+  slide_type: ''
 ---
 fig, ax = plt.subplots()
 ax.errorbar(clean_data[:,0], clean_data[:,1],  yerr=clean_data[:,2], fmt='o');
 ```
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
-$$y_i \sim N(\beta \cdot x+\alpha,\sigma_i),\quad \sigma_i \text{ known}$$
+$$y_i \sim N(\beta x_i+\alpha,\sigma_i),\quad \sigma_i \text{ known}$$
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
   slide_type: fragment
 ---
 y_model = pm.Model()
 
 with y_model:
-    pred = pm.MutableData("pred",clean_data[:,0])
-    sigma = pm.MutableData("sigma",clean_data[:,2])                        
     # Priors for unknown model parameters
     alpha = pm.Normal('alpha', mu=0, sigma=10)
     beta = pm.Normal('beta', mu=0, sigma=10)
+   
     # Expected value of outcome
-    mu = pm.Deterministic("mu",alpha + beta*pred)
+    mu = alpha + beta*clean_data[:,0]
+
     # Likelihood (sampling distribution) of observations
-    Y_obs = pm.Normal('Y_obs', mu=mu, sigma=sigma, observed=clean_data[:,1])
+    Y_obs = pm.Normal('Y_obs', mu=mu, sigma=clean_data[:,2], observed=clean_data[:,1])
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
   slide_type: slide
 ---
@@ -300,8 +312,9 @@ map_estimate = pm.find_MAP(model=y_model)
 map_estimate
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
   slide_type: slide
 ---
@@ -312,61 +325,57 @@ ys = map_estimate['alpha']+map_estimate['beta']*xs
 plt.plot(xs,ys);
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
   slide_type: slide
 ---
 with y_model:
-    y_trace = pm.sample(tune=1000, draws=10000, return_inferencedata=True)
+    trace = pm.sample(tune=1000, draws=8000)
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
   slide_type: slide
 ---
 with y_model:
-    az.plot_trace(y_trace, var_names=['alpha', 'beta']);
+    az.plot_trace(trace);
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
   slide_type: slide
 ---
-with y_model:
-    az.plot_posterior(y_trace, var_names=['alpha', 'beta']);
+az.summary(trace).round(2)
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
   slide_type: slide
 ---
-az.summary(y_trace, var_names=['alpha', 'beta']).round(2)
+trace.stack(sample=['chain', 'draw'], inplace=True)
+post=trace.posterior
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
-slideshow:
-  slide_type: skip
----
-post=y_trace.posterior
-```
-
-```{code-cell} ipython3
----
+editable: true
 slideshow:
   slide_type: slide
 ---
-plt.hexbin(y_trace.posterior['alpha'].data, y_trace.posterior['beta'].data);
-plt.xlabel('$\\alpha$', fontsize=20);
-plt.ylabel('$\\beta$', fontsize=20);
+print(post)
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
   slide_type: slide
 ---
@@ -374,388 +383,337 @@ fig, ax = plt.subplots()
 ax.errorbar(clean_data[:,0], clean_data[:,1],  yerr=clean_data[:,2], fmt='o')
 xs = np.linspace(50,250,100)
 ys = map_estimate['alpha']+map_estimate['beta']*xs
-plt.plot(xs,ys,'orange');
-ys = post['alpha'].mean(('chain', 'draw')).item()+post['beta'].mean(('chain', 'draw')).item()*xs
-plt.plot(xs,ys,'red');
-ys = post['alpha'].median().item()+ post['beta'].median().item()*xs
-plt.plot(xs,ys,'green');
+plt.plot(xs,ys,'orange',label='MAP');
+ys = np.mean(post['alpha'].data)+np.mean(post['beta'].data)*xs
+plt.plot(xs,ys,'red', label='mean');
+ys = post['alpha'].median().data+ post['beta'].median().data*xs
+plt.plot(xs,ys,'green', label='median');
+plt.legend();
 plt.close()
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
   slide_type: slide
 ---
 fig
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
+slideshow:
+  slide_type: skip
+---
+trace.posterior.sizes['sample']
+```
+
+```{code-cell}
+---
+editable: true
 slideshow:
   slide_type: slide
 ---
 fig, ax = plt.subplots()
 _ = ax.errorbar(clean_data[:,0], clean_data[:,1],  yerr=clean_data[:,2], fmt='o')
 xs = np.linspace(50,250,100)
-for i in range(8):
-    k  =np.random.randint(0, len(post['draw']))
-    ys = post['alpha'][0][k].data+post['beta'][0][k].data*xs
+for i in range(128):
+    k  =np.random.randint(0, trace.posterior.sizes['sample'])
+    ys = post['alpha'][k].data+post['beta'][k].data*xs
     plt.plot(xs,ys,'grey', alpha=0.25);
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
   slide_type: slide
 ---
-y_trace= pm.sample_posterior_predictive(y_trace, extend_inferencedata=True, 
-                                        var_names=['mu','Y_obs'], model=y_model)
+xs = np.linspace(50,250,100)
+ys = np.mean(post['alpha'].data)+np.mean(post['beta'].data)*xs
+yss = post['alpha'].data+np.outer(xs,post['beta'].data)
+err = yss.std(axis=1)
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
   slide_type: slide
 ---
 fig, ax = plt.subplots()
 _ = ax.errorbar(clean_data[:,0], clean_data[:,1],  yerr=clean_data[:,2], fmt='o')
-xs = np.linspace(50,250,100)
-ax.vlines(y_trace.constant_data['pred'], 
-          *az.hdi(y_trace.posterior_predictive)['mu'].transpose("hdi", ...) , color='orange');
-ax.scatter(y_trace.constant_data['pred'], 
-           y_trace.posterior_predictive['mu'].mean(('draw', 'chain')),s=5, color='orange');
-plt.close()
+plt.plot(xs,ys,color='red', linewidth=1);
+plt.fill_between(xs,ys-err,ys+err,color='orange', alpha=0.5);
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
   slide_type: slide
 ---
-fig
+plt.hexbin(post['alpha'].data, post['beta'].data);
+plt.xlabel('$\\alpha$', fontsize=20);
+plt.ylabel('$\\beta$', fontsize=20);
 ```
 
-```{code-cell} ipython3
----
-slideshow:
-  slide_type: slide
----
-fig, ax = plt.subplots()
-_ = ax.errorbar(clean_data[:,0], clean_data[:,1],  yerr=clean_data[:,2], fmt='o')
-xs = np.linspace(50,250,100)
-ax.vlines(y_trace.constant_data['pred'], 
-          *az.hdi(y_trace.posterior_predictive)['Y_obs'].transpose("hdi", ...) , color='orange');
-ax.scatter(y_trace.constant_data['pred'], 
-           y_trace.posterior_predictive['Y_obs'].mean(('draw', 'chain')),s=5, color='orange');
-plt.close();
-```
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
-```{code-cell} ipython3
----
-slideshow:
-  slide_type: slide
----
-fig
-```
+## Uncertainties on both axes
 
-```{code-cell} ipython3
+```{code-cell}
 ---
-slideshow:
-  slide_type: slide
----
-y_trace=pm.compute_log_likelihood(y_trace, model=y_model, extend_inferencedata=True)
-```
-
-```{code-cell} ipython3
----
-slideshow:
-  slide_type: ''
----
-az.loo(y_trace)
-```
-
-+++ {"slideshow": {"slide_type": "slide"}}
-
-# Higher order
-
-+++ {"slideshow": {"slide_type": "fragment"}}
-
-$$\mu_i = \sum_{i=0}^{n-1} x^i \alpha_{n-1-i}$$
-
-+++ {"slideshow": {"slide_type": "fragment"}}
-
-$$\mu_i = \alpha_0 x_i^4 + \alpha_1 x^{3} + \alpha_2 x^2 +\alpha_3 x +\alpha_4 $$
-
-```{code-cell} ipython3
----
-slideshow:
-  slide_type: slide
----
-def poly(x,alpha,n):
-    y=alpha[0]
-    for i in range(1,n):
-        y=y*x+alpha[i]
-    return y    
-```
-
-```{code-cell} ipython3
----
-slideshow:
-  slide_type: slide
----
-y4_model = pm.Model()
-n = 5
-with y4_model:
-    pred = pm.MutableData("pred",clean_data[:,0])
-    sigma = pm.MutableData("sigma",clean_data[:,2])
-                           
-    # Priors for unknown model parameters
-    alpha = pm.Normal('alpha', mu=0, sigma=10, size=(n,))
-   
-    # Expected value of outcome
-    mu = pm.Deterministic("mu",poly(pred,alpha, n))
-
-    # Likelihood (sampling distribution) of observations
-    Y_obs = pm.Normal('Y_obs', mu=mu, sigma=sigma, observed=clean_data[:,1])
-```
-
-```{code-cell} ipython3
----
-slideshow:
-  slide_type: slide
----
-from numpy import polyfit
-```
-
-```{code-cell} ipython3
----
-slideshow:
-  slide_type: ''
----
-a_start = polyfit(clean_data[:,0],clean_data[:,1],n-1)
-```
-
-```{code-cell} ipython3
----
-slideshow:
-  slide_type: fragment
----
-with y4_model:
-    y4_map = pm.find_MAP(model=y4_model, start={'alpha':a_start})
-```
-
-```{code-cell} ipython3
----
-slideshow:
-  slide_type: fragment
----
-y4_map
-```
-
-```{code-cell} ipython3
----
+editable: true
 slideshow:
   slide_type: skip
 ---
-from numpy import polyval
-```
-
-```{code-cell} ipython3
----
-slideshow:
-  slide_type: slide
----
-fig, ax = plt.subplots()
-_ = ax.errorbar(clean_data[:,0], clean_data[:,1],  yerr=clean_data[:,2], fmt='o')
-xs = np.linspace(50,230,100);ys = polyval(a_start, xs)
-plt.plot(xs,ys);
-```
-
-```{code-cell} ipython3
----
-slideshow:
-  slide_type: slide
----
-precalculated = True
-```
-
-```{code-cell} ipython3
----
-slideshow:
-  slide_type: fragment
----
-if not precalculated:
-    with y4_model:
-        y4_trace=pm.sample(tune=1000, draws=25000, return_inferencedata=True, nuts_sampler_kwargs={'target_accept':.995, 'max_tree_depth':20})
+def covariance(arr):
+    cov = np.zeros((2,2))
+    cov[0,0]=arr[1]*arr[1]
+    cov[1,1]=arr[0]*arr[0]
+    cov[1,0]=cov[0,1] = arr[0]*arr[1]*arr[2]
+    return cov
     
-    y4_trace.to_netcdf("y4_trace.nc", engine='h5netcdf')
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
-slideshow:
-  slide_type: fragment
----
-y4_trace_disk = az.from_netcdf('y4_trace.nc')
-```
-
-```{code-cell} ipython3
----
-slideshow:
-  slide_type: slide
----
-with y4_model:
-    az.plot_trace(y4_trace_disk, var_names=['alpha'])
-```
-
-```{code-cell} ipython3
----
-slideshow:
-  slide_type: ''
----
-az.summary(y4_trace_disk, var_names=['alpha'])
-```
-
-```{code-cell} ipython3
----
+editable: true
 slideshow:
   slide_type: skip
 ---
-with y4_model:
-    az.plot_posterior(y4_trace_disk, var_names=['alpha'], grid=(3,2))
+def ellipse_par(cov):
+    e,v = np.linalg.eig(cov)
+    c = v[0,0]
+    angle = np.arccos(c)
+    return (np.sqrt(e[0]), np.sqrt(e[1]),angle)
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
   slide_type: skip
 ---
-alphas4 = y4_trace_disk.posterior['alpha'].data.reshape(-1,5)
+covs = np.apply_along_axis(covariance,1, data[:,2:])
+clean_covs=covs[5:]
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
-  slide_type: slide
+  slide_type: skip
 ---
-plt.hexbin(y4_trace_disk.posterior['alpha'][:,:,3], y4_trace_disk.posterior['alpha'][:,:,4]);
+sigmas = np.linalg.inv(covs)
+clean_sigmas = sigmas[5:]
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
-  slide_type: slide
+  slide_type: skip
 ---
-plt.hexbin(y4_trace_disk.posterior['alpha'][:,:,2], y4_trace_disk.posterior['alpha'][:,:,3]);
+def ellipse_patch( x, y, w, h, a):
+    return Ellipse(xy=(x,y), width=2*w, height=2*h, angle=a*degree)    
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
-  slide_type: slide
+  slide_type: skip
 ---
-fig, ax = plt.subplots()
-_ = ax.errorbar(clean_data[:,0], clean_data[:,1],  yerr=clean_data[:,2], fmt='o')
-xs = np.linspace(50,230,100)
-ys = poly(xs, y4_trace_disk.posterior['alpha'].mean(('chain','draw')).data,n)
-plt.plot(xs,ys);
-plt.close()
+fig, ax = plt.subplots() 
+ax.set_xlim(0,300)
+ax.set_ylim(0,700)
+ax.scatter(clean_data[:,0], clean_data[0:,1],marker='.')
+for d in clean_data[:]:
+    c = covariance(d[2:])
+    ep = ellipse_par(c)
+    epa =  ellipse_patch(*d[0:2], *ep)
+    epa.set_facecolor('none')
+    epa.set_edgecolor('r')
+    ax.add_patch(epa)
+plt.close()    
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
   slide_type: slide
 ---
 fig
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
-  slide_type: slide
+  slide_type: skip
 ---
-with y4_model:
-    y4_trace_disk=pm.sample_posterior_predictive(y4_trace_disk, extend_inferencedata=True, return_inferencedata=True, var_names=['mu','Y_obs'])
+def o_d(phi,s):
+    cos  = np.cos(phi)
+    sin  = np.sin(phi)
+    return  (np.array([s*cos, s*sin]), 
+                      np.array([-sin, cos])
+                     )
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
-  slide_type: slide
+  slide_type: skip
 ---
-fig
+from matplotlib.patches import Arc, FancyArrowPatch
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
-  slide_type: slide
+  slide_type: skip
 ---
-fig, ax = plt.subplots()
-_ = ax.errorbar(clean_data[:,0], clean_data[:,1],  yerr=clean_data[:,2], fmt='o')
-xs = np.linspace(50,250,100)
-ax.vlines(y4_trace_disk.constant_data['pred'], 
-          *az.hdi(y4_trace_disk.posterior_predictive)['mu'].transpose("hdi", ...) , color='orange');
-ax.scatter(y4_trace_disk.constant_data['pred'], 
-           y4_trace_disk.posterior_predictive['mu'].mean(('draw', 'chain')),s=5, color='orange');
+phi=0.7
+s = 0.47
+fig, ax = plt.subplots(figsize=(8,8))
+ax.axvline(0, linewidth=1, color='gray');ax.axhline(0, linewidth=1, color='gray')
+ax.set_aspect(1.0);ax.set_xlim(-1,1); ax.set_ylim(-1,1);
+plt.scatter([0],[0],color='black');
+o,d = o_d(phi,s)
+ax.scatter(o[0],o[1]);ax.plot([0,o[0]],[0,o[1]],linestyle='--');
+ts = np.linspace(-1.,1.0,10); ls = d*ts.reshape(-1,1)+o;
+ax.plot(ls[:,0], ls[:,1],color='black');
+arc=Arc((0,0), width=.5, height=0.5, theta1=0, theta2=np.rad2deg(phi));ax.add_patch(arc);
 plt.close();
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
-slideshow:
-  slide_type: slide
----
-fig, ax = plt.subplots()
-_ = ax.errorbar(clean_data[:,0], clean_data[:,1],  yerr=clean_data[:,2], fmt='o')
-xs = np.linspace(50,250,100)
-ax.vlines(y4_trace_disk.constant_data['pred'], 
-          *az.hdi(y4_trace_disk.posterior_predictive)['Y_obs'].transpose("hdi", ...) , color='orange');
-ax.scatter(y4_trace_disk.constant_data['pred'], 
-           y4_trace_disk.posterior_predictive['Y_obs'].mean(('draw', 'chain')),s=20, color='orange');
-plt.close()
-```
-
-```{code-cell} ipython3
----
+editable: true
 slideshow:
   slide_type: slide
 ---
 fig
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
   slide_type: slide
 ---
-with y4_model:
-    y4_trace_disk=pm.compute_log_likelihood(y4_trace_disk, extend_inferencedata=True)
+n = len(clean_data)
+with pm.Model() as model:
+    s   = pm.HalfFlat('s')
+    phi = pm.Uniform('phi',lower = -np.pi, upper = np.pi)  
+    t = pm.Flat('t',shape=n)
+    o = pm.math.stack([s*np.cos(phi), s*np.sin(phi)])
+    d = pm.math.stack([-np.sin(phi), np.cos(phi)])
+   
+    p = pm.Deterministic('p', d*t.reshape((-1,1))+o)
+    
+    for i in range( n ):
+        obs = pm.MvNormal('obs_%i' % (i,) , mu = p[i] , cov = clean_covs[i], 
+                      observed = clean_data[i,0:2])
+   
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
   slide_type: slide
 ---
-az.loo(y4_trace_disk)
+with model:
+    trace = pm.sample(draws=10000, tune=8000, chains=4, target_accept = 0.99)
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
 slideshow:
   slide_type: slide
 ---
-model_comp = az.compare({'y_model':y_trace, 'y4_model':y4_trace_disk})
-model_comp
+with model:
+    az.plot_trace(trace, var_names=["phi","s"]);
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ---
+editable: true
+slideshow:
+  slide_type: ''
+---
+az.summary(trace, var_names=['phi', 's'])
+```
+
+```{code-cell}
+---
+editable: true
+slideshow:
+  slide_type: ''
+---
+trace.stack(sample=['chain', 'draw'], inplace=True)
+post2 = trace.posterior
+p_m = post2['p'].data.mean(2)
+```
+
+```{code-cell}
+---
+editable: true
+slideshow:
+  slide_type: skip
+---
+phi_m = post2["phi"].data.mean()
+s_m = post2["s"].data.mean()
+```
+
+```{code-cell}
+---
+editable: true
+slideshow:
+  slide_type: skip
+---
+fig, ax = plt.subplots() 
+ax.set_xlim(0,300)
+ax.set_ylim(0,700)
+ax.scatter(clean_data[:,0], clean_data[0:,1],marker='.')
+for d in clean_data[:]:
+    c = covariance(d[2:])
+    ep = ellipse_par(c)
+    epa =  ellipse_patch(*d[0:2], *ep)
+    epa.set_facecolor('none')
+    epa.set_edgecolor('r')
+    ax.add_patch(epa)
+o,d  = o_d(phi_m,s_m)  
+times = np.linspace(-600,-100,100)
+ps = o+d*times.reshape(-1,1)
+ax.plot(ps[:,0], ps[:,1]);
+ax.scatter(p_m[:,0], p_m[:,1],color='green');
+plt.close()
+```
+
+```{code-cell}
+---
+editable: true
 slideshow:
   slide_type: slide
 ---
-az.plot_compare(model_comp);
+fig
+```
+
+```{code-cell}
+---
+editable: true
+slideshow:
+  slide_type: skip
+---
+
 ```
