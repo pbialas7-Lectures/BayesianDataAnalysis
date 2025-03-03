@@ -1,0 +1,6 @@
+numpy
+scipy
+pymc
+arviz
+matplotlib
+ipywidgets
