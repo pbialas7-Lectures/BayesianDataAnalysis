@@ -33,6 +33,17 @@ After installing all required packages you can start `jupyter lab` by running
 jypyter lab
 ```
 
+## Using python in lab
+
+When using the computers in lab, please log to your linux account and then run
+```
+source /app/Python/3.10.4/VE/defaults/bin/activate
+```
+The you can run 
+```
+jupyter lab
+```
+
 ## MyST format
 
 The notebooks in the repository are stored in [MyST (Markedly Structured Text Format)](https://myst-parser.readthedocs.io/en/latest/) format. Thanks to the `jupytext` package you can open them right in the jupyter lab, by clicking the file name with righthand mouse button and choosing `open with` and then `Notebook`. If you are using jupyter notebook the you have to convert them prior to opening by running   
