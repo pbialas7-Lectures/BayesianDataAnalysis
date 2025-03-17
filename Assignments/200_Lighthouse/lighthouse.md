@@ -120,7 +120,7 @@ Under those conditions the sampling distribution is the Cauchy distribution with
 
 +++ {"editable": true, "slideshow": {"slide_type": ""}}
 
-$$p(x)=\frac{h}{\pi}\frac{1}{\left(x-x_{lh}\right)^2+h^2}$$
+$$p(x|x_{lh},h)=\frac{h}{\pi}\frac{1}{\left(x-x_{lh}\right)^2+h^2}$$
 
 +++ {"editable": true, "slideshow": {"slide_type": ""}}
 

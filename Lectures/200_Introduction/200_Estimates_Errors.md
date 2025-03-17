@@ -928,9 +928,18 @@ slideshow:
 ---
 beta=0.7
 lr,th,mass=hdr_f(beta_posteriors[-1].pdf, beta,a=0,b=1)
-_,ax=plot_All(beta_posteriors[-1].pdf,th)
+fig,ax=plot_All(beta_posteriors[-1].pdf,th)
 n_l = left.sum(); n_r = len(left)- n_l;
 n_l = left.sum(); n_r = len(left)- n_l;
 p_map = n_l/(n_l+n_r);
 ax.axvline(p_map);
+plt.close()
+```
+
+```{code-cell}
+fig
+```
+
+```{code-cell}
+
 ```

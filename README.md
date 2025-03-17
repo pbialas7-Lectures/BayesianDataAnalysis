@@ -24,13 +24,13 @@ mamba install numpy scipy  matplotlib
 If you didn't install `mamba` then you can substitute `conda` for `mamba`. I tend to use `mamba` as it is markedly faster then `conda`.  
 Finally run
 ```
-pip install bda
+pip install bda/
 ```
 to install the auxiliary package for this lecture.
 
 After installing all required packages you can start `jupyter lab` by running 
 ```
-jypyter lab
+jupyter lab
 ```
 
 ## Using python in lab
@@ -60,13 +60,13 @@ To be described later
 
 We will be using git and GitHub in this course. Please start by cloning this repository
 ```shell
-git clone https://github.com/pbialas7-Lectures/BayesianDataAanalysis.git
+git clone https://github.com/pbialas7-Lectures/BayesianDataAnalysis.git
 ```
 Then change into just created repository and change the name of the remote
 ```shell
 git remote rename origin lecture 
 ```
-This will enable you to update your repository from mine by issuing command 
+This will enable you to update your repository from mine by issuing a command 
 ```shell
 git pull lecture 
 ```
@@ -88,6 +88,6 @@ And finally please add me as a collaborator  (Select tab `Settings` and next `Co
 
 ## Jupytext and version control  (**!**)
 
-While the notebook `*.ipynb` files are JSON text files, they are not well suited for version control. That is because each notebook stores additional  information, like e.g. the output of each cell and the number of times each cell was executed. As a consequence,  executing even a single cell changes the notebook without really changing it content and makes it very hard to keep it under version control. That's why it is recommended to use `jupytext` for this purpose. Jupytext automatically keeps the  `*.ipynb` notebook file in sync with another  text file that  does not contain this extra information. You can choose from several formats for this file. I am using the `*.md` files in [Myst Markdown](https://myst-parser.readthedocs.io/en/latest/) format. To use `jupytext` you have of course to install it (see above). After that please download the `jupytext.toml` file from my repository (you have it already if you have cloned my repository). Please download also the `.gitignore` file which will prevent the `*.ipynb` files to be recognised by `git`. Then  keep under version control **only** the `*.md` files. Do not add the `*.ipynb` files to your repository.  
+While the notebook `*.ipynb` files are JSON text files, they are not well suited for version control. That is because each notebook stores additional  information, like e.g. the output of each cell and the number of times each cell was executed. As a consequence,  executing even a single cell changes the notebook without really changing it content and makes it very hard to keep it under version control. That's why it is recommended to use `jupytext` for this purpose. Jupytext automatically keeps the  `*.ipynb` notebook file in sync with another  text file that  does not contain this extra information. You can choose from several formats for this file. I am using the `*.md` files in [Myst Markdown](https://myst-parser.readthedocs.io/en/latest/) format. To use `jupytext` you have of course to install it (see above). After that please download the `jupytext.toml` file from my repository (you have it already if you have cloned my repository). Please download also the `.gitignore` file which will prevent the `*.ipynb` files to be recognized by `git`. Then  keep under version control **only** the `*.md` files. Do not add the `*.ipynb` files to your repository.  
 
 

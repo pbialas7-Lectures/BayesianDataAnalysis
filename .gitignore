@@ -10,3 +10,9 @@ bda/src/bda.egg-info/
 bda/src/bda/__pycache__/
 
 Assignments/200_Lighthouse/__pycache__/
+
+.idea/
+
+*.ipynb
+
+bda/build/

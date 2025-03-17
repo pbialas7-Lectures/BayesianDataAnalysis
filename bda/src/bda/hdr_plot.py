@@ -6,7 +6,7 @@ import sys
 
 sys.path.append('')
 
-from .stats import R_f, PofR_f, R_d, PofR_d
+from bda.stats import R_f, PofR_f, R_d, PofR_d
 
 
 def plot_R_f(f, r, a, b, *, alpha=0.5, n=500, ax=None, **kwargs):
