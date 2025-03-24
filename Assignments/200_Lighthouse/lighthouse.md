@@ -47,6 +47,8 @@ slideshow:
 import lighthouse as lh
 ```
 
++++ {"editable": true, "slideshow": {"slide_type": ""}}
+
 # Lighthouse
 
 +++ {"editable": true, "slideshow": {"slide_type": ""}}
@@ -82,14 +84,6 @@ slideshow:
   slide_type: ''
 ---
 x0=10;
-```
-
-```{code-cell}
----
-editable: true
-slideshow:
-  slide_type: ''
----
 fig,ax=plt.subplots();
 ax.set_ylim(0,1.1)
 ax.set_xlim(-350,200)
