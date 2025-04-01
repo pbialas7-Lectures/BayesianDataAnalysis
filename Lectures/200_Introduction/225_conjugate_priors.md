@@ -170,7 +170,7 @@ plt.plot(xs, scipy.stats.norm(100,np.sqrt(100)).pdf(xs));
 
 Assuming uniform prior on the parameter $\lambda$
 
-+++ {"slideshow": {"slide_type": "fragment"}, "editable": true}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
 $$P(\lambda)=1$$
 
@@ -178,7 +178,7 @@ $$P(\lambda)=1$$
 
 (this is an _improper_ prior, as this is not a normalizable probability distribution) we obtain for posterior after  observing a series of counts $\{k_i\}$
 
-+++ {"slideshow": {"slide_type": "slide"}, "editable": true}
++++ {"slideshow": {"slide_type": "fragment"}, "editable": true}
 
 $$P(\{k_i\}|t,\lambda) = \prod_{i=1}^n e^{-t\lambda}\frac{(t\lambda)^{k_i}}{k_i!}\propto (t\lambda)^{\displaystyle n \bar{k}}e^{\displaystyle -n t\lambda}$$
 
