@@ -38,7 +38,7 @@ slideshow:
   slide_type: skip
 ---
 import pymc as pm
-print(f"Running on PyMC3 v{pm.__version__}")
+print(f"Running on PyMC v{pm.__version__}")
 import arviz as az
 ```
 
