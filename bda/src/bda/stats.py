@@ -14,9 +14,11 @@ arviz_imported = False
 try:
     import arviz as az
     import xarray
+
     arviz_imported = True
 except ImportError:
     pass
+
 
 #  Distributions defined by their density function distinguished by suffix _f
 # f is the density function of the distribution, but it does not need to be normalized.
@@ -283,15 +285,20 @@ def hdr_f(f, beta, *, a, b):
     """
     max_p = -minimize_scalar(lambda x: -f(x), bounds=(a, b), method="Bounded").fun
 
+    # print(f"max p = {max_p}")
     def g(p):
         r = R_f(f, p, a, b)
-        return PofR_f(f, r) - beta
+        pofr = PofR_f(f, r)
+        # print(f"p={p} r={r} pofr={pofr}")
+        return pofr - beta
 
     p_zero = brentq(g, 0, max_p)
     rp = R_f(f, p_zero, a, b)
+    hdr_f.g = g
     return rp, p_zero, PofR_f(f, rp)
 
-def mad_c_f(f, c, *, left,right):
+
+def mad_c_f(f, c, *, left, right):
     """Mean absolute deviation around c for distribution f on an interval [left,right]
 
     Parameters
@@ -397,7 +404,6 @@ def hdr_d(xs, dist, beta):
     return xs[r], p_max, PofR_d(dist, r)
 
 
-
 # Random variables
 
 if arviz_imported:
@@ -420,5 +426,3 @@ if arviz_imported:
         return grid[pdf.argmax()]
 else:
     print("Arviz not imported, mode_rvs not available")
-
-
