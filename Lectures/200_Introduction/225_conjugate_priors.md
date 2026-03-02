@@ -4,7 +4,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.7
+    jupytext_version: 1.19.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -15,7 +15,7 @@ kernelspec:
 
 # Conjugate priors
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -129,7 +129,7 @@ Poisson distribution appears when  some events occur with uniform probability in
 
 $$P(k|t, \lambda) = e^{-t\lambda}\frac{(t\lambda)^k}{k!}$$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -138,7 +138,7 @@ slideshow:
 from scipy.stats import poisson
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -154,7 +154,7 @@ plt.legend();
 
 For large $\lambda$ Poisson distribution approaches the normal distribution with $\mu=\lambda$ and $\sigma^2=\lambda$.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -218,7 +218,7 @@ and  posterior distribution for Poisson distribution after observing $\{k_i\}$ c
 
 $$P(\lambda|t,\{k_i\}) =PDF[Gamma(\alpha+n \bar k,\beta+n t)]$$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -227,7 +227,7 @@ slideshow:
 from scipy.stats import gamma
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -244,7 +244,7 @@ ax.legend();
 plt.close();
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -253,7 +253,7 @@ slideshow:
 fig
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -270,7 +270,7 @@ ax.legend();
 plt.close();
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:

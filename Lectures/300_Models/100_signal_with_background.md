@@ -4,14 +4,14 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.7
+    jupytext_version: 1.19.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -61,7 +61,7 @@ $$P(n|D) = e^{-D}\frac{D^n}{n!} $$
 
 $$X\sim Poisson(D)\qquad E[X]=D,\qquad var[X]=D$$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -70,7 +70,7 @@ slideshow:
 from scipy.stats import poisson
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -79,7 +79,7 @@ slideshow:
 D = 5.77
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -153,7 +153,7 @@ $$k'=\sum_{i=1}^M n_i+k,\qquad \theta'=\frac{1}{\theta^{-1}+M}$$
 
 We regain the uniform prior with $k=1$ and $\theta=\infty$.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -166,7 +166,7 @@ print(nk_pois)
 nk_sum = nk_pois.sum()
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -175,7 +175,7 @@ slideshow:
 from scipy.stats import gamma
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -226,7 +226,7 @@ $$\log P(n_k|A,B)=n_k \log D_k(A,B)-D_k(A,B) -\log( n_k!)$$
 
 So let's simulate some measurements
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -239,7 +239,7 @@ B_true = 2
 n0 = 32
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -254,7 +254,7 @@ def D_rate_scalar(x, A,B):
 
 First we compute the decay rates in different positions $\{x\}_{k=1}^{13}=\{-6,-5,\ldots,6\}$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -264,7 +264,7 @@ xk = np.arange(-6,7)
 dk = D_rate_scalar(xk,A_true, B_true) 
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -279,7 +279,7 @@ plt.legend();
 
 From those rates we generate the actual counts from Poisson distribution
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -288,7 +288,7 @@ slideshow:
 nk = poisson(dk).rvs(size=len(dk))
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -304,7 +304,7 @@ plt.legend();
 
 Given $A$, $B$ and counts $n_k$ the log posterior can be calculated as
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -322,7 +322,7 @@ def log_pk(nk,A,B):
 
 We will calculate the posterion numerically. To this end we choose discretised intervals on for $A$ and $B$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -336,7 +336,7 @@ Bs = np.linspace(1,3,400)
 
 We will need the $D_k(A,B)$ for all possible combinations of $k$, $A$ and $B$. This can be done using the `for` loops. It is not an efficient implementation
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -349,7 +349,7 @@ for i,a in enumerate(As):
         posterior[j,i] = log_pk(nk,a,b) 
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -358,7 +358,7 @@ slideshow:
 posterior_n = posterior - posterior.max()
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -369,7 +369,7 @@ AB_map = As[idx[1]], Bs[idx[0]]
 AB_map
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -386,7 +386,7 @@ ax.scatter([A_true],[B_true], color='orange');ax.scatter(*AB_map, color='red')
 plt.close()
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -419,7 +419,7 @@ for i,x_i in enumerate(x):
 
 Using those functions we can rewrite the rates functions as
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -435,7 +435,7 @@ def D_rate_vector(x,A,B):
 
 and log posterior as
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -447,7 +447,7 @@ def log_pk_vector(A,B):
     return lk.sum(-1)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -460,7 +460,7 @@ nzs=zs-np.max(zs)
 
 This function is about 30 times faster than the previous implementation.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -470,7 +470,7 @@ idx = np.unravel_index(np.argmax(zs), zs.shape)
 AB_map=(As[idx[1]], Bs[idx[0]])
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -480,7 +480,7 @@ print(A_true, B_true)
 print(AB_map)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -498,7 +498,7 @@ ax.grid()
 plt.close()
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -511,7 +511,7 @@ fig
 
 ## Marginal distributions
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -524,7 +524,7 @@ from scipy.special import logsumexp
 
 ### $A$ distribution
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -535,7 +535,7 @@ A_map = As[ys.argmax()]
 print(A_map)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -544,7 +544,7 @@ slideshow:
 AB_map
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -561,7 +561,7 @@ ax.set_xlabel("A");
 
 ### $B$ distribution
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -572,7 +572,7 @@ B_map = Bs[ys.argmax()]
 print(B_map)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -581,7 +581,7 @@ slideshow:
 AB_map
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -594,7 +594,7 @@ ax.axvline(B_true, color='orange');ax.axvline(AB_map[1],color='red');ax.axvline(
 ax.set_xlabel("B");
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:

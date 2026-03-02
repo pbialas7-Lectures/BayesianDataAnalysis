@@ -4,14 +4,14 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.7
+    jupytext_version: 1.19.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -25,7 +25,7 @@ slideshow:
 
 # Model testing and selection
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -71,7 +71,7 @@ $$x^{-\nu-1}$$
 
  for large $x$. When $\nu\rightarrow\infty$ this distributions approaches normal distribution
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -89,7 +89,7 @@ ax.legend();
 
 Similarly to normal distribution, we can move and scale it
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -111,7 +111,7 @@ ax.legend();
 
 The data we will be using as example will be draw from t-distribution with $\nu=4$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -123,7 +123,7 @@ true_scale = 2
 true_dist = st.t(loc=1, scale=2, df=4)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -132,7 +132,7 @@ slideshow:
 true_mean, true_std = true_dist.mean(), true_dist.std()
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -145,7 +145,7 @@ print(true_mean, true_std)
 
 ### Data
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -157,7 +157,7 @@ y_mean = y.mean()
 y_s = y.std(ddof=1)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -166,7 +166,7 @@ slideshow:
 plt.scatter(np.arange(len(y)), y);
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -175,7 +175,7 @@ slideshow:
 plt.hist(y, bins=20);
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -193,7 +193,7 @@ print("nu = {:.2f} mu = {:.2f} scale = {:.2f}".format(*st.t.fit(y)))
 
 We will start with fitting normal model
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -206,7 +206,7 @@ with pm.Model() as normal_model:
     y_obs = pm.Normal('y_obs', mu = mu, sigma = sigma, observed = y )
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -216,7 +216,7 @@ with normal_model:
     MAP = pm.find_MAP()
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -225,7 +225,7 @@ slideshow:
 MAP
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -236,7 +236,7 @@ xs = -np.linspace(-15,10,500)
 plt.plot(xs,st.norm.pdf(xs, loc=MAP['mu'],scale=MAP['sigma']));
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -246,7 +246,7 @@ with normal_model:
     normal_trace = pm.sample(draws=8000, return_inferencedata=True)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -256,7 +256,7 @@ with normal_model:
     az.plot_trace(normal_trace);
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -321,7 +321,7 @@ The samples of $\mu$ and $\sigma$ from the posterior are already calculated and 
 
 Each of the the parameters was sampled 4 x 8000 times. We will combine both parameters into single array using `numpy.stack` function
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -330,7 +330,7 @@ slideshow:
 posterior_sample = np.stack( (normal_trace.posterior['mu'],normal_trace.posterior['sigma']),-1)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -343,7 +343,7 @@ posterior_sample.shape
 
 and sample `y_size` number for for each pair using the [`np.apply_along_axis`](https://numpy.org/doc/stable/reference/generated/numpy.apply_along_axis.html) function
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -352,7 +352,7 @@ slideshow:
 posterior_predictive_sample = np.apply_along_axis(lambda a: st.norm.rvs(*a, size=y_size),2,posterior_sample)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -365,7 +365,7 @@ posterior_predictive_sample.shape
 
 Finally we will combine all four chains into single one
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -374,7 +374,7 @@ slideshow:
 posterior_predictive_sample = posterior_predictive_sample.reshape(-1,y_size)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -387,7 +387,7 @@ posterior_predictive_sample.shape
 
 We have 32000 synthetic data sets to compare with our original `y` data set. We will start by drawing few examples together with the original data
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -404,7 +404,7 @@ for i in range(3):
 
 The look reasonably similar by one may notice the absence of  such pronounced outliers in case of the synthetic data sets. We can look at this using histograms but first generate the posterior predictive sample again this time using a PyMC function `sample_posterior_predictive`.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -422,7 +422,7 @@ This is confusing but we may ignore this warning in this case. The potential ter
 
 The `normal_trace` InferenceData variable is now extended with another group `posterior_predictive`.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -431,7 +431,7 @@ slideshow:
 normal_trace
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -440,7 +440,7 @@ slideshow:
 print(normal_trace.posterior_predictive)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -449,7 +449,7 @@ slideshow:
 normal_pps = normal_trace.posterior_predictive['y_obs'].stack({'z':['chain','draw']}).transpose()
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -462,7 +462,7 @@ print(normal_pps)
 
 We can check that we obtain identical results as before.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -476,7 +476,7 @@ plt.hist(posterior_predictive_sample.ravel(), bins=100, histtype='step', density
 
 Looking at the three first synthetic data sets we observe again that while they resemble the histogram of the original data, the outlying values are missing
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -493,7 +493,7 @@ for i in range(3):
 
 To see this in more detailed we will plot the histogram of the minimum values of each synthetic data set and compare it with the minimum of the original data
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -508,7 +508,7 @@ plt.axvline(y.min(), color='black');
 
 From this picture we see that it is almost impossible to obtain such a value of minimum from our model. The model does not explain such extreme value. We do the same thing for maximum
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -524,7 +524,7 @@ plt.axvline(y.max(), color='black');
 This time this value does not seem  impossible to obtain from our model.
 Finally we repeat same analysis for so called `kurtosis`, a quantity designed specifically to test for "normalness" of a distribution.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -547,7 +547,7 @@ Again we see that our model does not explain the value of this variable.
 
 Now we will look at the  t-distribution model, but with different $\nu$ which we somewhat arbitrarily set to twelve
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -560,7 +560,7 @@ with pm.Model() as T_model:
     y_obs = pm.StudentT('y_obs', mu = mu, sigma = sigma, nu=12, observed = y )
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -570,7 +570,7 @@ with T_model:
     MAP = pm.find_MAP()
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -579,7 +579,7 @@ slideshow:
 MAP
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -594,7 +594,7 @@ plt.plot(xs,st.t.pdf(xs, loc=MAP['mu'],scale=MAP['sigma']/st.t(df=12).std(),df=1
 
 Seems to fit well but still does not explain the outlier
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -604,7 +604,7 @@ with T_model:
     T_trace = pm.sample(draws=8000, return_inferencedata=True)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -614,7 +614,7 @@ with T_model:
     az.plot_trace(T_trace);
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -624,7 +624,7 @@ with T_model:
     az.plot_posterior(T_trace);
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -634,7 +634,7 @@ with T_model:
     T_trace = pm.sample_posterior_predictive(trace=T_trace,  extend_inferencedata=True)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -647,7 +647,7 @@ T_pps = T_trace.posterior_predictive['y_obs'].stack(z=('chain', 'draw')).transpo
 
 We can again check how this model predict the actual observed features of the data
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -658,7 +658,7 @@ plt.xlabel("min(y)")
 plt.axvline(y.min(), color='black');
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -753,7 +753,7 @@ $$p_{post}(\tilde y_i^j|\b{y})=
 
 $$\sum_i E_f(\log p_{post}(\tilde{y}_i)|\b y) \approx \sum_{i=1}^n \frac{1}{N}\sum_{j=1}^N\log\left(\frac{1}{S}\sum_{s=1}^S p(\tilde y_i^j|\theta^s)\right),\qquad \theta^s \sim p_{post}(\theta|\b y),\quad \tilde y^j_i\sim f$$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -764,7 +764,7 @@ mu_sigma_normal_pps = np.stack(
      normal_trace.posterior['sigma'].to_numpy().ravel()) , axis=1)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -774,7 +774,7 @@ def normal_likelihood(mu, sigma,y):
         return st.norm(loc=np.expand_dims(mu,1), scale=np.expand_dims(sigma,1)).pdf(y)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -791,7 +791,7 @@ elppds = np.array(
      ,print(ellpd))[1] for i in range(10)])
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -800,7 +800,7 @@ slideshow:
 print(f"Normal model elppd = {elppds.mean():.1f} +-/ {elppds.std()/np.sqrt(10.0):.2f}")
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -811,7 +811,7 @@ mu_sigma_T_pps = np.stack(
      T_trace.posterior['sigma'].to_numpy().ravel()) , axis=1)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -821,7 +821,7 @@ def T_likelihood(mu, sigma,y):
         return st.t(loc=np.expand_dims(mu,1), scale=np.expand_dims(sigma,1), df=12).pdf(y)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -831,7 +831,7 @@ def T_loglikelihood(mu, sigma,y):
         return st.t(loc=np.expand_dims(mu,1), scale=np.expand_dims(sigma,1), df=12).logpdf(y)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -845,7 +845,7 @@ elppds = np.array(
      print(ellpd))[1] for i in range(10)])
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -862,7 +862,7 @@ print(f"T model elppd = {elppds.mean():.1f} +-/ {elppds.std()/np.sqrt(10.0):.2f}
 
 If we try to estimate the lppd using the sample we have used to fit the model very likely our lppd will be  bigger
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -871,7 +871,7 @@ slideshow:
 y_size*np.log(normal_likelihood(mu_sigma_normal_pps[:,0], mu_sigma_normal_pps[:,1],y).mean(0)).mean()
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -892,7 +892,7 @@ One way to proceed in  such a case is to use _k-fold cross validation_. To this 
 
 To use this functionality in ArviZ we need first to calculate the log-likelighood of the observed data for each posterior sample
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -908,7 +908,7 @@ with normal_model:
 
 This  for every $\theta_i$ in the posterior sample calculates the $\log p(y_j|\theta_i)$ for every $y_j$ in the observed data set
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -917,7 +917,7 @@ slideshow:
 st.norm.logpdf(loc=normal_trace.posterior['mu'][0,0], scale=normal_trace.posterior['sigma'][0,0], x = y[:20])
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -926,7 +926,7 @@ slideshow:
 print(normal_trace.log_likelihood['y_obs'][0,0,:20])
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -964,7 +964,7 @@ where
 
 $$p_{WAIC} =\sum_{i=1}^n Var_{s}[\log p(y_i|\theta^s)]$$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -973,7 +973,7 @@ slideshow:
 az.waic(normal_trace)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -985,7 +985,7 @@ with T_model:
     pm.compute_log_likelihood(T_trace, extend_inferencedata=True)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -994,7 +994,7 @@ slideshow:
 az.loo(T_trace, pointwise=False)    
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1003,7 +1003,7 @@ slideshow:
 az.waic(T_trace)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1013,7 +1013,7 @@ model_compare = az.compare({'normal': normal_trace, 'T12':T_trace})
 model_compare
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1026,7 +1026,7 @@ az.plot_compare(model_compare);
 
 ## A yet  better  model?
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1039,7 +1039,7 @@ with pm.Model() as TT_model:
     y_obs = pm.StudentT('y_obs', mu = mu, sigma = sigma, nu=4, observed = y )
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1049,7 +1049,7 @@ with TT_model:
     MAP = pm.find_MAP()
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1058,7 +1058,7 @@ slideshow:
 MAP
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1068,7 +1068,7 @@ with TT_model:
     TT_trace = pm.sample(draws=8000, return_inferencedata=True)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1078,7 +1078,7 @@ with TT_model:
     az.plot_trace(TT_trace);
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1088,7 +1088,7 @@ with TT_model:
     az.plot_posterior(TT_trace);
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1098,7 +1098,7 @@ with TT_model:
     TT_trace = pm.sample_posterior_predictive(trace=TT_trace,  extend_inferencedata=True)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1107,7 +1107,7 @@ slideshow:
 TT_pps = TT_trace.posterior_predictive['y_obs'].stack(z=('chain', 'draw')).transpose()
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1118,7 +1118,7 @@ plt.xlabel("min(y)")
 plt.axvline(y.min(), color='black');
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1129,7 +1129,7 @@ plt.xlabel("kurtosis(y)")
 plt.axvline(st.kurtosis(y, bias=False), color='black');
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1139,7 +1139,7 @@ with TT_model:
     pm.compute_log_likelihood(TT_trace, extend_inferencedata=True)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1148,7 +1148,7 @@ slideshow:
 az.loo(TT_trace)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1157,7 +1157,7 @@ slideshow:
 az.waic(TT_trace)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1166,7 +1166,7 @@ slideshow:
 az.rcParams["stats.information_criterion"]
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1176,7 +1176,7 @@ model_compare = az.compare({'normal': normal_trace, 'T12':T_trace, 'T4':TT_trace
 model_compare
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1185,7 +1185,7 @@ slideshow:
 az.plot_compare(model_compare);
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1195,7 +1195,7 @@ model_compare_waic = az.compare({'normal': normal_trace, 'T12':T_trace, 'T4':TT_
 model_compare_waic
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:

@@ -4,7 +4,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.7
+    jupytext_version: 1.19.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -15,7 +15,7 @@ kernelspec:
 
 # Normal model and PyMC
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -25,7 +25,7 @@ slideshow:
 %autoreload 2
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -35,7 +35,7 @@ import numpy as np
 from scipy.stats import norm
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -46,7 +46,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["figure.figsize"] = [6, 4]
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -76,7 +76,7 @@ mamab install -c conda-forge pymc arviz
 
 Again we will start by generating some artificial data.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -93,7 +93,7 @@ s2 = y.var(ddof=1)
 print(y_bar, s2)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -112,7 +112,7 @@ ax.axhline(mu_true + sigma_true, linestyle='--');
 
 ## PyMC model
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -132,7 +132,7 @@ print(f"Running on PyMC v{pm.__version__} and ArviZ v{az.__version__}")
 
 After importing the PyMC package we are ready to define our first model. We start with know variance case and uninformative improper prior on $\sigma^2$. Whe defining the model we start with defining the prior on $\sigma^2$ using one of many [distributions](https://www.pymc.io/projects/docs/en/stable/api/distributions.html) available in PyMC. In this case we use `pm.Flat` which is a flat prior. Next we define the likelihood using `pm.Normal` which is a normal distribution. The `observed` argument is used to pass the data. Notice how the `mu` prior variable is passed to the `pm.Normal` as the mean of the distribution.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -153,7 +153,7 @@ with normal_model1:
 
 Once we have the model defined we can find the Maximum a Posteriori (MAP) estimate. This is the value of the parameters that maximizes the posterior distribution. In this case we are looking for the value of $\mu$ that maximizes the posterior distribution.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: fragment
@@ -166,7 +166,7 @@ print(MAP1)
 
 In this case the MAP  estimate is know analytically and is just the mean of the data
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: fragment
@@ -182,12 +182,12 @@ y_bar
 
 The model also allows us to sample from the posterior distribution. The `tune` parameter is the number of samples used for tuning the sampler. Those samples will be discarded. The  `draws` parameter is the number of samples to draw. We are not specifying the  algorithm to be used for sampling, so the default [No-U-Turn Sampler](https://arxiv.org/abs/1111.4246) (NUTS) is used. By default the samplers in PyMC run in parallel using available cores. The `cores` parameter can be used to specify the number of cores to use.
 
-```{code-cell}
+```{code-cell} ipython3
 n_samples = 8000
 n_tune = 1000
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: fragment
@@ -204,7 +204,7 @@ The first to notice is that this sampling is much slower than the one we did in 
 
 Once the samples are generated a quick way to view the results is the `plot_trace` function from `ArviZ`. For each parameter (in this case just $\mu$) it shows the resulting marginal distribution and the trace of the samples for each chain.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -226,7 +226,7 @@ In this case everything looks good.
 
 The `trace1` object returned from the ` pm.sample` function is a `InferenceData` object from the [`ArviZ` library](https://python.arviz.org/en/latest/index.html#). This can be viewed as a collection of the generated samples and some additional data and metadata.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -243,7 +243,7 @@ In this case it contains three  groups: `posterior`, `samples_stats` and `observ
 
 Each of those groups is in turn a `DataSet` object from the [`xarray` library](https://docs.xarray.dev/en/stable/index.html). Let's look at the `posterior` group.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -256,7 +256,7 @@ trace1.posterior
 
 This is an `DataSet` object from `xarray` which in turn is a collection of [`DataArray` objects](https://docs.xarray.dev/en/stable/api.html#dataarray) from the same library. A `DataArray` is essentially a wrapper around the numpy array with some additional metadata. In this case we have only one variable `mu` which is the posterior samples of the $\mu$ parameter.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -269,7 +269,7 @@ trace1.posterior.mu
 
 This DataArray consists of an two-dimensional numpy array which holds the samples from posterior for each chain  separately. We can access this data using the `values` attribute
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -282,7 +282,7 @@ trace1.posterior.mu.values.shape
 
 Besides the data a DataArray also holds the information about the dimensions.  The attribute `dims` holds the names of the dimensions. In this case we have two dimensions `chain` and `draw`.
 
-```{code-cell}
+```{code-cell} ipython3
 trace1.posterior.mu.dims
 ```
 
@@ -294,7 +294,7 @@ trace1.posterior.mu.dims
 
 You can access the data either using the normal numpy indexing
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -307,7 +307,7 @@ trace1.posterior.mu[0,:100]
 
  or using the `sel` method. The `sel` method allows you to select the data using the dimension names.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -320,7 +320,7 @@ trace1.posterior.mu.sel(chain=0, draw=slice(0, 100))
 
 The `coords` attribute holds the values of the dimensions.  You can think of them as  tick marks on the axes.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -333,7 +333,7 @@ trace1.posterior.mu.coords
 
 Often we would like to combine the chains into a single dimension. We can do it directly on the values
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -346,7 +346,7 @@ trace1.posterior.mu.values.ravel()
 
 or using the `stack` method.
 
-```{code-cell}
+```{code-cell} ipython3
 mu_samples = trace1.posterior.mu.stack(z=('chain', 'draw'))
 ```
 
@@ -354,7 +354,7 @@ mu_samples = trace1.posterior.mu.stack(z=('chain', 'draw'))
 
  The `z` argument is the name of the new dimension that combines `chain` and `draw` dimensions.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -367,7 +367,7 @@ mu_samples
 
 We can still use the `sel` method to access the data `chain` and `draw` dimensions.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -384,7 +384,7 @@ mu_samples.sel(chain=2, draw=slice(0, 100))
 
 After this short introduction to the ArviZ data type we return to our samples. As explained previously  the qualioty of thise samples depends on the autocorrelation time. We can use the `ac_and_tau_int` function from the `bda` module to calculate the autocorrelation and the integrated autocorrelation time.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -400,7 +400,7 @@ for i in range(4):
 
 ArviZ does not have a built-in function to calculate the autocorrelation and the integrated autocorrelation time. However it has a function to calculate the effective sample size which is the number of independent samples that would have the same variance as the samples generated by the MCMC.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -413,7 +413,7 @@ az.ess ( mu_samples.sel(chain=0).values)
 
 This compares well with the integrated autocorrelation time
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -430,7 +430,7 @@ len(mu_samples.sel(chain=0))/(2*1.1908)
 
 An usefull function is the `plot_posterior` function from the `ArviZ` library. It plots the posterior distribution of the parameter together with the HDI and some point estimate which is mean by the default.  The `hdi_prob` argument specifies the probability of the highest density interval. The default value is 0.94.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -444,7 +444,7 @@ with normal_model1:
 
 It this case we know the true posterior distribution which is a normal distribution with mean `y_bar` and $n$ times smaller variance, and we can compare it with the one generated by the PyMC.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -453,7 +453,7 @@ slideshow:
 from scipy.stats import norm
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -462,7 +462,7 @@ slideshow:
 posterior1 = norm(loc=y_bar, scale=sigma_true / np.sqrt(len(y)))
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -477,7 +477,7 @@ ax.figure
 
 We can require  that this functions also plots the mode of the distribution instead of the mean.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -491,7 +491,7 @@ with normal_model1:
 
 However we have little control on how this mode will be calculated. I have provided a function `mode_rvs` that calculates the mode of the distribution using the samples.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -500,7 +500,7 @@ slideshow:
 from bda.stats import mode_rvs
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -509,7 +509,7 @@ slideshow:
 mode_rvs(trace1.posterior.mu)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -522,7 +522,7 @@ y_bar
 
 And finally the `summary` function provides a summary of the posterior distribution.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -541,7 +541,7 @@ summary1
 
 Next example would be same model but with unknown variance. We will use a flat prior on $\sigma$. The only difference in the model definition is the prior on the sigma. We use `pm.HalfFlat` which is a flat prior on the positive half-line. After defining this variable we pass it later to the likelihood  functions.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: fragment
@@ -554,7 +554,7 @@ with normal_model2:
     y_obs = pm.Normal('y_obs', mu=mu, sigma=sigma, observed=y)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: slide
@@ -562,7 +562,7 @@ slideshow:
 pm.find_MAP(model=normal_model2)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: fragment
@@ -574,7 +574,7 @@ y_bar
 
 $$\sigma^2_{MAP}=\frac{n-1}{n}s^2\qquad s^2=\frac{n}{n-1}\left(\bar{y^2}-\bar{y}^2\right)\qquad \sigma^2_{MAP}=\left(\bar{y^2}-\bar{y}^2\right)$$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: fragment
@@ -582,7 +582,7 @@ slideshow:
 np.std(y, ddof=0)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -592,7 +592,7 @@ with normal_model2:
     trace2 = pm.sample(model=normal_model2, tune=n_tune, draws=n_samples)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: slide
@@ -601,7 +601,7 @@ with normal_model2:
     az.plot_trace(trace2)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: slide
@@ -610,7 +610,7 @@ with normal_model2:
     ax = az.plot_posterior(trace2, var_names=['mu', 'sigma'])
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: slide
@@ -623,7 +623,7 @@ with normal_model2:
 
 ## Unknow variance and $\sigma^{-2}$ prior on $\sigma^{2}$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: slide
@@ -638,7 +638,7 @@ with normal_model3:
     y_obs = pm.Normal('y_obs', mu=mu, sigma=np.sqrt(var), observed=y)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: slide
@@ -652,7 +652,7 @@ print(np.sqrt(map3['var']))
 
 $$\sigma_{MAP}^2=\frac{n-1}{n+1}s^2\qquad s^2=\frac{n}{n-1}\left(\bar{y^2}-\bar{y}^2\right)$$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: skip
@@ -660,7 +660,7 @@ slideshow:
 print((n-1) / (n + 1) * s2)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: slide
@@ -669,7 +669,7 @@ with normal_model3:
     trace3 = pm.sample(tune=n_tune, draws=n_samples)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: slide
@@ -678,7 +678,7 @@ with normal_model3:
     az.plot_trace(trace3)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -688,7 +688,7 @@ with normal_model3:
     print(az.summary(trace3))
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: slide
@@ -697,7 +697,7 @@ with normal_model3:
     ax3 = az.plot_posterior(trace3, var_names='mu')
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -707,7 +707,7 @@ from scipy.stats import t
 posterior3 = t(df=len(y) - 1, loc=y_bar, scale=np.sqrt(s2 / len(y)))
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -718,7 +718,7 @@ ax3.plot(xs, posterior3.pdf(xs), color='orange');
 ax3.figure
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -728,7 +728,7 @@ with normal_model3:
     az.plot_posterior(trace3, var_names='var', point_estimate='mean')
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -738,11 +738,11 @@ with normal_model3:
     az.plot_posterior(trace3, var_names='var', point_estimate='mode')
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 mode_rvs(trace3.posterior['var'], grid_len  = 1000)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:

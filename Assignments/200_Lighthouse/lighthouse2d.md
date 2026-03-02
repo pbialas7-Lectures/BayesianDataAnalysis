@@ -4,14 +4,14 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.7
+    jupytext_version: 1.19.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -21,7 +21,7 @@ slideshow:
 %autoreload 2
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -32,7 +32,7 @@ import numpy as np
 import scipy
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -54,7 +54,7 @@ from scipy.special import logsumexp
 
 This problem is taken from "Data Analysis, a Bayesian Tutorial" by D.S. Silva with J. Skiling. A lighthouse distance $h=1$ from the shore is rotating with constant angular frequency and emitting thin beams of light at random. The probability of emission is uniform in time. The signals are picked up on the shore by an array of detectors and their location is saved in the file `lighthouse.txt`.  Both the  horizontal location of the lighthouse $x_{lh}$ and its distance from the shore $h$ are unknown. The task is to estimate those positions.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -83,7 +83,7 @@ $$P(x|x_{lh},h)=\frac{h}{\pi}\frac{1}{\left(x-x_{lh}\right)^2+h^2}$$
 
 Write down function that implements this probability distribution function (pdf)
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -97,7 +97,7 @@ def p(x_lh, h, x):
 
 and the logarithm of the pdf
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -116,9 +116,9 @@ def log_p(x_lh, h, x):
 Calculate the posterior distribution on $x_{lh}$ and $h$ after detection of one flash.
 Assume a uniform prior on some interval for both $x_{lh}$ and $h$. Choose the intervals yourself.
 
-Calculate the MAP estimate for $x_{lh}$ and $h$. Then calculate the marginal distributions for $x_{lh}$ and $h$. Calculate the MAP estimates for each distributions separately.
+Calculate the MAP estimate for $x_{lh}$ and $h$. Then calculate the marginal distributions for $x_{lh}$ and $h$ and plot them. Calculate the MAP estimates for each distributions separately.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -132,7 +132,7 @@ h_min = 1.0; h_max= 10;
 
 The distribution will be represented as an array with columns corresponding to the values of $x_{lh}$ and rows to values of $h$. Start by discretizing the intervals you have chosen for $x_{lh}$ and $h$. Use the `np.linspace` function for that
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -144,11 +144,9 @@ x_lhs = np.linspace(x_min, x_max, nx)
 hs = np.linspace(h_min, h_max, ny)
 ```
 
-+++ {"editable": true, "slideshow": {"slide_type": ""}}
+I suggest to use different values for each dimensions. In that way if you by mistake exchange row and columns you will get an error. The prior will be a constant and we do not have to worry about the normalization (we will normalize the posterior) so we will set this value to one
 
-The prior will be a constant and we do not have to worry about the normalization (we will normalize the posterior) so we will set this value to one
-
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -161,7 +159,7 @@ prior_array = np.ones((ny,nx))
 
 The next step will be to calculate the value of $p(x_0|x_{lh},h)$ for each value $x_{ls}$ and $h$ in arrays `x_lhs` and `hs`, where $x_0$ is the the position of the first flash `flash_x[0]`. This could be done by a simple double loop
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -171,7 +169,7 @@ p_array = np.empty((ny,nx))
 p_array.shape
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -190,7 +188,7 @@ print(f"Elapsed time = {elapsed_time_loop:.1f}s")
 
 However this is not recommended, as the explicit loops in Python tend to be slow. The proper way is to construct a grid of $x_{lh}$ and $h$ values using function [`numpy.meshgrid`](https://numpy.org/doc/stable/reference/generated/numpy.meshgrid.html).
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -207,7 +205,7 @@ print(f"Elapsed time = {elapsed_time_meshgrid:.3f}s")
 
 Array `x_lh_grid` contains the values of $x_{lh}$ for every cell of array `p_array`. It consists of identical rows
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -216,7 +214,7 @@ slideshow:
 x_lh_grid[0]
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -229,7 +227,7 @@ x_lh_grid[1]
 
 Similarly the array `h_grid` contains the values of $h$ for every cell in array `p_array` and consists of identical columns
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -238,7 +236,7 @@ slideshow:
 h_grid[:,0]
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -251,7 +249,7 @@ h_grid[:,1]
 
 Now we can compute the `p_array` with a single call to `p`
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -268,7 +266,7 @@ print(f"Elapsed time = {elapsed_time_meshgrid_p:.3f}s")
 
 The whole computation took
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -281,7 +279,7 @@ print(f"{(elapsed_time_meshgrid+elapsed_time_meshgrid_p)*1000:.0f}ms")
 
 compared to
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -294,7 +292,7 @@ print(f"{(elapsed_time_loop):.1f}s")
 
 for the explicit loop, so the speedup is
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -311,7 +309,7 @@ times. This is not very important here, as four seconds is still a very short ti
 
 The array can be visualized using the `imshow` function, but first we will normalize  the posterior so the sum (not integral) is equal to one.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -322,7 +320,7 @@ Z = posterior1.sum()
 posterior1/=Z
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -336,7 +334,7 @@ plt.colorbar();
 
 but we can get a clearer picture using the `contour` and `contourf` functions
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -380,7 +378,7 @@ Similarly the distribution $p(h|x_0)$ will be obtained by summing  over the axis
 
 More often than not we will be using logarithm of probabilities. Perform same calculations as previously, using the log of the probability.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -389,7 +387,7 @@ slideshow:
 log_prior_array = np.zeros_like(prior_array)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -401,7 +399,7 @@ Z= logsumexp(log_posterior1)
 log_posterior1 -= Z
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -433,7 +431,7 @@ Again we have to partially sum the `log_posterior1` array. But before doing that
 
 Write down a function to compute an array containing the log of the sampling distribution using an array of flash positions, not just single point.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -450,6 +448,14 @@ def log_p_many(x_lh, h_lh, flash): # flash is an array of flash positions
 +++ {"editable": true, "slideshow": {"slide_type": ""}}
 
 Plot the (log)posterior distribution after two flashes. Calculate the MAP estimate, as well as the marginal distributions and MAP estimates for each variable separately.
+
+```{code-cell} ipython3
+map_2
+```
+
+```{code-cell} ipython3
+log_p_many(-110,1,flash_x[:2])
+```
 
 +++ {"editable": true, "slideshow": {"slide_type": ""}}
 

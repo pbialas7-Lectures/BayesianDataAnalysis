@@ -4,14 +4,14 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.7
+    jupytext_version: 1.19.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -21,7 +21,7 @@ slideshow:
 %autoreload 2
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -33,7 +33,7 @@ from scipy.stats import beta
 import matplotlib.pyplot as plt
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -44,7 +44,7 @@ plt.rcParams["figure.figsize"] = [9,6]
 dc='#1f77b4' #default color
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -53,7 +53,7 @@ slideshow:
 import defaults
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -71,7 +71,7 @@ import bda.stats as bst
 
 We return to the billiard example that we have studied in the previous notebook "100_Introduction.md". In this notebook we will explain how to attach errors to the estimates of $p$ that we have calculated previously. But first let's again establish the starting point.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -85,7 +85,7 @@ y =  0.786
 
 We throw 100 balls and check wheter they land on the left of the initial ball
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -104,7 +104,7 @@ We have assumed the initial uniform prior
 
 $$P(p)=1$$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -133,7 +133,7 @@ $$P(p|n_L,n_R)=PDF[Beta(n_L+\alpha,n_R+\beta)$$
 
 where $n_L$ and $n_R$ is the number of balls that have landed on the left and right of the original ball.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -150,7 +150,7 @@ for i in range(1,101):
 
 After five throws we have
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -164,7 +164,7 @@ print(f"After throwing {n_b} balls, {n_l} ball(s) landed on the left and {n_r} b
 
 and the posterior distribution is $Beta(2,5)$ illustrated below. The true value of $p$ is denoted by the black line.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -173,7 +173,7 @@ slideshow:
 post = beta_posteriors[n_b-1]
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -183,7 +183,7 @@ tags: [aux_code]
 xs=np.linspace(0,1,500)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -231,7 +231,7 @@ In this particular example
 
 $$p_{MAP} =  \frac{1}{5}$$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -241,7 +241,7 @@ _a,_b = beta_posteriors[n_b-1].args
 p_map = (_a-1)/(_a+_b-2)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -255,7 +255,7 @@ plt.legend();
 plt.close();
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -291,7 +291,7 @@ $$\avg{p}=\frac{n_L+\alpha}{n_L+n_R+\alpha+\beta}$$
 $$\newcommand{\avg}[1]{\left\langle#1\right\rangle}$$
 $$\avg{p}=\frac{2}{7}$$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -301,7 +301,7 @@ p_mean=beta_posteriors[n_b-1].mean()
 print(p_mean)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -317,7 +317,7 @@ ax.legend()
 plt.close();
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -352,7 +352,7 @@ $$
 
 where $CDF$ stands for _cumulative distribution function.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -366,7 +366,7 @@ ax.axhline(0.5, lw=0.5);
 plt.close();
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -375,7 +375,7 @@ slideshow:
 fig
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -384,7 +384,7 @@ slideshow:
 from scipy.optimize import fsolve
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -394,7 +394,7 @@ p_med = fsolve(lambda x: beta_posteriors[n_b-1].cdf(x)-0.5, x0=[0.2]).item()
 p_med
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -403,7 +403,7 @@ slideshow:
 beta_posteriors[n_b-1].isf(0.5)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -420,7 +420,7 @@ ax.legend()
 plt.close();
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -443,7 +443,7 @@ $$median[Beta(\alpha,\beta)]
 
 $$p_{med}=\frac{n_L+\alpha-\frac{1}{3}}{n_L+n_R+\alpha+\beta-\frac{2}{3}}$$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -456,7 +456,7 @@ slideshow:
 
 Which is not very far from the true value
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -519,7 +519,7 @@ For uniform prior we obtain
 $$\sigma^2 = \frac{
 \avg{p}(1-\avg{p})}{n_L+n_R+3}$$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -546,7 +546,7 @@ calculates the posterior mean and variance
 
 Below we plot the $\pm\sigma$ interval around mean
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -563,7 +563,7 @@ ax.fill_between(xs,post.pdf(xs),0, where = (xs>p_mean-s) & (xs<p_mean+s), alpha=
 plt.close();
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -576,7 +576,7 @@ fig
 
 Please note that contrary to the Gaussian distribution the probability contained in within the interval of one standard deviation around mean is not constant
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -588,7 +588,7 @@ std1 = d1.std()
 d1.cdf(p1+std1)-d1.cdf(p1-std1)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -604,7 +604,7 @@ d2.cdf(p2+std2)-d2.cdf(p2-std2)
 
 so the interpretation of this quantity is not so clear.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -656,7 +656,7 @@ The second moment of the Beta distribution is
 
 $$\frac{\alpha(1+\alpha)}{(\alpha+\beta)(1+\alpha+\beta)}=\mu\frac{\alpha+1}{\alpha+\beta+1}$$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -672,7 +672,7 @@ def c_std_beta(c,a,b):
 
 We can also use the `moment` method of the `scipy.stats` distribution.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -681,7 +681,7 @@ slideshow:
 post.moment(2)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -698,7 +698,7 @@ ax.set_title("Standard deviation around MAP")
 plt.close();
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -715,7 +715,7 @@ fig
 
 $$\int d p P(p) |p-c| $$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -724,7 +724,7 @@ slideshow:
 import bda
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -737,7 +737,7 @@ bda.stats.mad_c_f(beta(2,6).pdf ,p_map, left=0, right=1)
 
 ## Confidence interval
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -758,7 +758,7 @@ $$P(p\in [a,b])=\beta$$
 
 Below we construct two such possible intervals
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -774,7 +774,7 @@ ax.set_title(f"Confidence intervals $\\beta=0.75$")
 plt.close();
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -787,7 +787,7 @@ fig
 
 One way of choosing a confidence interval is to make it symmetric around $p_{MAP}$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -797,7 +797,7 @@ fig, ax=bda.plotting.plot_c_vs_hdr_example(post,p_map, beta=0.7,delta=0.05, show
 ax.axvline(p_map, c='blue');
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -826,7 +826,7 @@ Let $P_X(x)$ be de density function of  some random variable $X$ with values in 
 
 $$ R_X(r) = \{x\in R: P_X(x)\ge r\}$$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -836,7 +836,7 @@ from bda.hdr_plot import plot_All
 from ipywidgets import interact
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -845,7 +845,7 @@ slideshow:
 plot_All(beta_posteriors[4].pdf,2.0);
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -854,7 +854,7 @@ slideshow:
 plot_All(beta_posteriors[4].pdf,0.8);
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -865,7 +865,7 @@ def plot(r=2.5):
   plt.show()
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -882,7 +882,7 @@ The $\beta$ HDR is equal to $R(r_\beta)$ where $r_\beta$ is the largest constant
 
 $$P\left(x\in R(r_\beta)\right)\ge \beta$$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -891,7 +891,7 @@ slideshow:
 from bda.stats import hdr_f
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -907,7 +907,7 @@ ax.axvline(p_map);
 
 and here is the HDR(0.95)  after all
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -920,7 +920,7 @@ len(left)
 
 balls have been thrown
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -936,10 +936,10 @@ ax.axvline(p_map);
 plt.close()
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 fig
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 
 ```

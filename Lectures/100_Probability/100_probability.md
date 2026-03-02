@@ -4,14 +4,14 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.7
+    jupytext_version: 1.19.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -131,7 +131,7 @@ Where $\#A$ denotes the number of elements in set $A$.
 
 For larger examples this would be impractical, but just for fun let's code this in Python
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: skip
@@ -139,7 +139,7 @@ slideshow:
 from itertools import product
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: skip
@@ -147,7 +147,7 @@ slideshow:
 S_dice =  {(i,j) for i,j in product(range(1,7), range(1,7))}
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: skip
@@ -156,7 +156,7 @@ print(len(S_dice))
 print(S_dice)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: skip
@@ -337,7 +337,7 @@ $$M_n(X_i)\underset{n\rightarrow\infty}{\longrightarrow}\mu$$
 
 +++ {"editable": true, "slideshow": {"slide_type": "skip"}}
 
-where i.i.d is the abreviation or "independent, indentically distributed" and
+where i.i.d is the abreviation or "independent, indentically distributed".
 
 +++ {"slideshow": {"slide_type": "skip"}}
 
@@ -431,7 +431,7 @@ $$\{(1,5),(2,4),(3,3),(4,2),(5,1)\}$$
 
 which we can verify by some python code
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: skip
@@ -441,7 +441,7 @@ print(len(A))
 print(A)      
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: skip
@@ -471,7 +471,7 @@ $$\begin{split}\{
 
 Again I will use some Python code althought it is probably faster to   calculate this "by hand".
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: skip
@@ -481,7 +481,7 @@ print(len(B))
 print(B)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: skip
@@ -494,7 +494,7 @@ print(P_B)
 
 The event $A\cap B$ contains only one event $(3,3)$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -517,7 +517,7 @@ $$P(A\cap B)=\frac{1}{36}$$
 
 And finally
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -531,47 +531,47 @@ print(P_A_cond_B, float(P_A_cond_B))
 
 $$P(A|B) = \frac{P(A\cap B)}{P(B)}=\frac{1}{36}\cdot\frac{36}{11}=\frac{1}{11}<P(A)=\frac{5}{36}$$
 
-+++ {"slideshow": {"slide_type": "skip"}, "editable": true}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
 #### Problem
 
-+++ {"slideshow": {"slide_type": "skip"}, "editable": true}
++++ {"slideshow": {"slide_type": "fragment"}, "editable": true}
 
 __1.__ What if we are told that we have rolled one on one die? Has the conditional probability of getting the sum six changed?
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
-jupyter:
-  source_hidden: true
 slideshow:
   slide_type: skip
 tags: [answer]
+jupyter:
+  source_hidden: true
 ---
 B1 = set( filter(lambda s: s[0]==1 or s[1]==1 , S_dice) )
 A_cap_B1 = A.intersection(B1)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
-jupyter:
-  source_hidden: true
 slideshow:
   slide_type: skip
 tags: [hide_src, answer]
+jupyter:
+  source_hidden: true
 ---
 P_A_cond_B1 = Fraction(len(A_cap_B1), len(B1))
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
+slideshow:
+  slide_type: skip
+tags: [answer, hide_src]
 jupyter:
   source_hidden: true
-slideshow:
-  slide_type: ''
-tags: [answer, hide_src]
 ---
 print(P_A_cond_B1, float(P_A_cond_B1))
 ```
@@ -622,11 +622,27 @@ If $wet$ is the event "sidewalk is wet" and $rain$ is the event "it has rained" 
 
 +++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
-$$P(rain|wet)=\frac{P(rain)}{P(wet)}$$
+$$P(rain|wet)=\frac{P(wet|rain)P(rain)}{P(wet)}=\frac{P(rain)}{P(wet)}$$
 
 +++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
-We will make a reasonable assumption that our neighbour does not wash the sidewalk when it has rained: $P(wash|rain)=0$. Also obviously $P(wet|wash)=1$ so
+We will make a reasonable assumption that our neighbour does not wash the sidewalk when it has rained
+
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
+
+$$P(wash|rain)=0$$
+
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
+
+Also obviously
+
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
+
+$$P(wet|wash)=1$$
+
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
+
+so
 
 +++ {"slideshow": {"slide_type": "fragment"}, "editable": true}
 
@@ -646,7 +662,7 @@ Let's consider some "corner cases". If our neigbour always washes the sidewalk w
 
 +++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
-$P(rain|wet)=P(rain)$
+$$P(rain|wet)=P(rain)$$
 
 +++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
@@ -654,7 +670,15 @@ $P(rain|wet)=P(rain)$
 
 +++ {"slideshow": {"slide_type": "skip"}}
 
-If our neigbour never washes the sidewalk $P(wash|\neg rain)=0$
+If our neigbour never washes the sidewalk
+
++++ {"slideshow": {"slide_type": "skip"}}
+
+$$P(wash|\neg rain)=0$$
+
++++ {"editable": true, "slideshow": {"slide_type": "skip"}}
+
+and
 
 +++ {"editable": true, "slideshow": {"slide_type": "fragment"}}
 
@@ -674,9 +698,26 @@ $$P(rain|wet) = \frac{P(rain)}{P(rain)+\frac{1}{2}(1-P(rain))} = \frac{ 2 P(rain
 
 +++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
-So if _e.g._ $P(rain)=1/7$  seeing wet sidewalk increses that chance to
+So if _e.g._
 
-```{code-cell}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
+
+$$P(rain)=1/7$$
+
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
+
+seeing wet sidewalk increses that chance to
+
+```{code-cell} ipython3
+---
+editable: true
+slideshow:
+  slide_type: skip
+---
+from fractions import Fraction
+```
+
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -689,7 +730,7 @@ print(2 * Fraction(1,7)/(1+Fraction(1,7)))
 
 Let's plot this using `matplotlib`  and `numpy` libraries.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -705,7 +746,7 @@ plt.rcParams["figure.figsize"] = [12,8]
 
 We can plot the whole family of plots corresponding to different values of $P(wash|\neg rain)$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -718,23 +759,6 @@ plt.ylabel("P(rain|wet)");
 plt.plot(ps, ps, c='grey', linewidth = 1);
 for pw in [0.1, 0.2, 0.3, 0.4, 0.5, 0.75]:
     plt.plot(ps, ps/(ps+pw*(1-ps)),label = "P(w|not r) = {:.2f}".format(pw)); 
-plt.grid()
-plt.legend();
-```
-
-```{code-cell}
----
-editable: true
-slideshow:
-  slide_type: skip
-tags: [hide_src]
----
-ps = np.linspace(0,1,100)
-plt.xlabel("P(rain)")
-plt.ylabel("P(rain|wet)");
-plt.plot(ps, ps, c='grey', linewidth = 1);
-for pw in [0.1, 0.2, 0.3, 0.4, 0.5, 0.75]:
-    plt.plot(ps, 1/(ps+pw*(1-ps)),label = "P(w|not r)/P(r) = {:.2f}".format(pw)); 
 plt.grid()
 plt.legend();
 ```
@@ -765,13 +789,13 @@ $$P(ill|P)= \frac{P(ill, P)}{P(P)}$$
 
 The probability of being ill and tested positive is
 
-```{code-cell}
+```{code-cell} ipython3
 ---
-jupyter:
-  source_hidden: true
 slideshow:
   slide_type: skip
 tags: [answer]
+jupyter:
+  source_hidden: true
 ---
 p_ill_p = 0.004 * 0.8  
 ```
@@ -784,13 +808,13 @@ The probability of being tested positive is
 
 $$P(P)=P(ill,P)+P(\neg ill, P)$$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
-jupyter:
-  source_hidden: true
 slideshow:
   slide_type: skip
 tags: [answer]
+jupyter:
+  source_hidden: true
 ---
 p_p = .004*0.8 + 0.996*0.1
 ```
@@ -799,13 +823,13 @@ p_p = .004*0.8 + 0.996*0.1
 
 and finally
 
-```{code-cell}
+```{code-cell} ipython3
 ---
-jupyter:
-  source_hidden: true
 slideshow:
   slide_type: skip
 tags: [answer]
+jupyter:
+  source_hidden: true
 ---
 p_ill_cond_p = p_ill_p/p_p
 print("{:4.1f}%".format(100*p_ill_cond_p))

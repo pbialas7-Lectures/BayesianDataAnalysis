@@ -4,14 +4,14 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.7
+    jupytext_version: 1.19.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -21,7 +21,7 @@ slideshow:
 %autoreload 2
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -31,7 +31,7 @@ import numpy as np
 import scipy as sp
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -42,14 +42,14 @@ print(f"Running on PyMC v{pm.__version__}")
 import arviz as az
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 import matplotlib.pyplot as plt
 %matplotlib inline
 plt.rcParams["figure.figsize"] = [12,8]
 from matplotlib.patches import Arc, FancyArrowPatch
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 import lighthouse as lh
 ```
 
@@ -59,7 +59,7 @@ import lighthouse as lh
 
 In this assignment you will continue to work on the estimatio of the position of the lighthouse, but this time using the Monte-Carlo method.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -68,7 +68,7 @@ slideshow:
 h=1
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -98,7 +98,7 @@ Estimate the position of the lighthouse and its distance from the shore using Py
 2. Find the MAP estimate.
 3. Simulate the posterior and find the mean and 95% highest density interval for each parameter separately.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -107,7 +107,16 @@ slideshow:
 flash_x_2d = np.loadtxt('lighthouse_2d.txt')
 ```
 
-```{code-cell}
+```{code-cell} ipython3
+---
+editable: true
+slideshow:
+  slide_type: ''
+---
+flash_x_2d[:4]
+```
+
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:

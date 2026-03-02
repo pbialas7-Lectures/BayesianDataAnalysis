@@ -4,14 +4,14 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.7
+    jupytext_version: 1.19.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -34,7 +34,7 @@ import matplotlib.pyplot as plt
 
 $$ z_{ijk}=x_{ijkl} \cdot y_{ijk}\quad\text{for all}\; i,j,k$$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -49,7 +49,7 @@ y = np.random.normal(0,1,(3,5,2))
 
 Please note that arithmetic operations create a new array.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -62,7 +62,7 @@ print(z.base)
 
 This is equivalent to the following loop but faster
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -81,7 +81,7 @@ for i in range(s[0]):
 
 Time difference in this case is not  very big, but for bigger arrays it can becomes very large:
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -90,7 +90,7 @@ slideshow:
 import timeit
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -105,7 +105,7 @@ elapsed_implicit = end_time-start_time
 print("Took %s " % (elapsed_implicit,))
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -125,7 +125,7 @@ print("Took %fs which is %f times longer!" %(elapsed_explicit, elapsed_explicit/
 
 +++ {"editable": true, "slideshow": {"slide_type": ""}}
 
-As you can see this pure python implementation is almost 200 times slower! That is the main reason you should become fluent in tensor operations.
+As you can see this pure python implementation is much slower! That is the main reason you should become fluent in tensor operations.
 
 +++ {"editable": true, "slideshow": {"slide_type": ""}}
 
@@ -135,7 +135,7 @@ Similarly we can apply a numpy function to every element of the tensor just by c
 
 $$s_{ijk} = \sin(x_{ijk})\quad\text{for all}\; i,j,k$$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -150,11 +150,11 @@ Please compare yourself the time of the execution of this operation to an explic
 
 You can also use a scalar argument in tensor operations with the common sense interpretation:
 
-```{code-cell}
+```{code-cell} ipython3
 grumpy = img.imread("GrumpyCat.jpg")
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 normalized_grumpy = grumpy/255
 ```
 
@@ -166,7 +166,7 @@ normalized_grumpy = grumpy/255
 
 Another common operations are  reductions. Those are the functions that can be applied to a subset of dimensions "reducing" them  to a single number.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -181,7 +181,7 @@ data.shape
 
 A common reduction operation is sum. Without any additional parameters sum sums all the element of the array
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -194,7 +194,7 @@ np.sum(data)
 
 But we can specify the dimension(s) along which the reduction operation will be applied.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -204,7 +204,7 @@ row_sum = np.sum(data, axis=1)
 row_sum.shape
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -221,7 +221,7 @@ As we can see the secod dimension  was "reduced" and we are left with a one dime
 
 In the same way we can calculate the mean of every column:
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -234,7 +234,7 @@ np.mean(data, axis=0)
 
 or standard deviation
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -247,7 +247,7 @@ np.std(data, axis=0)
 
 We can reduce more then one dimension at the time. Below we calculate the mean value of each chanel in grumpy
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -258,11 +258,11 @@ np.mean(grumpy, axis=(0,1))
 
 or max and min  values
 
-```{code-cell}
+```{code-cell} ipython3
 np.min(grumpy, axis=(0,1))
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 np.max(grumpy, axis=(0,1))
 ```
 
@@ -303,7 +303,7 @@ $$
 
 When both arrays are vectors this is normal scalar product:
 
-```{code-cell}
+```{code-cell} ipython3
 x = np.random.normal(0,1,10)
 y = np.ones_like(x)
 np.inner(x,y)
@@ -313,7 +313,7 @@ np.inner(x,y)
 
 When first is  a matrix and other is a vector this is matrix vector multiplication:
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -328,7 +328,7 @@ np.inner(m,v)
 
 Can you tell what the operation below is doing?
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -338,7 +338,7 @@ w =np.asarray([0.3, 0.59, 0.11])
 G = np.inner(grumpy,w)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -355,7 +355,7 @@ Similar to `inner` is `dot. Please check out its documentation [here](https://do
 
 Matrix multiplication requires contraction of last and first dimension. That's why it's more convenient to use `tensordot(A,B,n)` which contracts last `n` dimensions of array `A` with first `n` dimensions of array `B`.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -366,7 +366,7 @@ B = np.random.normal(0,2,(3,4))
 C = np.tensordot(A,B,1)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -381,7 +381,7 @@ C
 If we want to do matrix multiplication it's better to use 
 `matmul` function which is described [here](https://docs.scipy.org/doc/numpy/reference/generated/numpy.matmul.html#numpy.matmul). This function can be invoked using operator `@`
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -394,7 +394,7 @@ A@B
 
 Here we contract all dimensions resulting in scalar
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -416,7 +416,7 @@ $$ C = \sum_{ij}A_{ij} B_{ij}$$
 
 We can also specify which dimensions will be contracted, by providing lists of dimensions in each array:
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -445,7 +445,7 @@ $$ C = \sum_{ij}A_{ij} B_{ji}=\operatorname{Tr}A\cdot B$$
 
 You have a 3x4 matrix W and a set of N 4-vectors in a form of array X of shape (N,4). How to produce an array Y of shape (N,3) where each row is the product of matrix W and corresponding row of X ?
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -468,14 +468,14 @@ $$Y_{ij} = \sum_{k} W_{jk} X_{i,k}$$
 
 which means that we have the contract the last dimensions of $W$ and $X$. However the order of the arguments is important
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
-jupyter:
-  source_hidden: true
 slideshow:
   slide_type: ''
 tags: [answer]
+jupyter:
+  source_hidden: true
 ---
 Y = np.inner(X,W)
 Y.shape
@@ -495,13 +495,13 @@ What happens when we request zero dimension contraction in `tensordot`? For two 
 
 +++ {"editable": true, "slideshow": {"slide_type": ""}}
 
-$$ z_{ij} = x_i \cdot y_j$
+$$ z_{ij} = x_i \cdot y_j$$
 
 +++ {"editable": true, "slideshow": {"slide_type": ""}}
 
 Let's check this.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -518,7 +518,7 @@ z
 
 This operation is called outer or tensor product. We can achieve same result with function `outer`
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -539,7 +539,7 @@ However those two functions behave the same same only for 1-dimensional arrays.
 
 For more dimensional arrays
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -553,7 +553,7 @@ y = np.random.normal(0,1,(2,2))
 
 `tensordot` creates an outer product  with dimensions concatenated
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -567,7 +567,7 @@ out_tdot.shape
 
 and `outer` firts flatten both input arrays making them one dimensional and then calculates outer product
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -591,7 +591,7 @@ This a technical but a quite important point. It concerns dimensions with size o
 
 Let's start by creating a vector
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -606,7 +606,7 @@ vector
 
 a one row matrix
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -621,7 +621,7 @@ vector_row
 
 and one column matrix:
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -636,7 +636,7 @@ vector_column
 
 Now make some experiments:
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -645,7 +645,7 @@ slideshow:
 np.inner(vector, vector)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -654,7 +654,7 @@ slideshow:
 np.inner(vector_row, vector_row)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -667,7 +667,7 @@ np.inner(vector_column, vector_column)
 
 This actually the outer product:
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -684,11 +684,11 @@ The `squeeze` method eliminates those degenerate dimensions
 
 The only two other combinations that will match are:
 
-```{code-cell}
+```{code-cell} ipython3
 np.inner(vector, vector_row)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:

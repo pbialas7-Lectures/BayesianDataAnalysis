@@ -4,14 +4,14 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.7
+    jupytext_version: 1.19.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -25,7 +25,7 @@ slideshow:
 
 # Monte Carlo methods
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -34,7 +34,7 @@ slideshow:
 %matplotlib inline
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -124,7 +124,7 @@ A discrete distribution is defined by a set of probabilities $p_i$ for $i=0,1,\l
 
 $$p_i,\quad \sum_ip_i=1,\quad i=0,\ldots,N-1$$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -153,7 +153,7 @@ $$[0,c_0), [c_0,c_1),\cdots\qquad  c_i = \sum_{j=0}^i p_j$$
 
 Coefficients $c_i$ can be calculated by `cumsum` function
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -171,7 +171,7 @@ We can now draw a random number $u$ from uniform distribution $u\in [0,1)$ and c
 
 $$u\in [0,1)$$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -184,7 +184,7 @@ u = np.random.uniform(0, 1)
 
 The most effient way to do this is to use `searchsorted` function that uses the binary search algorithm.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -193,7 +193,7 @@ slideshow:
 np.searchsorted(cum, u)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -203,7 +203,7 @@ n_samples = 1000
 u = np.random.uniform(0, 1, n_samples)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -212,7 +212,7 @@ slideshow:
 sample = np.searchsorted(cum, u)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -350,7 +350,7 @@ else:
    theta = theta_proposed
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -375,7 +375,7 @@ $$\log P(x|\mu,\sigma) =  -\frac{(x-\mu)^2}{2\sigma^2} -\frac{1}{2}\log(2\pi)-\l
 
 The two last terms are constant and can be omitted. Code below implements the algorithm described above
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -385,7 +385,7 @@ def log_norm(x, mu=0, s=1):
     return -0.5 * (x - mu) * (x - mu) / (s * s)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -414,7 +414,7 @@ def mcmc(log_p, x, size, eps=0.1):
     return np.asarray(chain), accepted/size
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -426,7 +426,7 @@ mu = 1
 chain, acceptance = mcmc(lambda x: log_norm(x, mu, sigma), -10 , 1000000, 1)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -439,7 +439,7 @@ acceptance
 
 Let's look at the first samples
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -456,7 +456,7 @@ plt.show()
 
 This picture show a very important point: it can take some time before our process  converges to the desired stationary distribution. That's why we have to discard some number of initial samples. How much depends unfortunately on the process.  From the plot it look that one hundred may be enough.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -469,7 +469,7 @@ clean_chain = chain[100:]
 
 Let's check if the distribution is correct
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -584,7 +584,7 @@ $$corr(x_i,x_j)=\frac{cov(x_i,x_j)}{var[x]}$$
 
 Below is a plot of the correlations between $x_i$ and $x_j$  as a function of $|j-i|$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -594,7 +594,7 @@ import sys
 sys.path.append('../../src')
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -603,7 +603,7 @@ slideshow:
 from bda.autocorr import ac_and_tau_int
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -618,7 +618,7 @@ plt.grid();
 
 Clearly the successive samples are not independent. Please contrast this with the samples from build in random number generator that produces (almost) independent samples
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -649,7 +649,7 @@ $$\tau_{int}=\frac{1}{2}+\sum_{j=1}^{\infty}  corr(x_0,x_{j})$$
 
 In practice the integrated autocorrelation time is tricky to estimate from the finite sample. You can use the `ac_and_tau_int` function from the `bda.autocorr` module.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -662,7 +662,7 @@ tau_int, ac = ac_and_tau_int(clean_chain)
 
 It returns both $\tau_{int}$ and the autocorrelation function. In this case
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -675,7 +675,7 @@ tau_int
 
 So finallly our error on the mean
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -688,7 +688,7 @@ clean_chain.mean()
 
 as measured by standard deviation is
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -717,7 +717,7 @@ $$N_{eff}=\frac{N}{2\tau_{int}}$$
 
 which in this case equals
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -726,7 +726,7 @@ slideshow:
 len(clean_chain)/(2*tau_int)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -735,7 +735,7 @@ slideshow:
 import arviz as az
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -752,7 +752,7 @@ az.ess(clean_chain)
 
 If the autocorrelation is caused by the small changes between the samples then maybe increasing the magnitude of the changes may result in smaller autocorrelation time? Unfortunately  the bigger the change the smaller probability of accepting such a change. If the acceptance rate becomes small then many proposed smaples are rejected and we are left with streaks of same samples leading again to large autocorrelations. Let's check this out
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -767,7 +767,7 @@ print(acceptance, tau_int)
 
 Increasing the `eps` to two reduced the acceptance as expected but the autocorrelation time droped. Let's increase the `eps` even further
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -782,7 +782,7 @@ print(acceptance, tau_int)
 
 Aceeptance droped and  autocorrelation time increased. On the plot below we can clearly see the streaks of rejections
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -795,7 +795,7 @@ plt.plot(chain[:100],'.-', linewidth=1);
 
 Further increase of `eps` leads to further increase of autocorrelation time.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -810,7 +810,7 @@ print(acceptance, tau_int)
 
 Reducing `eps` leads to increased acceptance but also increased autocorrelation time
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -852,7 +852,7 @@ $$
 
 The function below calculates the log probability of this distribution
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -875,7 +875,7 @@ slideshow:
 This time our distribution is two dimensional and one of the components, $\sigma^2$ is constrained to be positive. This is reflected in the generating function below
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -903,7 +903,7 @@ Please show that this trial distribution is symmetric.
 
 The function that generates the chain is almost identical to the previous one, but we also append the $\log P(\mu^i,(\sigma^2)^i)$ for each $i$.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -934,7 +934,7 @@ def mcmc2(log_p,x0, size, eps):
 
 Let's first generate some artificial data by drawing 20 samples from a normal distribution
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -949,7 +949,7 @@ s2 = y.var(ddof=1)
 print(y_bar, s2)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -958,7 +958,7 @@ slideshow:
 log_p = lambda m, s: log_mu_sig2(m, s, 20, y_bar, s2)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -972,7 +972,7 @@ chain2 = mcmc2(log_p, x0=[0,1], size=500000, eps=(1,1))
 
 Plotting the first 500 values of $\mu$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -987,7 +987,7 @@ plt.show()
 
 we may notice that there are some   correlation. The effect is more pronounced for $\sigma^2$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1002,7 +1002,7 @@ plt.show()
 
 We will drop the first 5000 samples
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1015,7 +1015,7 @@ clean_chain2=chain2[5000:]
 
 First we check the autocorellation time for $\mu$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1030,7 +1030,7 @@ plt.plot(ac_mu,'.');
 
 and then for $\sigma^2$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1053,7 +1053,7 @@ The correlations for $\sigma^2$ are quite big.
 
 Using the simulated samples we can plot the resulting marginal $\mu$  distribution  $P(\mu|y)$ and compare it to the true value of $\mu$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1068,7 +1068,7 @@ plt.legend();
 
 The mean of this posterior distribution is
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1085,7 +1085,7 @@ In this particular case we know this distribution analytically (see the normal m
 
 $$\frac{\mu-\bar y}{\sqrt{\frac{s^2}{n}}} \sim t(n-1)$$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1098,7 +1098,7 @@ t_dist = st.t(df=len(y) - 1, loc=y_bar, scale=np.sqrt(s2/len(y)))
 
 The mean of this distribution is $\bar y$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1115,7 +1115,7 @@ So as we can see the Monte-Carlo estimate is very  good
 
 The standard deviation of this distribution is
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1128,7 +1128,7 @@ t_dist.std()
 
 again in good agreement with the Monte-Carlo estimate
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1141,7 +1141,7 @@ clean_chain2[:,0].std()
 
 The highest density  interval can be calculated using the `hdi` function from `arviz`
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1151,7 +1151,7 @@ hdi_mu = az.hdi(clean_chain2[:,0], hdi_prob=.95)
 print(hdi_mu)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1167,7 +1167,7 @@ plt.legend();
 
 Finally let's compare the whole distribution with the Monte-Carlo histogram
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1186,7 +1186,7 @@ plt.plot(mus, t_dist.pdf(mus));
 
 Now let's repeat this with the marginal $\sigma^2$ distribution $P(\sigma^2|y)$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1205,7 +1205,7 @@ This distribution is also known analytically and is the [scaled inverse $\chi^2$
 
 $$\sigma^2|y \sim \operatorname{Scaled-Inv-}\chi^2(n-1,s^2)=  \operatorname{Inv-\Gamma}(\frac{n-1}{2},\frac{(n-1)s^2}{2})$$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1218,7 +1218,7 @@ sc_inv_gamma_dist = st.invgamma((len(y)-1) / 2., scale=(len(y)-1) * s2 / 2.)
 
 The mean of this distribution is
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1231,7 +1231,7 @@ sc_inv_gamma_dist.mean()
 
 to be compared with
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1244,7 +1244,7 @@ clean_chain2[:,1].mean()
 
 For the standard deviation we obtain
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1257,11 +1257,11 @@ sc_inv_gamma_dist.std()
 
 and
 
-```{code-cell}
+```{code-cell} ipython3
 clean_chain2[:,1].std()
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1271,7 +1271,7 @@ hdi_sigma2 = az.hdi(clean_chain2[:,1],hdi_prob=0.95)
 print(hdi_sigma2)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1287,7 +1287,7 @@ plt.legend();
 
 And finally the full distribution comparison
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1303,7 +1303,7 @@ plt.show()
 
 ## Summary
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:

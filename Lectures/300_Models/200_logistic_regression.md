@@ -4,14 +4,14 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.7
+    jupytext_version: 1.19.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -26,7 +26,7 @@ figsize=(8,6)
 plt.rcParams["figure.figsize"] = figsize
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -41,7 +41,7 @@ from scipy.special import  expit, log_expit
 # Analysis of bioassay experiment 
 ## (from "Bayesian Data Analysis" sec. 3.7)
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -52,7 +52,7 @@ n_animals = np.array([5,5,5,5])
 n_deaths = np.array([0,1,3,5])
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -120,7 +120,7 @@ $$\theta_i=s(z_i)\equiv\frac{e^z_i}{1+e^z_i}$$
 
 $z$ in this formula is often called _logit_. The sigmoid function is provided in `scipy` as `scipy.special.expit`
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -196,7 +196,7 @@ $$1-\theta_i=1-\frac{e^{z_i}}{1+e^{z_i}}=\frac{1}{1+e^{z_i}}=\frac{e^{-z_i}}{1+e
 
 The implementation of the  logarithm of posterior is straightforward
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: slide
@@ -212,7 +212,7 @@ def log_P_alpha_beta(a,b,x,y,n):
 
 and we can use the` scipy.otimize.mininimize` function the find the MAP estimate of $\alpha$ and $\beta$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: slide
@@ -221,7 +221,7 @@ min_results = scipy.optimize.minimize(lambda arg: -log_P_alpha_beta(*arg,dose, n
 print(min_results)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -235,7 +235,7 @@ print(ab_map)
 
 We can check how  those estimates compare to data
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: skip
@@ -245,7 +245,7 @@ def lr(x,a,b):
     return expit(z)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -260,7 +260,7 @@ ax.set_ylabel('$\\frac{\\# deaths}{\\# animals}$', rotation='horizontal', fontsi
 plt.close();
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -273,7 +273,7 @@ fig
 
 It look as the choice of logistic regression as our model was justified.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -289,7 +289,7 @@ def log_P_alpha_beta_tensor(a,b,x,y,n):
                    ((log_theta_conj)*(n-y).reshape(sh)), axis=0)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -300,7 +300,7 @@ betas  = np.linspace(-10,40,500)
 a_mesh, b_mesh = np.meshgrid(alphas, betas)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -310,7 +310,7 @@ lr_zs = log_P_alpha_beta_tensor(a_mesh, b_mesh, dose, n_deaths, n_animals)
 lr_zs = lr_zs - lr_zs.max()
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -328,7 +328,7 @@ ax.set_xlabel("$\\alpha$",fontsize=16);ax.set_ylabel("$\\beta$",fontsize=16, rot
 plt.close()
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -337,7 +337,7 @@ slideshow:
 fig
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -355,7 +355,7 @@ ax.set_xlabel("$\\alpha$",fontsize=16);ax.set_ylabel("$\\beta$",fontsize=16, rot
 plt.close()
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -368,7 +368,7 @@ fig
 
 ## Marginal distribution for $\alpha$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -380,7 +380,7 @@ map_alpha = alphas[log_p_alphas.argmax()]
 print(map_alpha)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -392,7 +392,7 @@ def log_trapz(log_y,x):
     return scipy.special.logsumexp(a=log_f, b= 0.5*dx)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -401,7 +401,7 @@ slideshow:
 log_Z = log_trapz(log_p_alphas,alphas)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -416,7 +416,7 @@ plt.xlabel("$\\alpha$", fontsize=16);
 
 ## Marginal distribution for $\beta$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -428,7 +428,7 @@ map_beta = betas[log_p_betas.argmax()]
 print(map_beta)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -437,7 +437,7 @@ slideshow:
 log_Z_beta = log_trapz(log_p_betas,betas)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -452,7 +452,7 @@ plt.xlabel("$\\beta$", fontsize=16);
 
 ## Monte-Carlo
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -461,7 +461,7 @@ slideshow:
 import pymc as pm
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -479,7 +479,7 @@ with lr_model:
     obs = pm.Binomial("obs", n=n_animals, p=theta, observed=n_deaths)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -489,7 +489,7 @@ with lr_model:
     lr_MAP = pm.find_MAP()
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -498,7 +498,7 @@ slideshow:
 lr_MAP
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -508,7 +508,7 @@ with lr_model:
     lr_trace = pm.sample(tune=2000, draws=16000)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -517,7 +517,7 @@ slideshow:
 import arviz as az
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -526,7 +526,7 @@ slideshow:
 az.plot_trace(lr_trace);
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -535,7 +535,7 @@ slideshow:
 ab_posterior = lr_trace.posterior.stack({'z':['chain','draw']})
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -544,7 +544,7 @@ slideshow:
 ab_posterior['alpha'].shape
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -558,7 +558,7 @@ ax.scatter([ab_map[0]], [ab_map[1]], color='orange');
 plt.close()
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -571,7 +571,7 @@ fig
 
 ### Correlations
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -582,7 +582,7 @@ b_posterior=ab_posterior['beta'].values
 ab_array = np.stack((a_posterior, b_posterior),1)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -591,7 +591,7 @@ slideshow:
 ab_array.shape
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -616,7 +616,7 @@ $$s(z)=\frac{1}{2}\qquad z=0$$
 
 $$\alpha +\beta x = 0,\quad x = -\frac{\alpha}{\beta}$$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -630,7 +630,7 @@ for x in dose:
 plt.close()    
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -639,7 +639,7 @@ slideshow:
 fig
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:

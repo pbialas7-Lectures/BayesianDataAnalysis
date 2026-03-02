@@ -4,7 +4,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.7
+    jupytext_version: 1.19.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -15,7 +15,7 @@ kernelspec:
 
 # Regression
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -31,7 +31,7 @@ from matplotlib.patches import Ellipse
 plt.rcParams['figure.figsize']=(8,6)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -50,7 +50,7 @@ From [Getting started with PyMC3](https://www.pymc.io/projects/examples/en/2021.
 
 $$y_i \sim N(\vec{\beta} \cdot \vec{x_i}+\alpha,\sigma)$$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -79,11 +79,11 @@ X2 = np.random.randn(size) * 0.2
 Y = alpha_t + beta_t[0]*X1 + beta_t[1]*X2 + np.random.randn(size)*sigma_t
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
-  slide_type: skip
+  slide_type: slide
 ---
 cs=plt.scatter(X1,X2, c=Y);
 plt.xlabel('$X_1$')
@@ -91,7 +91,7 @@ plt.ylabel('$X_2$')
 plt.colorbar(cs);
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -113,7 +113,7 @@ with basic_model:
     Y_obs = pm.Normal('Y_obs', mu=mu, sigma=sigma, observed=Y)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -123,7 +123,7 @@ map_estimate = pm.find_MAP(model=basic_model)
 map_estimate
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -132,7 +132,7 @@ slideshow:
 beta_t
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -142,7 +142,7 @@ with basic_model:
     trace = pm.sample(tune=1000, draws=8000, cores=4, nuts_sampler_kwargs={'num_blas_workers':4})
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -152,7 +152,7 @@ with basic_model:
     az.plot_trace(trace);
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -161,7 +161,7 @@ slideshow:
 az.summary(trace).round(2)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -170,7 +170,7 @@ slideshow:
 betas=trace.posterior['beta'].values.reshape(-1,2)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -179,7 +179,7 @@ slideshow:
 alphas = trace.posterior['alpha'].values.reshape(-1)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -192,7 +192,7 @@ plt.xlabel(r"$\beta_0$");plt.ylabel(r"$\beta_1$");
 plt.colorbar(cs);plt.legend();
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -201,7 +201,7 @@ slideshow:
 np.corrcoef(betas,rowvar=False )
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -211,7 +211,7 @@ plt.hexbin(alphas, betas[:,0]);
 plt.colorbar();
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -225,7 +225,7 @@ plt.colorbar();
 
 ### Errors
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -234,7 +234,7 @@ slideshow:
 print(az.hdi(trace.posterior['beta'],hdi_prob=.975)['beta'].values)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -243,7 +243,7 @@ slideshow:
 print(az.hdi(trace.posterior['alpha'], hdi_prob=0.975)['alpha'].values)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -260,7 +260,7 @@ print(az.hdi(trace.posterior['sigma'], hdi_prob=0.975)['sigma'].values)
 
 From [Data analysis recipes: Fitting Model to data, David W. Hong](https://arxiv.org/abs/1008.4686). See also [GLM: Linear regression](https://www.pymc.io/projects/docs/en/stable/learn/core_notebooks/GLM_linear.html#glm-linear)
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -270,7 +270,7 @@ data = np.loadtxt("linear_regression.txt")
 clean_data = data[5:]
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -284,7 +284,7 @@ ax.errorbar(clean_data[:,0], clean_data[:,1],  yerr=clean_data[:,2], fmt='o');
 
 $$y_i \sim N(\beta x_i+\alpha,\sigma_i),\quad \sigma_i \text{ known}$$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -304,7 +304,7 @@ with y_model:
     Y_obs = pm.Normal('Y_obs', mu=mu, sigma=clean_data[:,2], observed=clean_data[:,1])
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -314,7 +314,7 @@ map_estimate = pm.find_MAP(model=y_model)
 map_estimate
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -327,7 +327,7 @@ ys = map_estimate['alpha']+map_estimate['beta']*xs
 plt.plot(xs,ys);
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -337,7 +337,7 @@ with y_model:
     trace = pm.sample(tune=1000, draws=8000)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -347,7 +347,7 @@ with y_model:
     az.plot_trace(trace);
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -356,7 +356,7 @@ slideshow:
 az.summary(trace).round(2)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -366,7 +366,7 @@ trace.stack(sample=['chain', 'draw'], inplace=True)
 post=trace.posterior
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -375,7 +375,7 @@ slideshow:
 print(post)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -394,7 +394,7 @@ plt.legend();
 plt.close()
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -403,7 +403,7 @@ slideshow:
 fig
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -412,7 +412,7 @@ slideshow:
 trace.posterior.sizes['sample']
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -427,7 +427,7 @@ for i in range(128):
     plt.plot(xs,ys,'grey', alpha=0.25);
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -439,7 +439,7 @@ yss = post['alpha'].data+np.outer(xs,post['beta'].data)
 err = yss.std(axis=1)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -451,7 +451,7 @@ plt.plot(xs,ys,color='red', linewidth=1);
 plt.fill_between(xs,ys-err,ys+err,color='orange', alpha=0.5);
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -466,7 +466,7 @@ plt.ylabel('$\\beta$', fontsize=20);
 
 ## Uncertainties on both axes
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -482,7 +482,7 @@ ax.errorbar(clean_data[:,0], clean_data[0:,1],
 plt.close()    
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -491,7 +491,7 @@ slideshow:
 fig
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -505,7 +505,7 @@ def o_d(phi,s):
                      )
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -514,7 +514,7 @@ slideshow:
 from matplotlib.patches import Arc, FancyArrowPatch
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -536,7 +536,7 @@ ax.text(0.3*np.cos(phi+.1), 0.3*np.sin(phi+.1),"$s$")
 plt.close();
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -545,7 +545,7 @@ slideshow:
 fig
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -569,7 +569,7 @@ with pm.Model() as model:
    
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -579,7 +579,7 @@ with model:
     trace = pm.sample(draws=10000, tune=8000, chains=4, target_accept = 0.99)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -589,7 +589,7 @@ with model:
     az.plot_trace(trace, var_names=["phi","s"]);
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -598,7 +598,7 @@ slideshow:
 az.summary(trace, var_names=['phi', 's'])
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -609,7 +609,7 @@ post2 = trace.posterior
 p_m = post2['p'].data.mean(2)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -619,7 +619,7 @@ phi_m = post2["phi"].data.mean()
 s_m = post2["s"].data.mean()
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -640,7 +640,7 @@ ax.scatter(p_m[:,0], p_m[:,1],color='green',s=10);
 plt.close()
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -649,11 +649,16 @@ slideshow:
 fig
 ```
 
-```{code-cell}
+```{code-cell} ipython3
+---
+editable: true
+slideshow:
+  slide_type: slide
+---
 plt.hexbin(post2['phi'].data,post2['s'].data);
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -676,7 +681,7 @@ ax.scatter([0],[0],color='red',s=20);
 plt.close()
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -685,7 +690,7 @@ slideshow:
 fig
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:

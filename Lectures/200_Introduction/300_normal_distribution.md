@@ -4,14 +4,14 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.7
+    jupytext_version: 1.19.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -32,7 +32,7 @@ $$\renewcommand{\b}[1]{\boldsymbol{#1}}$$
 
 # Bayesian data analysis -- Normal model
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -41,7 +41,7 @@ slideshow:
 from scipy.stats import norm
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -53,7 +53,7 @@ var_true = sigma_true**2
 n = 12
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -62,7 +62,7 @@ slideshow:
 y = norm(mu_true, sigma_true).rvs(n)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -550,7 +550,7 @@ giving the expected MAP estimator
 
 $$\mu_{MAP}=\bar y$$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: skip
@@ -570,7 +570,7 @@ $$s^2\frac{n-1}{n(n-3)}$$
 
 To illustrate this we will again we will use the `scipy.stats` module
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -583,7 +583,7 @@ from scipy.stats import t
 
 The student's $t$ distribution depends only on the number of degrees of freedom $\nu$ but `scipy.stats` permits us to provide `location` and `scale` parameter that allow us to obtain the distribution directly for $\mu$ instead of $x$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -592,7 +592,7 @@ slideshow:
 s2 = y.var(ddof=1)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -601,7 +601,7 @@ slideshow:
 post_mu = t(df=n-1, loc=y.mean(), scale=np.sqrt(s2/n))
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -637,7 +637,7 @@ $$
 
 $\operatorname{Inv-}\Gamma$ is the [inverse gamma distribution](https://en.wikipedia.org/wiki/Inverse-gamma_distribution).
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -649,7 +649,7 @@ beta  = ((n-1)*s2)/2
 post_var = invgamma(a=alpha, scale=beta)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -659,7 +659,7 @@ def post_mu_cond_var_log_pdf(mu, var):
     return norm(y.mean(),np.sqrt(var/n)).logpdf(mu)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -668,7 +668,7 @@ slideshow:
 vars=np.linspace(0.00001,16,1000)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -677,7 +677,7 @@ slideshow:
 xs,ys = np.meshgrid(mus, vars)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -687,7 +687,7 @@ def post_joined_log_pdf(mu,var):
     return post_var.logpdf(var)+post_mu_cond_var_log_pdf(mu, var)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -697,7 +697,7 @@ log_joined = post_joined_log_pdf(xs,ys)
 log_joined-=np.max(log_joined)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -711,7 +711,7 @@ ax.scatter([mu_true],[var_true], color='red', label='true')
 plt.close()
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -728,7 +728,7 @@ fig
 
 ### $\mu$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -737,7 +737,7 @@ slideshow:
 from scipy.special import logsumexp
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -747,7 +747,7 @@ mu_dist = np.exp(logsumexp(log_joined, axis=0))
 mu_dist/=np.trapz(mu_dist, mus)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -762,7 +762,7 @@ plt.legend();
 
 ### $\sigma^2$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -772,7 +772,7 @@ var_dist = np.exp(logsumexp(log_joined, axis=1))
 var_dist/=np.trapz(var_dist, vars)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -787,7 +787,7 @@ plt.legend();
 
 ### MAP
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -797,7 +797,7 @@ mu_map = mus[mu_dist.argmax()]
 var_map = vars[var_dist.argmax()]
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -806,7 +806,7 @@ slideshow:
 i_joined_map = np.unravel_index(np.argmax(log_joined), log_joined.shape)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -817,7 +817,7 @@ ax.scatter([mus[i_joined_map[1]]],[vars[i_joined_map[0]]], color='blue', label='
 ax.legend();
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -877,7 +877,7 @@ $$x\sim t_{n-3}$$
 
 Again we will use the `scipy.stats` module
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -890,7 +890,7 @@ from scipy.stats import t
 
 The student's $t$ distribution depends only on the number of degrees of freedom $\nu$ but `scipy.stats` permits us to provide `location` and `scale` parameter that allow us to obtain the distribution directly for $\mu$ instead of $x$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -899,7 +899,7 @@ slideshow:
 post_mu_flat = t(df=n-3, loc=y.mean(), scale=np.sqrt(s2*(n-1)/(n*(n-3))))
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -912,7 +912,7 @@ plt.axvline(mu_true, color='orange', label='true value');
 plt.legend();
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:

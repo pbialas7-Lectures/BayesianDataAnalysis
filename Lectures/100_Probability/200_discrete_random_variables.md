@@ -4,14 +4,14 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.7
+    jupytext_version: 1.19.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -21,7 +21,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 ```
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
 ## Discrete random variables
 
@@ -254,7 +254,7 @@ $$\operatorname{corr}(X,Y)=\frac{E\left[(X-E[X])(Y-E[Y])\right]}{\sqrt{E\left[(X
 
 Please check that when variables $X$ and $Y$ are linearly dependent _i.e._  $Y =a \cdot X + b$ correlation between them is 1 or -1.
 
-+++
++++ {"editable": true, "slideshow": {"slide_type": "slide"}}
 
 ### Examples
 
@@ -262,7 +262,7 @@ Please check that when variables $X$ and $Y$ are linearly dependent _i.e._  $Y =
 
 Let's illustrate this with some Python code. We start by generating values of two random variables from uniform distribution
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: slide
@@ -271,7 +271,7 @@ xs = np.random.uniform(size=10000)
 ys = np.random.uniform(size=10000)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: fragment
@@ -280,19 +280,20 @@ slideshow:
 np.mean( (xs-xs.mean())*(ys-ys.mean() ))
 ```
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
 We get same result using build in function
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: fragment
+editable: true
 ---
 np.cov(xs,ys)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: fragment
@@ -301,7 +302,7 @@ slideshow:
 np.mean( (xs-xs.mean())*(ys-ys.mean() ))/np.sqrt(np.mean( (xs-xs.mean())**2)*np.mean((ys-ys.mean() )**2))
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: fragment
@@ -309,7 +310,7 @@ slideshow:
 np.corrcoef(xs,ys)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: fragment
@@ -390,7 +391,7 @@ Take for example a coin toss with unfair coin with probability $p$ of comming up
 
 $$-p\log p - (1-p)\log(1-p)$$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: fragment
@@ -427,6 +428,6 @@ We can see that the entropy is maximum when $p=1/2$ and zero when $p=0$ or $p=1$
 
 ### Poisson distribution
 
-```{code-cell}
+```{code-cell} ipython3
 
 ```

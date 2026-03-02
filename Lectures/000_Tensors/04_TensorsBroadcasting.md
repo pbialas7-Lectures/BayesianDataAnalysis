@@ -4,14 +4,14 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.7
+    jupytext_version: 1.19.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
 
-```{code-cell}
+```{code-cell} ipython3
 import numpy as np
 ```
 
@@ -21,18 +21,18 @@ import numpy as np
 
 Elmentwise operation on arrays require the tensors to be of the same shape:
 
-```{code-cell}
+```{code-cell} ipython3
 mat1 = np.ones((3,4))
 mat2 = 2*np.ones_like(mat1)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 mat1+mat2
 ```
 
-However creating a whole array when we just want to add same  number to all elemnts like above would be tedious. That's why `numpy` provides a much more convenient way:
+However creating a whole array when we just want to add same  number to all elements like above would be tedious. That's why `numpy` provides a much more convenient way:
 
-```{code-cell}
+```{code-cell} ipython3
 mat1 + 2
 ```
 
@@ -40,7 +40,7 @@ This is in example of *broadcasting*. Value 2 in this case is broadcast along al
 
 Let's try to add a vector. Experimenting with the size you will find out that only size (except for 1) that does not give an error is 4:
 
-```{code-cell}
+```{code-cell} ipython3
 mat1 + np.arange(4)
 ```
 
@@ -49,7 +49,7 @@ That's why sooner or later you should invest some time and familiarize yourself 
 
 +++
 
-For broadcast to work the dimensions of the two arrays must be compatible. The dimensions are matched from the last dimenion. Two dimensions are compatible if 
+For broadcast to work the dimensions of the two arrays must be compatible. The dimensions are matched from the last dimesion. Two dimensions are compatible if 
   * they have the same size
   * one of them has size one
 
@@ -84,20 +84,20 @@ How we add a vector to every column?
 
 Broadcasting can have suprising effects
 
-```{code-cell}
+```{code-cell} ipython3
 v1 = np.ones(5)
 v2 = np.arange(5)
 ```
 
 This works as expected:
 
-```{code-cell}
+```{code-cell} ipython3
 v1+v2
 ```
 
 However reshaping the first vector to column vector, will produce something more akin to tensor product.
 
-```{code-cell}
+```{code-cell} ipython3
 v1.reshape(-1,1) + v2 
 ```
 
@@ -114,7 +114,7 @@ are broadcasted to
 
 And this can get compouned in higher dimensions.
 
-```{code-cell}
+```{code-cell} ipython3
 (mat1.reshape(1,3,1,4)+ mat1.reshape(3,1,4,1)).shape
 ```
 

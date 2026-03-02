@@ -4,14 +4,14 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.7
+    jupytext_version: 1.19.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -21,12 +21,12 @@ slideshow:
 %autoreload 2
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 import numpy as np
 import scipy as sp
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -38,7 +38,7 @@ plt.rcParams["figure.figsize"] = [12,8]
 from matplotlib.patches import Arc, FancyArrowPatch
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -55,7 +55,7 @@ import lighthouse as lh
 
 This problem is taken from "Data Analysis, a Bayesian Tutorial" by D.S. Silva with J. Skiling. A lighthouse distance $h=1$ from the shore is rotating with constant angular frequency and emitting thin beams of light at random. The probability of emission is uniform in time. The signals are picked up on the shore by an array of detectors and their location is saved in the file `lighthouse.txt`.  The horizontal location of the lighthouse $x_{lh}$ is unknown. The task is to estimate this position.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -64,7 +64,7 @@ slideshow:
 h=1
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -77,7 +77,7 @@ flash_x = np.loadtxt('lighthouse.txt')
 
 The figure below  presents the geometry of the problem. The orange dot indicates the lighthouse. Blue dots are the points were the flashes were recorded. The directions of the first 10 flashes are shown as lightblue lines.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -128,7 +128,7 @@ In the following we will drop the subscript $X$ on $p$.
 
 Assuming an uniform prior on interval $[-x_{lim}, x_{lim})$ with $x_{lim}=100$ for $x_{lh}$  plot the posterior distribution after performing one measurement.  Represent posterior density function by an array $p_{post}(xs_i)$ where $xs_i$ are uniformly distributed on the interval  $[-x_{lim}, x_{lim})$:
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -149,6 +149,10 @@ $$\sum_i p(xs_i)=1$$
 +++ {"editable": true, "slideshow": {"slide_type": ""}}
 
 Find and printout the maximal a posteriori (MAP) estimate for $x_{lh}$.
+
+```{code-cell} ipython3
+flash_x[0]
+```
 
 +++ {"editable": true, "slideshow": {"slide_type": ""}}
 
@@ -178,7 +182,7 @@ Write a procedure that takes as the input $xs$ array, the prior array,  array of
 
 **Hint** it is easier to work with logarithms of probabilities. For normalizing you can use `logsumexp` function from `scipy.special`. If you need to use a loop in your code, please loop over the measurments.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:

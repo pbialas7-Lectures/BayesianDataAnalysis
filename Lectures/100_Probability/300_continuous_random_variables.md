@@ -4,14 +4,14 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.7
+    jupytext_version: 1.19.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -21,7 +21,7 @@ import numpy as np
 import scipy.stats as st
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: skip
@@ -172,7 +172,7 @@ $$P(x|\mu, \sigma) = \frac{1}{\sqrt{2\pi\sigma^2}}e^{\displaystyle -\frac{(x-\mu
 
 and it has a characteristic bell-like shape
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: fragment
@@ -206,7 +206,7 @@ Another feature  of the normal distribution is that it is the distribution with 
 
 As you can see on the probability density function $P_X(x)$ is not restricted to be less then one. That's because this is a _density_. We  can meaningfully only ask about probability of $X$ having an outcome in an interval  which is given by the area under a fragment of the curve
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: slide
@@ -224,7 +224,7 @@ area = distrib.cdf(b)-distrib.cdf(a)
 plt.text(0.2, 1.4, "$P(a<X<b) = {:2f}$".format(area), fontsize=14);
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: fragment
@@ -242,7 +242,7 @@ The area was calculated using the cumulative distribution function
 
 $$P(a<X<b)=F_X(b)-F_X(a)$$
 
-```{code-cell}
+```{code-cell} ipython3
 xs = np.linspace(0,2,500)
 plt.plot(xs,distrib.cdf(xs));
 plt.plot([a,a,0],[0,distrib.cdf(a), distrib.cdf(a)], c='grey')
@@ -295,7 +295,7 @@ Its importance stems from  the fact that it is a _conjugate_ prior to Bernoulli 
 
 Here are plots of the probability density function for some values of $\alpha=\beta$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: slide
@@ -311,7 +311,7 @@ plt.legend(loc='best', title='$\\alpha=\\beta$');
 
 And here for some values of $\alpha\neq\beta$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 slideshow:
   slide_type: slide
@@ -383,6 +383,11 @@ $$\alpha = \mu \left(\frac{\mu(1-\mu)}{\sigma^2}-1\right)\quad\text{and}\quad\be
 
 ### $\chi^2$ distribution
 
-```{code-cell}
+```{code-cell} ipython3
+---
+editable: true
+slideshow:
+  slide_type: ''
+---
 
 ```

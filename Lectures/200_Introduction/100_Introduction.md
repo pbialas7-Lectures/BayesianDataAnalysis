@@ -5,14 +5,14 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.7
+    jupytext_version: 1.19.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -22,7 +22,7 @@ slideshow:
 %autoreload 2
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -31,7 +31,7 @@ slideshow:
 from fractions import Fraction
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -43,7 +43,7 @@ import matplotlib.pyplot as plt
 from scipy.stats import beta
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -53,7 +53,7 @@ import bda
 import bda.stats as bst
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -64,7 +64,7 @@ plt.rcParams["figure.figsize"] = [9,6]
 dc='#1f77b4' #default color
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -73,7 +73,7 @@ slideshow:
 import defaults
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -119,7 +119,7 @@ The problem considered by T. Bayes was how our belief about the ball position ch
 
 So let's place our original ball (black) on the table, the problem is really one dimensional as we are only interested in ball position along one side of the table and we can describe it by one number $p\in[0,1]$.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -129,7 +129,7 @@ p =  np.pi/10.0
 y =  0.786
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -204,7 +204,7 @@ $$P(p)=1$$
 
 which is indicated in the plot below by the blue line.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -214,7 +214,7 @@ xs = np.linspace(0,1,1000)
 prior = np.vectorize(lambda x: 1.0)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -235,7 +235,7 @@ pax.legend();
 Now we throw another ball marked in red on the plot below, which lands on the right side of the original ball. Actually I will throw 100 balls at once, but use them one by one.
 For each ball we generate two numbers specyfying its $(x,y)$ position on the table. The second $y$ coordinate is only used for rendering.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -251,7 +251,7 @@ left= (xy[:,0]<=p) + 0
 
 The last line rquires an explanation. By comparing a array to scalar we obtain an array filled with boolean (true/false) values.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -264,7 +264,7 @@ slideshow:
 
 Adding zero to it converts true to one and false to zero.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -273,7 +273,7 @@ slideshow:
 (xy[:,0]<p)[:5] + 0
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -310,7 +310,7 @@ Intuitively this means that we are restricting our sample space to $B$. Let's lo
 
 We are rolling two dices, what is the probability that we role a sum of eleven or twelve?
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -319,7 +319,7 @@ slideshow:
 from bda.plotting import plot_cartesian
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -333,7 +333,7 @@ fig, ax = plot_cartesian(6,6, radius=0.3, cfunc=lambda i,j: 'red' if f_A(i,j) el
 
 We have 36 possible outcomes and only three of them have a sum larger than ten, so the probability is
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -347,7 +347,7 @@ print(f"{p_A} \u2248 {float(p_A):.4f}")
 
 Now let's supose that somebody has told us that there is five on one of the dices. How would this change the probability of rolling the sum greater than ten? Now we have to look only in the combinations that fulfill this condition
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -361,7 +361,7 @@ fig, ax = plot_cartesian(6,6, radius=0.3, cfunc= lambda i,j: 'green' if f_B(i,j)
 
 There is only eleven such combination so $P(B)$ is equal to
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -375,7 +375,7 @@ print(f"{p_B} \u2248 {float(p_B):.4f}")
 
 Of those only two fullfill the condition so
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -391,7 +391,7 @@ def f_cond_A_B(i,j):
   return None
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -404,7 +404,7 @@ fig, ax = plot_cartesian(6,6, radius=0.3, cfunc= f_cond_A_B )
 
 The result is
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -422,7 +422,7 @@ and as we can see it is  substantially higher then $P(A)$.
 
 On the other hand if we new that there is a number smaller then five on one of the dices, then our chances drop to zero, as it is not possible to attain eleven or twelve in this situation.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -511,7 +511,7 @@ $$P(R|p)$$
 
 that the first  ball lands on the right provided that original ball is at $p$. This called the _sampling distribution_ and  in this case this is the Bernoulli distribution
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -592,7 +592,7 @@ $$P(p|R)=2-2p$$
 
 denoted by the dark blue line on the plot below.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -601,7 +601,7 @@ slideshow:
 posteriors = [lambda x: 2-2*x]
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -617,7 +617,7 @@ pax.plot(xs,prior(xs), zorder=1, c='blue', alpha=alpha);
 plt.close();
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -642,7 +642,7 @@ $$p_{MAP}=\operatorname{argmax}_p P(p|R)$$
 
 which in this case is equal to zero.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -656,7 +656,7 @@ def find_pmap(posterior):
     return xs[i_max], post[i_max]
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -676,7 +676,7 @@ ax.axvline(p_map+.001, c=defaults.map_color);
 plt.close();
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -693,7 +693,7 @@ fig
 
 We can continue by throwing another ball which again lands on the right of the original ball
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -707,7 +707,7 @@ bl.plot_balls(ax, nb, xy,left, bl.cs)
 plt.close();
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -744,7 +744,7 @@ $$P(p|R,R)=3(1-p)^2$$
 
 which does not change the MAP estimate which remains zero.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -753,7 +753,7 @@ slideshow:
 posteriors.append(lambda x: 3*(1-x)**2)
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -773,7 +773,7 @@ plt.legend();
 plt.close()
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -839,14 +839,14 @@ $$
 3\int_0^{b}\text{d}p\,(1-p)^2=3\int_0^{b}\text{d}p\,(1-2p+p^2)=3\left(b - b^2 +\frac{1}{3}b^3\right)
 $$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
-jupyter:
-  source_hidden: true
 slideshow:
   slide_type: skip
 tags: [answer]
+jupyter:
+  source_hidden: true
 ---
 b = Fraction(1,2)
 3*(b-b*b+b*b*b/3)
@@ -868,7 +868,7 @@ We see that this probability successively  increases.
 
 Throwing a third ball we notice that it lands on the left of the original ball.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -881,7 +881,7 @@ bl.plot_balls(ax, nb, xy,left, bl.cs)
 plt.close();
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1086,7 +1086,7 @@ $$p_{MAP}=\frac{1}{3}$$
 
 Using the `scipy.stats` module we will generate all the posteriors
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1100,7 +1100,7 @@ for n in range(1,101): # n is the number of balls
     beta_posteriors.append(beta(n_L+1, n_R+1))
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1121,7 +1121,7 @@ plt.legend();
 plt.close();
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1160,14 +1160,14 @@ $$CDF[Beta(\alpha,\beta)](x)=I_x(\alpha,\beta)$$
 
 where $I_x(\alpha,\beta)$ [regularized incomplete beta function](https://en.wikipedia.org/wiki/Beta_function#Incomplete_beta_function) and its value can be calculated using `scipy.special.betainc` function
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
-jupyter:
-  source_hidden: true
 slideshow:
   slide_type: skip
 tags: [answer]
+jupyter:
+  source_hidden: true
 ---
 print(f"P(p<1/2) \u2248 {scipy.special.betainc(2,3,0.5):.2f}")
 ```
@@ -1208,7 +1208,7 @@ $$P\left(p\leq p_{med}\right)\geq\frac{1}{2}\quad\text{and}\quad P\left(p\geq p_
 
 The median value is marked with a orange line on the plot below.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1234,7 +1234,7 @@ plt.legend();
 plt.close();
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1243,7 +1243,7 @@ slideshow:
 fig
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1262,7 +1262,7 @@ for i in reversed([0,1,2,5,10,25,50,75,90,95,99]):
 
 And finally here is the result after 100 throws
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1286,7 +1286,7 @@ pax.axvline(p_median, color='orange')
 plt.close()
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1299,7 +1299,7 @@ fig
 
 Because of relatively large number of throws there is very little difference between MAP, posterior mean and median.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1324,7 +1324,7 @@ So far we have assumed that the prior is uniform over the whole interval $[0,1]$
 
 $$P(p) = PDF[Beta(\alpha,\beta),p]$$
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -1338,7 +1338,7 @@ plt.title("Symmetric Beta distribution");
 plt.legend(loc=1, title="$\\alpha=\\beta$");
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:

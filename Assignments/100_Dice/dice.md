@@ -4,14 +4,14 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.7
+    jupytext_version: 1.19.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -30,7 +30,7 @@ import matplotlib.pyplot as plt
 
 Throw the provided dice more than 100 times. Count how many times each face apeared in the results and write it down in array
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -67,7 +67,7 @@ __Hint__ For median use the `isf` function of the distribution from `scipy.stats
 
 Estimate the HDR containing the 90% probability. Use the `bda.stats.hdr_f` function.
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -76,7 +76,7 @@ slideshow:
 import bda 
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
