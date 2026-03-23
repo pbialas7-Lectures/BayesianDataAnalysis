@@ -24,7 +24,7 @@ mamba install numpy scipy  matplotlib
 If you didn't install `mamba` then you can substitute `conda` for `mamba`. I tend to use `mamba` as it is markedly faster then `conda`.  
 Finally run
 ```
-pip install bda
+pip install ./bda
 ```
 in the repository root directory to install the auxiliary package for this lecture.
 
