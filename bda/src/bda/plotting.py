@@ -1,7 +1,10 @@
 import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
 import numpy as np
 from matplotlib.patches import Circle
 from scipy.optimize import brentq
+from scipy.special import logsumexp
+
 
 def darrow(start, end, *, ax, c, label):
     ax.annotate('', xy=end, xytext=start,
@@ -89,4 +92,52 @@ def plot_c_vs_hdr_example(post, c,*,beta,delta, figsize=None,show=True):
             ax.fill_between(xs, post.pdf(xs), 0, where=(xs > xm) & (xs < r), alpha=1, color='blue');
 
     return fig, ax
+  
 
+def plot_marginals(xs, ys, density,*, log=False, figsize=(7,7), levels=10):
+  density_= density/density.sum()  if not log else density - logsumexp(density)
+  density_ = np.exp(density_) if log else density_
+  fig = plt.figure(figsize=figsize);
+  gs = gridspec.GridSpec(2,3,
+      width_ratios=[1,4,0.10],height_ratios=[1, 4],   # top marginal narrow, main plot tall
+      hspace=0.05,
+      wspace=0.05,
+  )
+
+  Z = np.trapezoid(np.trapezoid(density_, x=ys, axis=0), x=xs)
+  density_/=Z
+  
+  ax_main  = fig.add_subplot(gs[1, 1])                        # bottom-right
+  ax_top   = fig.add_subplot(gs[0, 1], sharex=ax_main)        # top-right
+  ax_left  = fig.add_subplot(gs[1, 0], sharey=ax_main) 
+  ax_right = fig.add_subplot(gs[1,2])
+  
+  cf = ax_main.contourf(xs,ys, density_, levels=levels, cmap="viridis")
+  ax_main.contour(xs,ys, density_, levels=levels,
+                  colors="white", linewidths=0.5, alpha=0.4)
+  ax_main.tick_params(axis='y', left=False, labelleft=False);
+  fig.colorbar(cf, cax=ax_right)
+  ax_right.yaxis.set_tick_params(labelsize=7)
+
+  marginal_x = np.exp(logsumexp(density,0)) if log else np.sum(density,0)
+  marginal_x/=np.trapezoid(marginal_x, xs)
+  ax_top.plot(xs, marginal_x, color="steelblue",
+              linewidth=0.4)
+  ax_top.set_xlim(ax_main.get_xlim())
+  ax_top.tick_params(axis='x', labelbottom=False)
+  ax_top.tick_params(axis='x', top='True', labeltop=True,direction='in')
+
+  ax_top.yaxis.set_tick_params(labelsize=7)
+  ax_top.grid(True);
+
+  marginal_y = np.exp(logsumexp(density,1)) if log else np.sum(density,1)
+  marginal_y/=np.trapezoid(marginal_y,ys)
+  ax_left.plot(marginal_y ,ys, color="steelblue", 
+                linewidth=0.4)          # rotated!
+  ax_left.set_ylim(ax_main.get_ylim())
+  ax_left.yaxis.set_visible(True)
+  ax_left.xaxis.set_tick_params(labelsize=7, direction='in')
+  ax_left.tick_params(axis='y', direction='in')
+  ax_left.invert_xaxis();
+  ax_left.grid(True);
+  return fig, ax_main, ax_top, ax_left

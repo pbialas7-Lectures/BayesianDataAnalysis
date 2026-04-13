@@ -465,7 +465,7 @@ slideshow:
 p_med
 ```
 
-+++ {"editable": true, "slideshow": {"slide_type": "slide"}}
++++ {"editable": true, "slideshow": {"slide_type": "slide"}, "jp-MarkdownHeadingCollapsed": true}
 
 ## Errors
 
@@ -938,6 +938,14 @@ plt.close()
 
 ```{code-cell} ipython3
 fig
+```
+
+```{code-cell} ipython3
+
+```
+
+```{code-cell} ipython3
+
 ```
 
 ```{code-cell} ipython3

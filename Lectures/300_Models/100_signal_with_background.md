@@ -17,8 +17,19 @@ editable: true
 slideshow:
   slide_type: skip
 ---
+%load_ext autoreload
+%autoreload 2
+```
+
+```{code-cell} ipython3
+---
+editable: true
+slideshow:
+  slide_type: skip
+---
 import numpy as np
 import scipy
+from scipy.special import logsumexp
 import matplotlib.pyplot as plt
 plt.rcParams["figure.figsize"] = [12,8]
 ```
@@ -114,11 +125,15 @@ $$P(D|\{n\}_i)=\prod_{i=1}^M e^{-D}\frac{D^{\displaystyle n_i}}{n_i!}\propto
 e^{\displaystyle-M D}
 \,  D^{\displaystyle \sum_{i=1}^M n_i}$$
 
++++ {"editable": true, "slideshow": {"slide_type": "slide"}}
+
+### Gamma distribution
+
 +++ {"editable": true, "slideshow": {"slide_type": "skip"}}
 
 As a function of $D$ the posterior distribution is a [Gamma distribution](https://en.wikipedia.org/wiki/Gamma_distribution)
 
-+++ {"editable": true, "slideshow": {"slide_type": "slide"}}
++++ {"editable": true, "slideshow": {"slide_type": ""}}
 
 $$p(x|k,\theta) = \frac{1}{\Gamma(k)\theta^k}x^{k-1} e^{-\frac{x}{\theta}},
 \qquad 
@@ -126,7 +141,7 @@ p(x|\alpha,\beta) = \frac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha-1} e^{-\beta x}
 
 +++ {"slideshow": {"slide_type": "fragment"}, "editable": true}
 
-$$D|n\sim \operatorname{Gamma}\left(k = 1+\sum_k n_k,\theta = \frac{1}{M}\right)$$
+$$D|n\sim \operatorname{Gamma}\left(k = 1+\sum_{i=1}^M n_i,\theta = \frac{1}{M}\right)$$
 
 +++ {"editable": true, "slideshow": {"slide_type": "skip"}}
 
@@ -197,11 +212,11 @@ plt.axvline(D, color='red');
 
 +++ {"editable": true, "slideshow": {"slide_type": "slide"}}
 
-$$P(\{n_k\}|A,B)=\prod_{k=1}^M P(n_k|A,B)=\prod_{k=1}^M P(n_k|D_k(A,B)) $$
+$$P(\{n_i\}|A,B)=\prod_{i=1}^M P(n_i|A,B)=\prod_{i=1}^M P(n_i|D_i(A,B)) $$
 
 +++ {"slideshow": {"slide_type": "fragment"}, "editable": true}
 
-$$P(A,B|\{n_k\})=P(A,B)\prod_{k=1}^M P(n_k|A,B)$$
+$$P(A,B|\{n_i\})=P(A,B)\prod_{i=1}^M P(n_i|A,B)$$
 
 +++ {"editable": true, "slideshow": {"slide_type": "skip"}}
 
@@ -216,11 +231,11 @@ A\ge0, B\ge0\\
 
 +++ {"slideshow": {"slide_type": "fragment"}, "editable": true}
 
-$$\log P(A,B|\{n_k\})=\sum_k \log P(n_k|A,B)$$
+$$\log P(A,B|\{n_i\})=\sum_i \log P(n_i|A,B)$$
 
 +++ {"slideshow": {"slide_type": "fragment"}, "editable": true}
 
-$$\log P(n_k|A,B)=n_k \log D_k(A,B)-D_k(A,B) -\log( n_k!)$$
+$$\log P(n_i|A,B)=n_k \log D_i(A,B)-D_i(A,B) -\log( n_i!)$$
 
 +++ {"editable": true, "slideshow": {"slide_type": "skip"}}
 
@@ -272,6 +287,8 @@ slideshow:
 ---
 plt.scatter(xk,dk, label='signal')
 plt.axhline(n0*B_true,label='background')
+plt.xlabel('$x_i$', fontsize=18)
+plt.ylabel('$D_i$', fontsize=18)
 plt.legend();
 ```
 
@@ -297,6 +314,8 @@ slideshow:
 bottom = 60
 plt.bar(xk,nk-bottom,bottom=bottom,label='measured counts')
 plt.scatter(xk,dk,label='true activity')
+plt.xlabel('$x_i$', fontsize=18);
+plt.ylabel("$n_i$", fontsize=18)
 plt.legend();
 ```
 
@@ -378,8 +397,8 @@ slideshow:
 fig, ax = plt.subplots()
 ax.set_aspect(1)
 ax.contourf(As,Bs,posterior_n, levels=np.log(np.array([0.001,0.01,0.1, 0.3, 0.5, 0.7, 0.9,1])))
-ax.contour(As,Bs,posterior_n, levels=np.log(np.array([0.001,0.01,0.1, 0.3, 0.5, 0.7, 0.9,1])), colors='black', 
-           linestyles='-', linewidths=0.5)
+ax.contour(As,Bs,posterior_n, levels=np.log(np.array([0.001,0.01,0.1, 0.3, 0.5, 0.7, 0.9,1])), 
+           colors='black', linestyles='-', linewidths=0.5)
 ax.set_xlabel("A")
 ax.set_ylabel("B")
 ax.scatter([A_true],[B_true], color='orange');ax.scatter(*AB_map, color='red')
@@ -458,6 +477,8 @@ zs = log_pk_vector(As, Bs)
 nzs=zs-np.max(zs)
 ```
 
++++ {"editable": true, "slideshow": {"slide_type": ""}}
+
 This function is about 30 times faster than the previous implementation.
 
 ```{code-cell} ipython3
@@ -489,7 +510,7 @@ slideshow:
 fig, ax = plt.subplots()
 ax.set_aspect(1)
 ax.contourf(As,Bs,nzs, levels=np.log(np.array([0.001,0.01,0.1, 0.3, 0.5, 0.7, 0.9,1])))
-ax.contour(As,Bs,posterior_n, levels=np.log(np.array([0.001,0.01,0.1, 0.3, 0.5, 0.7, 0.9,1])), colors='black', 
+ax.contour(As,Bs,nzs, levels=np.log(np.array([0.001,0.01,0.1, 0.3, 0.5, 0.7, 0.9,1])), colors='black', 
            linestyles='-', linewidths=0.5)
 ax.set_xlabel("A")
 ax.set_ylabel("B")
@@ -517,10 +538,19 @@ editable: true
 slideshow:
   slide_type: ''
 ---
-from scipy.special import logsumexp
+from bda.plotting import plot_marginals
 ```
 
-+++ {"editable": true, "slideshow": {"slide_type": ""}}
+```{code-cell} ipython3
+---
+editable: true
+slideshow:
+  slide_type: slide
+---
+plot_marginals(As,Bs, nzs, log=True, figsize=(7,7)); 
+```
+
++++ {"editable": true, "slideshow": {"slide_type": "slide"}}
 
 ### $A$ distribution
 

@@ -332,7 +332,7 @@ $$P_{u_k}(u_k) = e^{u_k-\log \sigma}f(e^{u_k-\log\sigma}) $$
 
 This can be derived by differentiating the cumulative distribution function with respect to $x$
 
-+++ {"jupyter": {"outputs_hidden": false}}
++++ {"jupyter": {"outputs_hidden": false}, "editable": true, "slideshow": {"slide_type": "skip"}}
 
 $$P(u<x) = P(\ln(y_k-\mu)<x) = P(y_k-\mu<e^x) = P(y_k<e^x+\mu)$$
 
@@ -364,7 +364,7 @@ $$P_{\sigma^2}(\sigma^2)\propto \frac{1}{\sigma^2}$$
 
 This can be checked by calculating the cumulative distribution function for this distribution
 
-+++ {"editable": true, "slideshow": {"slide_type": "fragment"}}
++++ {"editable": true, "slideshow": {"slide_type": "skip"}}
 
 $$CDF_{P_{\sigma^2}}(z)=P(\sigma^2<z)=P(\sigma<\sqrt{z})=CDF_{P_\sigma}(\sqrt{z})$$
 
@@ -378,13 +378,13 @@ Please note that those are also improper priors.
 
 +++ {"editable": true, "slideshow": {"slide_type": "slide"}}
 
-### Normal model --  posterior distribution for variance $\sigma^2$
+### Normal model --  posterior distribution for variance $\sigma^2$ and mean $\mu$
 
 +++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
 Using variance as our parameter with prior
 
-+++ {"editable": true, "slideshow": {"slide_type": ""}}
++++ {"editable": true, "slideshow": {"slide_type": "slide"}}
 
 $$P(v)\propto \frac{1}{v},\qquad v=\sigma^2$$
 
@@ -395,7 +395,7 @@ $$P(v)\propto \frac{1}{v},\qquad v=\sigma^2$$
 +++ {"slideshow": {"slide_type": "fragment"}, "editable": true}
 
 $$
-P(\mu,\sigma^2|y) \propto  v^{-\frac{n+2}{2}} 
+P(\mu,v|y) \propto  v^{-\frac{n+2}{2}} 
 e^{\displaystyle -\frac{n}{2 v}\left(\bar y -\mu\right)^2 -\frac{n}{2 v}\left(\overline{y^2} -{\bar y }^2\right)}
 $$
 
@@ -415,8 +415,9 @@ we obtain
 +++ {"slideshow": {"slide_type": "fragment"}, "editable": true}
 
 $$
-P(\mu,\sigma^2|y) \propto  v^{-\frac{n+2}{2}} 
-e^{\displaystyle -\frac{n}{2v}\left(\bar y -\mu\right)^2 -\frac{n-1}{2 v}s^2}$$
+P(\mu,v|y) \propto  v^{-\frac{n+2}{2}} 
+e^{\displaystyle -\frac{n}{2v}\left(\bar y -\mu\right)^2 -\frac{n-1}{2 v}s^2}
+$$
 
 +++ {"editable": true, "slideshow": {"slide_type": "skip"}}
 
@@ -424,7 +425,7 @@ The join posterior can be rewritten as
 
 +++ {"editable": true, "slideshow": {"slide_type": "slide"}}
 
-$$P(\mu,\sigma^2|y) = P(\mu|\sigma^2,y)P(\sigma^2|y)$$
+$$P(\mu,v|y) = P(\mu|v,y)P(v|y)$$
 
 +++ {"editable": true, "slideshow": {"slide_type": "skip"}}
 
@@ -432,13 +433,21 @@ with
 
 +++ {"slideshow": {"slide_type": "fragment"}, "editable": true}
 
-$$P(\mu|\sigma^2,y) = \frac{1}{\sqrt{2\pi \frac{\sigma^2}{n}}}
-e^{\displaystyle -\frac{n}{2\sigma^2}\left(\bar y -\mu\right)^2}
+$$P(\mu|v,y) = \frac{1}{\sqrt{2\pi \frac{v}{n}}}
+e^{\displaystyle -\frac{n}{2 v}\left(\bar y -\mu\right)^2}
 $$
 
 +++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
-which is the  Gaussian distribution $\operatorname{Norm}\left(\bar y,\sqrt{\frac{\sigma^2}{n}}\right)$
+which is the  Gaussian distribution $\operatorname{Norm}\left(\bar y,\sqrt{\frac{\sigma^2}{n}}\right)$ and
+
++++ {"editable": true, "slideshow": {"slide_type": "fragment"}}
+
+$$P(v|y) = v^{-\frac{n+1}{2}}  e^{\displaystyle -\frac{n-1}{2 v}s^2}$$
+
++++ {"editable": true, "slideshow": {"slide_type": "skip"}}
+
+ which is a Inverse-gamma distribution with $\alpha=\frac{n-1}{2}$ and $\beta=s^2\frac{n-1}{2}$.
 
 +++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
@@ -459,7 +468,7 @@ $$
 
 We introduce a new variable
 
-+++ {"slideshow": {"slide_type": "fragment"}, "editable": true}
++++ {"slideshow": {"slide_type": "subslide"}, "editable": true}
 
 $$z=\frac{A}{2 v},\qquad v = \frac{A}{2z}$$
 
@@ -467,7 +476,7 @@ $$z=\frac{A}{2 v},\qquad v = \frac{A}{2z}$$
 
 with
 
-+++ {"slideshow": {"slide_type": "fragment"}, "editable": true}
++++ {"slideshow": {"slide_type": "subslide"}, "editable": true}
 
 $$A=n(\bar y-\mu)^2+(n-1)s^2$$
 
@@ -475,11 +484,11 @@ $$A=n(\bar y-\mu)^2+(n-1)s^2$$
 
 Differentiating $z$ with respect to $v$ we obtain that
 
-+++ {"slideshow": {"slide_type": "fragment"}, "editable": true}
++++ {"slideshow": {"slide_type": "subslide"}, "editable": true}
 
 $$\text{d}z=-\frac{A}{2v^2}\text{d}v,\quad \text{d}v = -\frac{2v^2}{A}\text{d}z = -\frac{A}{2z^2} \text{d}z$$
 
-+++ {"slideshow": {"slide_type": "slide"}, "editable": true}
++++ {"slideshow": {"slide_type": "subslide"}, "editable": true}
 
 $$ \int_0^\infty\text{d}v\, v^{-\frac{n+2}{2}} 
 e^{\displaystyle -\frac{n}{2v}\left(\bar y -\mu\right)^2 -\frac{n-1}{2v}s^2}\propto
@@ -490,7 +499,7 @@ $$
 
 so finally
 
-+++ {"slideshow": {"slide_type": "slide"}, "editable": true}
++++ {"slideshow": {"slide_type": "subslide"}, "editable": true}
 
 $$P(\mu|y)\propto A^{-\frac{n}{2}}\int_0^\infty\text{d}z\,z^{\frac{n-2}{2}}e^{-z}$$
 
@@ -498,7 +507,7 @@ $$P(\mu|y)\propto A^{-\frac{n}{2}}\int_0^\infty\text{d}z\,z^{\frac{n-2}{2}}e^{-z
 
 The integral over $z$ does not depend on $\mu$ so
 
-+++ {"slideshow": {"slide_type": "slide"}, "editable": true}
++++ {"slideshow": {"slide_type": "subslide"}, "editable": true}
 
 $$P(\mu | y)\propto A^{-\frac{n}{2}}=\left(n(\bar y-\mu)^2+(n-1)s^2\right)^{-\frac{n}{2}}$$
 
@@ -506,7 +515,7 @@ $$P(\mu | y)\propto A^{-\frac{n}{2}}=\left(n(\bar y-\mu)^2+(n-1)s^2\right)^{-\f
 
 Pulling out the $\left((n-1)s^2\right)^{-\frac{n}{2}}$ term we obtain
 
-+++ {"editable": true, "slideshow": {"slide_type": "slide"}}
++++ {"editable": true, "slideshow": {"slide_type": "subslide"}}
 
 $$\left((n-1)s^2\right)^{-\frac{n}{2}}\left(\frac{n}{n-1}\frac{(\bar y-\mu)^2}{s^2}+1\right)^{-\frac{n}{2}}$$
 
@@ -514,7 +523,7 @@ $$\left((n-1)s^2\right)^{-\frac{n}{2}}\left(\frac{n}{n-1}\frac{(\bar y-\mu)^2}{s
 
 Putting $\nu=n-1$ we finally get
 
-+++ {"slideshow": {"slide_type": "fragment"}}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
 $$P(\mu|y)\propto\left(\frac{n}{\nu}\frac{(\bar y-\mu)^2}{s^2}+1\right)^{-\frac{\nu+1}{2}}$$
 
@@ -522,7 +531,7 @@ $$P(\mu|y)\propto\left(\frac{n}{\nu}\frac{(\bar y-\mu)^2}{s^2}+1\right)^{-\frac{
 
 which can be identified as [Student's _t_-distribution](https://en.wikipedia.org/wiki/Student%27s_t-distribution)  with $\nu$ degrees of freedom for variable
 
-+++ {"editable": true, "slideshow": {"slide_type": ""}}
++++ {"editable": true, "slideshow": {"slide_type": "fragment"}}
 
 $$P(x)=\frac{\Gamma\left(\frac{\nu+1}{2}\right)}{\sqrt{\pi\nu}\Gamma\left(\frac{\nu}{2}\right)}
 \left(1+\frac{x^2}{\nu}\right)^{-\frac{\nu+1}{2}}
@@ -542,11 +551,11 @@ $$\left.
 {\sqrt{\frac{s^2}{n}}}
 \right|\sim t_{n-1}$$
 
-+++ {"slideshow": {"slide_type": "skip"}}
++++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
 giving the expected MAP estimator
 
-+++ {"slideshow": {"slide_type": "fragment"}}
++++ {"slideshow": {"slide_type": "fragment"}, "editable": true}
 
 $$\mu_{MAP}=\bar y$$
 
@@ -608,7 +617,7 @@ slideshow:
   slide_type: slide
 ---
 mus = np.linspace(-5,5,500)
-plt.xlabel("$\mu$")
+plt.xlabel("$\\mu$")
 plt.plot(mus, post_mu.pdf(mus),label='posterior' );
 plt.axvline(mu_true, color='orange', label='true value');
 plt.legend();
@@ -744,7 +753,7 @@ slideshow:
   slide_type: fragment
 ---
 mu_dist = np.exp(logsumexp(log_joined, axis=0)) 
-mu_dist/=np.trapz(mu_dist, mus)
+mu_dist/=np.trapezoid(mu_dist, mus)
 ```
 
 ```{code-cell} ipython3
@@ -769,7 +778,7 @@ slideshow:
   slide_type: fragment
 ---
 var_dist = np.exp(logsumexp(log_joined, axis=1)) 
-var_dist/=np.trapz(var_dist, vars)
+var_dist/=np.trapezoid(var_dist, vars)
 ```
 
 ```{code-cell} ipython3

@@ -65,7 +65,7 @@ The Monte-Carlo lecture introduced the basic concepts of how to generate samples
 Both packages can be installed using conda/mamba
 
 ```bash
-mamab install -c conda-forge pymc arviz
+mamab install -c conda-forge pymc arviz arviz-plots
 ```
 
 +++ {"editable": true, "slideshow": {"slide_type": "slide"}}
@@ -121,6 +121,7 @@ slideshow:
 import pymc as pm
 import arviz as az
 
+
 print(f"Running on PyMC v{pm.__version__} and ArviZ v{az.__version__}")
 ```
 
@@ -145,7 +146,7 @@ with normal_model1:
     pm.Normal('y_obs', mu=mu, sigma=sigma_true, observed=y)  #likelihood
 ```
 
-+++ {"slideshow": {"slide_type": "slide"}}
++++ {"slideshow": {"slide_type": "slide"}, "editable": true}
 
 ### Maximal a Posteriori
 
@@ -157,6 +158,7 @@ Once we have the model defined we can find the Maximum a Posteriori (MAP) estima
 ---
 slideshow:
   slide_type: fragment
+editable: true
 ---
 MAP1 = pm.find_MAP(model=normal_model1)
 print(MAP1)
@@ -170,6 +172,7 @@ In this case the MAP  estimate is know analytically and is just the mean of the 
 ---
 slideshow:
   slide_type: fragment
+editable: true
 ---
 y_bar
 ```
@@ -300,7 +303,7 @@ editable: true
 slideshow:
   slide_type: slide
 ---
-trace1.posterior.mu[0,:100]
+trace1.posterior.mu[0,:10]
 ```
 
 +++ {"editable": true, "slideshow": {"slide_type": "skip"}}
@@ -313,7 +316,7 @@ editable: true
 slideshow:
   slide_type: slide
 ---
-trace1.posterior.mu.sel(chain=0, draw=slice(0, 100))
+trace1.posterior.mu.sel(chain=0, draw=slice(0, 10))
 ```
 
 +++ {"editable": true, "slideshow": {"slide_type": "skip"}}
@@ -373,7 +376,7 @@ editable: true
 slideshow:
   slide_type: slide
 ---
-mu_samples.sel(chain=2, draw=slice(0, 100))
+mu_samples.sel(chain=2)[:10]
 ```
 
 +++ {"editable": true, "slideshow": {"slide_type": "slide"}}
@@ -390,8 +393,10 @@ editable: true
 slideshow:
   slide_type: ''
 ---
+taus=[]
 for i in range(4):
     tau1, ac1 = ac_and_tau_int(trace1.posterior.mu[i].values)
+    taus.append(tau1)
     plt.plot(ac1, '.');
     print(f"{tau1:.4f}")
 ```
@@ -406,7 +411,7 @@ editable: true
 slideshow:
   slide_type: slide
 ---
-az.ess ( mu_samples.sel(chain=0).values)
+az.ess( mu_samples.sel(chain=0).values)
 ```
 
 +++ {"editable": true, "slideshow": {"slide_type": "skip"}}
@@ -419,7 +424,7 @@ editable: true
 slideshow:
   slide_type: ''
 ---
-len(mu_samples.sel(chain=0))/(2*1.1908)
+len(mu_samples.sel(chain=0))/(2*taus[0])
 ```
 
 +++ {"editable": true, "slideshow": {"slide_type": "slide"}}
@@ -627,6 +632,7 @@ with normal_model2:
 ---
 slideshow:
   slide_type: slide
+editable: true
 ---
 normal_model3 = pm.Model()
 
@@ -673,6 +679,7 @@ with normal_model3:
 ---
 slideshow:
   slide_type: slide
+editable: true
 ---
 with normal_model3:
     az.plot_trace(trace3)

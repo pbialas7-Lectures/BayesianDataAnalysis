@@ -721,18 +721,23 @@ which in this case equals
 ---
 editable: true
 slideshow:
-  slide_type: skip
+  slide_type: fragment
 ---
 len(clean_chain)/(2*tau_int)
 ```
+
++++ {"editable": true, "slideshow": {"slide_type": "skip"}}
+
+This can also be achived by the `ess` function from package `arviz-stats`
 
 ```{code-cell} ipython3
 ---
 editable: true
 slideshow:
-  slide_type: fragment
+  slide_type: slide
 ---
-import arviz as az
+import arviz_stats as azs
+import arviz_base as azb
 ```
 
 ```{code-cell} ipython3
@@ -741,7 +746,7 @@ editable: true
 slideshow:
   slide_type: ''
 ---
-az.ess(clean_chain)
+azs.ess(clean_chain.reshape(1,-1))
 ```
 
 +++ {"editable": true, "slideshow": {"slide_type": "slide"}}
@@ -750,7 +755,7 @@ az.ess(clean_chain)
 
 +++ {"editable": true, "slideshow": {"slide_type": "skip"}}
 
-If the autocorrelation is caused by the small changes between the samples then maybe increasing the magnitude of the changes may result in smaller autocorrelation time? Unfortunately  the bigger the change the smaller probability of accepting such a change. If the acceptance rate becomes small then many proposed smaples are rejected and we are left with streaks of same samples leading again to large autocorrelations. Let's check this out
+If the autocorrelation is caused by the small changes between the samples then maybe increasing the magnitude of the changes may result in smaller autocorrelation time? Unfortunately  the bigger the change the smaller probability of accepting such a change. If the acceptance rate becomes small then many proposed samples are rejected and we are left with streaks of same samples leading again to large autocorrelations. Let's check this out
 
 ```{code-cell} ipython3
 ---
@@ -1147,7 +1152,7 @@ editable: true
 slideshow:
   slide_type: slide
 ---
-hdi_mu = az.hdi(clean_chain2[:,0], hdi_prob=.95)
+hdi_mu = azs.hdi(clean_chain2[:,0], prob=.95)
 print(hdi_mu)
 ```
 
@@ -1258,6 +1263,11 @@ sc_inv_gamma_dist.std()
 and
 
 ```{code-cell} ipython3
+---
+editable: true
+slideshow:
+  slide_type: ''
+---
 clean_chain2[:,1].std()
 ```
 
@@ -1267,7 +1277,7 @@ editable: true
 slideshow:
   slide_type: slide
 ---
-hdi_sigma2 = az.hdi(clean_chain2[:,1],hdi_prob=0.95)
+hdi_sigma2 = azs.hdi(clean_chain2[:,1],prob=0.95)
 print(hdi_sigma2)
 ```
 
