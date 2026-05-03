@@ -37,8 +37,9 @@ import scipy.stats as st
 from scipy.special import gamma
 
 import pymc as pm
-import arviz as az
-print(f"Running on PyMC v{pm.__version__} and ArviZ v{az.__version__}") 
+import arviz_stats as azs
+import arviz_plots as azp
+print(f"Running on PyMC v{pm.__version__}  ArviZ  stats {azs.__version__} plot v{azp.__version__} ") 
 import matplotlib.pyplot as plt
 figsize = (8,6)
 plt.rcParams["figure.figsize"] = figsize
@@ -69,6 +70,14 @@ $$x^{-\nu-1}$$
 
 +++ {"editable": true, "slideshow": {"slide_type": "skip"}}
 
+The variance $\sigma^2$ is
+
++++ {"editable": true, "slideshow": {"slide_type": ""}}
+
+$$\sigma^2 = \frac{\nu}{\nu-2},\qquad \nu>2$$
+
++++ {"editable": true, "slideshow": {"slide_type": "skip"}}
+
  for large $x$. When $\nu\rightarrow\infty$ this distributions approaches normal distribution
 
 ```{code-cell} ipython3
@@ -82,12 +91,13 @@ fig, ax = plt.subplots(figsize=figsize)
 for nu in (1,2,5,10,25,50):
     ax.plot(xs, st.t.pdf(xs, df=nu), label=f"$\\nu={nu}$", linewidth=1);
 ax.plot(xs, st.norm.pdf(xs), color = 'black', label=r"$\mathcal{{N}}(0,1)$")    
+ax.grid()
 ax.legend();    
 ```
 
 +++ {"editable": true, "slideshow": {"slide_type": "skip"}}
 
-Similarly to normal distribution, we can move and scale it
+Similarly to normal distribution, we can move and scale it. Location parameter sets the mean and the mode and scale changes the width (standard deviation).
 
 ```{code-cell} ipython3
 ---
@@ -99,8 +109,27 @@ mu = 1
 xs = np.linspace(-5,5,1000)
 fig, ax = plt.subplots(figsize=figsize)
 for s in (0.2,0.5, 1,2,5):
-    ax.plot(xs, st.t.pdf(xs, df=1, loc=mu, scale=s), label=f"$s={s}$");
+    ax.plot(xs, st.t.pdf(xs, df=3, loc=mu, scale=s), label=f"$s={s}$");
+ax.grid();  
 ax.legend();    
+```
+
+```{code-cell} ipython3
+---
+editable: true
+slideshow:
+  slide_type: slide
+---
+print(st.t(df=10,loc=0,scale=1).mean(), st.t(df=10,loc=0,scale=1).std())
+```
+
+```{code-cell} ipython3
+---
+editable: true
+slideshow:
+  slide_type: ''
+---
+print(st.t(df=10,loc=3,scale=5).mean(), st.t(df=10,loc=3,scale=5).std())
 ```
 
 +++ {"slideshow": {"slide_type": "slide"}, "editable": true}
@@ -191,7 +220,7 @@ print("nu = {:.2f} mu = {:.2f} scale = {:.2f}".format(*st.t.fit(y)))
 
 +++ {"editable": true, "slideshow": {"slide_type": "skip"}}
 
-We will start with fitting normal model
+We will start with fitting normal model with $\sigma^{-1}$ prior on $\sigma$
 
 ```{code-cell} ipython3
 ---
@@ -250,10 +279,9 @@ with normal_model:
 ---
 editable: true
 slideshow:
-  slide_type: slide
+  slide_type: ''
 ---
-with normal_model:
-    az.plot_trace(normal_trace);
+azp.plot_trace_dist(normal_trace);
 ```
 
 ```{code-cell} ipython3
@@ -263,7 +291,25 @@ slideshow:
   slide_type: slide
 ---
 with normal_model:
-    az.plot_posterior(normal_trace, hdi_prob=0.95);
+    azp.plot_dist(normal_trace);
+```
+
+```{code-cell} ipython3
+---
+editable: true
+slideshow:
+  slide_type: skip
+---
+print(azs.eti(normal_trace, prob=0.95)['mu'])
+```
+
+```{code-cell} ipython3
+---
+editable: true
+slideshow:
+  slide_type: skip
+---
+print(azs.hdi(normal_trace, prob=0.95)['mu'])
 ```
 
 +++ {"slideshow": {"slide_type": "slide"}, "editable": true}
@@ -405,6 +451,11 @@ for i in range(3):
 The look reasonably similar by one may notice the absence of  such pronounced outliers in case of the synthetic data sets. We can look at this using histograms but first generate the posterior predictive sample again this time using a PyMC function `sample_posterior_predictive`.
 
 ```{code-cell} ipython3
+import warnings
+warnings.filterwarnings("ignore", message="The effect of Potentials on other parameters")
+```
+
+```{code-cell} ipython3
 ---
 editable: true
 slideshow:
@@ -413,10 +464,6 @@ slideshow:
 with normal_model:
     normal_trace = pm.sample_posterior_predictive(trace=normal_trace, extend_inferencedata=True)
 ```
-
-+++ {"editable": true, "slideshow": {"slide_type": "skip"}}
-
-This is confusing but we may ignore this warning in this case. The potential term involves only the `sigma` variable  which is taken from the trace.
 
 +++ {"editable": true, "slideshow": {"slide_type": "skip"}}
 
@@ -574,15 +621,6 @@ with T_model:
 ---
 editable: true
 slideshow:
-  slide_type: fragment
----
-MAP
-```
-
-```{code-cell} ipython3
----
-editable: true
-slideshow:
   slide_type: slide
 ---
 plt.hist(y, bins=20, density=True);
@@ -610,8 +648,7 @@ editable: true
 slideshow:
   slide_type: slide
 ---
-with T_model:
-    az.plot_trace(T_trace);
+azp.plot_trace_dist(T_trace);
 ```
 
 ```{code-cell} ipython3
@@ -620,8 +657,7 @@ editable: true
 slideshow:
   slide_type: slide
 ---
-with T_model:
-    az.plot_posterior(T_trace);
+azp.plot_dist(T_trace);
 ```
 
 ```{code-cell} ipython3
@@ -656,6 +692,17 @@ slideshow:
 plt.hist(np.min(T_pps,axis=1) , histtype='step', density=True, bins=50);
 plt.xlabel("min(y)")
 plt.axvline(y.min(), color='black');
+```
+
+```{code-cell} ipython3
+---
+editable: true
+slideshow:
+  slide_type: slide
+---
+plt.hist(np.max(T_pps,axis=1) , histtype='step', density=True, bins=50);
+plt.xlabel("max(y)")
+plt.axvline(y.max(), color='black');
 ```
 
 ```{code-cell} ipython3
@@ -858,6 +905,10 @@ print(f"T model elppd = {elppds.mean():.1f} +-/ {elppds.std()/np.sqrt(10.0):.2f}
 
 ### In-sample lppd
 
++++ {"slideshow": {"slide_type": "-"}, "editable": true}
+
+$$\sum_i \log p_{post}(\b y|\b y)] = \sum_i\log p_{post}(\b y|\b y) $$
+
 +++ {"slideshow": {"slide_type": "skip"}, "editable": true}
 
 If we try to estimate the lppd using the sample we have used to fit the model very likely our lppd will be  bigger
@@ -868,7 +919,7 @@ editable: true
 slideshow:
   slide_type: fragment
 ---
-y_size*np.log(normal_likelihood(mu_sigma_normal_pps[:,0], mu_sigma_normal_pps[:,1],y).mean(0)).mean()
+np.log(normal_likelihood(mu_sigma_normal_pps[:,0], mu_sigma_normal_pps[:,1],y).mean(0)).sum()
 ```
 
 ```{code-cell} ipython3
@@ -877,7 +928,7 @@ editable: true
 slideshow:
   slide_type: fragment
 ---
-y_size*np.log(T_likelihood(mu_sigma_T_pps[:,0], mu_sigma_T_pps[:,1],y).mean(0)).mean()
+np.log(T_likelihood(mu_sigma_T_pps[:,0], mu_sigma_T_pps[:,1],y).mean(0)).sum()
 ```
 
 +++ {"slideshow": {"slide_type": "slide"}, "editable": true}
@@ -932,7 +983,7 @@ editable: true
 slideshow:
   slide_type: slide
 ---
-loo=az.loo(normal_trace,  pointwise=True)
+loo=azs.loo(normal_trace,  pointwise=True)
 print(loo)
 ```
 
@@ -964,14 +1015,9 @@ where
 
 $$p_{WAIC} =\sum_{i=1}^n Var_{s}[\log p(y_i|\theta^s)]$$
 
-```{code-cell} ipython3
----
-editable: true
-slideshow:
-  slide_type: slide
----
-az.waic(normal_trace)
-```
++++ {"editable": true, "slideshow": {"slide_type": "skip"}}
+
+However the use of WAIC is depreciated in ArviZ and we will not be using it here.
 
 ```{code-cell} ipython3
 ---
@@ -991,16 +1037,7 @@ editable: true
 slideshow:
   slide_type: slide
 ---
-az.loo(T_trace, pointwise=False)    
-```
-
-```{code-cell} ipython3
----
-editable: true
-slideshow:
-  slide_type: ''
----
-az.waic(T_trace)
+azs.loo(T_trace, pointwise=False)    
 ```
 
 ```{code-cell} ipython3
@@ -1009,7 +1046,7 @@ editable: true
 slideshow:
   slide_type: slide
 ---
-model_compare = az.compare({'normal': normal_trace, 'T12':T_trace})
+model_compare = azs.compare({'normal': normal_trace, 'T12':T_trace})
 model_compare
 ```
 
@@ -1019,7 +1056,7 @@ editable: true
 slideshow:
   slide_type: slide
 ---
-az.plot_compare(model_compare);
+azp.plot_compare(model_compare);
 ```
 
 +++ {"slideshow": {"slide_type": "slide"}, "editable": true}
@@ -1074,8 +1111,7 @@ editable: true
 slideshow:
   slide_type: slide
 ---
-with TT_model:
-    az.plot_trace(TT_trace);
+azp.plot_trace_dist(TT_trace);
 ```
 
 ```{code-cell} ipython3
@@ -1084,8 +1120,7 @@ editable: true
 slideshow:
   slide_type: slide
 ---
-with TT_model:
-    az.plot_posterior(TT_trace);
+azp.plot_dist(TT_trace);
 ```
 
 ```{code-cell} ipython3
@@ -1145,7 +1180,7 @@ editable: true
 slideshow:
   slide_type: slide
 ---
-az.loo(TT_trace)
+azs.loo(TT_trace)
 ```
 
 ```{code-cell} ipython3
@@ -1154,25 +1189,7 @@ editable: true
 slideshow:
   slide_type: slide
 ---
-az.waic(TT_trace)
-```
-
-```{code-cell} ipython3
----
-editable: true
-slideshow:
-  slide_type: ''
----
-az.rcParams["stats.information_criterion"]
-```
-
-```{code-cell} ipython3
----
-editable: true
-slideshow:
-  slide_type: slide
----
-model_compare = az.compare({'normal': normal_trace, 'T12':T_trace, 'T4':TT_trace})
+model_compare = azs.compare({'normal': normal_trace, 'T12':T_trace, 'T4':TT_trace}, round_to=1)
 model_compare
 ```
 
@@ -1182,24 +1199,14 @@ editable: true
 slideshow:
   slide_type: slide
 ---
-az.plot_compare(model_compare);
+azp.plot_compare(model_compare);
 ```
 
 ```{code-cell} ipython3
 ---
 editable: true
 slideshow:
-  slide_type: slide
+  slide_type: ''
 ---
-model_compare_waic = az.compare({'normal': normal_trace, 'T12':T_trace, 'T4':TT_trace}, ic='waic')
-model_compare_waic
-```
 
-```{code-cell} ipython3
----
-editable: true
-slideshow:
-  slide_type: slide
----
-az.plot_compare(model_compare_waic);
 ```

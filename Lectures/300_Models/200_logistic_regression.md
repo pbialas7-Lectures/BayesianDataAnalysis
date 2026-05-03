@@ -60,6 +60,7 @@ slideshow:
 ---
 plt.scatter(dose, n_deaths/n_animals,s=50, edgecolors='blue', facecolors='none')
 plt.xlabel('dose [log g/ml]', fontsize=16);
+plt.grid()
 plt.ylabel('$\\frac{\\# deaths}{\\# animals}$', rotation='horizontal', fontsize=16, labelpad=10);
 ```
 

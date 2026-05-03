@@ -24,7 +24,8 @@ slideshow:
 import numpy as np
 import scipy
 import pymc as pm
-import arviz as az
+import arviz_plots as azp
+import arviz_stats as azs
 ```
 
 ```{code-cell} ipython3
@@ -33,7 +34,7 @@ editable: true
 slideshow:
   slide_type: ''
 ---
-print(f"Running on PyMC version {pm.__version__} and ArviZ version {az.__version__}")
+print(f"Running on PyMC version {pm.__version__} and ArviZ stats {azs.__version__} plots {azp.__version__}")
 ```
 
 ```{code-cell} ipython3
@@ -94,20 +95,6 @@ plot_discrete_hist(data, ax=ax);
 +++ {"editable": true, "slideshow": {"slide_type": ""}}
 
 Check if the data can be explained by the binomial distribution with $n=35$. Make a posterior predictive check.
-
-```{code-cell} ipython3
-tune = 1000
-draws = 8000
-```
-
-```{code-cell} ipython3
----
-editable: true
-slideshow:
-  slide_type: ''
----
-
-```
 
 +++ {"editable": true, "slideshow": {"slide_type": ""}}
 
