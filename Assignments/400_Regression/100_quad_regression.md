@@ -19,7 +19,7 @@ slideshow:
 ---
 import numpy as np
 import scipy as sp
-from sklearn.model_selection import train_test_split
+#from sklearn.model_selection import train_test_split
 from scipy.optimize import curve_fit
 
 import pymc as pm
@@ -48,7 +48,7 @@ editable: true
 slideshow:
   slide_type: ''
 ---
-data = np.loadtxt('regression_students.txt')
+data = np.loadtxt('regression.txt')
 ```
 
 +++ {"editable": true, "slideshow": {"slide_type": ""}}
@@ -74,6 +74,10 @@ Use `find_MAP` function to fit the model to the data. Compare the results with t
 +++ {"editable": true, "slideshow": {"slide_type": ""}}
 
 Generate the posterior samples for the model parameters using `sample` function.
+
++++
+
+Calculate the correlation matrix between all the parameter.
 
 +++ {"editable": true, "slideshow": {"slide_type": ""}}
 
